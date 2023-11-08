@@ -3,8 +3,8 @@ import express, { Express } from 'express';
 import morgan from 'morgan'; // record log request, error in console
 import dotenv from 'dotenv';
 import cors from 'cors';
-import mongoose from 'mongoose';
 import userRouter from './routes/userRoutes';
+import dbConnect from './dbConnect';
 
 
 dotenv.config();
@@ -17,15 +17,11 @@ router.use(morgan('dev'));
 router.use(express.urlencoded({ extended: true }));
 /** Takes care of JSON data */
 router.use(express.json());
-// Allow requests from the specified origin
+/**  Allow requests from the specified origin */
 router.use(cors())
 
-// Connect to the database
-mongoose.connect(`${process.env.MONGO_URL}`, {
-      connectTimeoutMS: 10000
-})
-      .then(() => console.log("Connected to mongoDB."))
-      .catch((err) => console.log("Unable to connect."))
+/** Connect to the database */
+dbConnect();
 
 /** RULES OF OUR API */
 router.use((req, res, next) => {
