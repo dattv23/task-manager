@@ -6,9 +6,8 @@ export const Login = () => {
       const [hidePass, setHidePass] = useState(true);
 
       return (
-            <div className="max-w-full bg-white flex flex-1 flex-wrap relative">
-                  <div className="flex-[0.3] p-8 gap-2">
-                        <div className="text-sky-400 text-base font-semibold font-['Poppins'] tracking-tight">Create an account</div>
+            <div className="w-screen h-screen bg-white flex flex-1 flex-wrap relative">
+                  <div className="flex-[0.3] h-full p-8 gap-2">
                         <div className="text-black text-[48px] font-medium font-['Poppins']">Welcome back!</div>
                         <div className="mb-2 w-full flex-col justify-start items-start gap-2 inline-flex">
                               <div className="ml-2 text-gray-800 text-base font-bold font-['Gelion']">Email</div>
