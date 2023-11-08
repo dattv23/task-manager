@@ -15,7 +15,7 @@ const alertDialogVariants = cva(
                   },
                   form: {
                         filled: "text-white",
-                        stroked: "bg-neutral-50 border-2 text-red-700",
+                        stroked: "bg-neutral-50 border-2",
                   },
             },
             defaultVariants: {
