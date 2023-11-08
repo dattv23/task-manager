@@ -3,7 +3,9 @@ import express, { Express } from 'express';
 import morgan from 'morgan'; // record log request, error in console
 import dotenv from 'dotenv';
 import cors from 'cors';
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
+import userRouter from './routes/userRoutes';
+
 
 dotenv.config();
 
@@ -40,12 +42,13 @@ router.use((req, res, next) => {
 });
 
 /** Routes */
-router.use('/', (req, res, next) => {
+router.use('/hello', (req, res, next) => {
       return res.status(200).json({
             message: "Hello World!!!"
       });
 });
 
+router.use('/api', userRouter);
 
 /** Error handling */
 router.use((req, res, next) => {
