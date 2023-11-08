@@ -11,7 +11,7 @@ let validateRegisterUser = () => {
             }),
             body('name', 'Name does not Empty').not().isEmpty(),
             body('name', 'Name must be Alphanumeric').not().isAlphanumeric(),
-            body('name', 'username more than 6 degits').isLength({ min: 6 }),
+            body('name', 'Name more than 6 degits').isLength({ min: 6 }),
             body('email', 'Invalid does not Empty').not().isEmpty(),
             body('email', 'Invalid email').isEmail(),
             body('date_of_birth', 'Invalid birthday').isISO8601().toDate(),

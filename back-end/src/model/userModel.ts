@@ -1,10 +1,28 @@
 import { Schema, model } from "mongoose";
 
 const userSchema = new Schema({
-      name: String,
-      email: String,
-      password: String,
-      date_of_birth: Date
+      name: {
+            type: String,
+            required: true,
+      },
+      email: {
+            type: String,
+            required: true,
+            unique: true,
+      },
+      date_of_birth: {
+            type: Date,
+            required: true,
+      },
+      password: {
+            type: String,
+            required: true,
+      },
+      roles: {
+            type: [String],
+            enum: ["user", "admin"],
+            default: ["user"],
+      },
 });
 
 const User = model('User', userSchema);
