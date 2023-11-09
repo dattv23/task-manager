@@ -74,6 +74,13 @@ let validateVerifyUser = () => {
       ];
 }
 
+let validateRefreshToken = () => {
+      return [
+            body('refreshToken', 'refreshToken dose not Empty').not().isEmpty(),
+            body('refreshToken', 'refreshToken mush be string').isString(),
+      ]
+}
+
 let validateLogin = () => {
       return [
             ...validateEmail(),
@@ -81,5 +88,5 @@ let validateLogin = () => {
       ];
 }
 
-export { validateRegisterUser, validateResendVerifyUser, validateVerifyUser, validateLogin };
+export { validateRegisterUser, validateResendVerifyUser, validateVerifyUser, validateRefreshToken, validateLogin };
 

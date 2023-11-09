@@ -4,6 +4,7 @@ import CryptoJS from 'crypto-js';
 
 import User from '../model/userModel';
 import sendOTP from '../utils/sendOTP';
+import generateTokens from '../utils/generateToken';
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
       const errors = validationResult(req);
@@ -29,8 +30,15 @@ const verifyUser = async (req: Request, res: Response, next: NextFunction) => {
             return;
       }
 
-      await User.findOneAndUpdate({ email: req.body.email }, { verify: true });
-      res.status(200).json({ error: false, message: "Verify user sucessfully" });
+      const user = await User.findOneAndUpdate({ email: req.body.email }, { verify: true });
+      if (user) {
+            const { accessToken, refreshToken } = await generateTokens(user.id, user.roles);
+            res.cookie("access_token", accessToken);
+            res.cookie("refresh_token", refreshToken);
+            res.status(200).json({
+                  error: false, message: "Verify user sucessfully", accessToken, refreshToken
+            });
+      }
 }
 
 const resendVerifyUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -46,4 +54,34 @@ const resendVerifyUser = async (req: Request, res: Response, next: NextFunction)
       res.status(201).json({ error: false, message: "Send otp sucessfully" });
 }
 
-export default { register, verifyUser, resendVerifyUser };
+const login = async (req: Request, res: Response, next: NextFunction) => {
+      const errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+            res.status(422).json({ errors: errors.array() });
+            return;
+      }
+
+      const user = await User.findOne({ email: req.body.email, password: CryptoJS.HmacSHA256(req.body.password, `${process.env.SECRET_KEY}`) }, { verify: true });
+      if (user) {
+            const { accessToken, refreshToken } = await generateTokens(user.id, user.roles);
+            res.cookie("access_token", accessToken);
+            res.cookie("refresh_token", refreshToken);
+            res.status(200).json({
+                  error: false, message: "Login sucessfully", accessToken, refreshToken
+            });
+      } else {
+            res.status(200).json({
+                  error: true, message: "Email or password not incorected!"
+            });
+      }
+};
+
+const getDetailUser = async (req: Request, res: Response, next: NextFunction) => {
+      // console.log(req.body.user);
+      const user = await User.findById(req.body.user._id);
+
+      res.status(200).json({ message: "user authenticated.", user });
+}
+
+export default { register, verifyUser, resendVerifyUser, login, getDetailUser };
