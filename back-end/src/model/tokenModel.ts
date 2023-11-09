@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const userTokenSchema = new Schema({
+const tokenSchema = new Schema({
       userId: {
             type: Schema.Types.ObjectId,
             required: true,
@@ -16,5 +16,5 @@ const userTokenSchema = new Schema({
       },
 });
 
-const UserToken = model('UserToken', userTokenSchema);
-export default UserToken;
+const Token = model('Token', tokenSchema);
+export default Token;

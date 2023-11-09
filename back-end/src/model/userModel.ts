@@ -23,6 +23,10 @@ const userSchema = new Schema({
             enum: ["user", "admin"],
             default: ["user"],
       },
+      verify: {
+            type: Boolean,
+            default: false,
+      }
 });
 
 const User = model('User', userSchema);
