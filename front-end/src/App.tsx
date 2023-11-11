@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Home, Login, Register } from './pages';
 import { useAppSelector } from './hook/redux';
-import { NotFound } from './pages/404';
+import { NotFound } from './pages/not-found';
 export default function App() {
   const app = useAppSelector(state => state.app);
   console.log(app.isSigned);
