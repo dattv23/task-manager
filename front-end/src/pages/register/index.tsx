@@ -7,7 +7,7 @@ export const Register = () => {
       const [hidePassComfirm, setHidePassComfirm] = useState(true);
 
       return (
-            <div className="max-w-full bg-white flex flex-1 flex-wrap relative">
+            <div className="max-w-full bg-white flex flex-1 flex-wrap relative h-screen">
                   <div className="flex-[0.3] px-8 pt-3 gap-1">
                         <div><span className="text-black text-[48px] font-medium font-['Poppins']">Welcome to </span><span className="text-sky-400 text-[48px] font-semibold font-['Poppins']">Alliance</span></div>
                         <div className="mb-2 w-full flex-col justify-start items-start gap-2 inline-flex">
@@ -61,15 +61,15 @@ export const Register = () => {
                               <Button variant={"tetiary"} to='/login' className="text-primary text-base font-semibold font-['Poppins'] tracking-tight w-14 h-14">Log In</Button>
                         </div>
                   </div>
-                  <div className="flex-[0.7] relative">
-                        <div className="w-[169px] h-3/4 left-[70px] top-0 absolute bg-gradient-to-b from-sky-100 to-sky-100 shadow-inner" />
-                        <div className="w-[91px] h-full left-[998px] top-0 absolute bg-gradient-to-b from-sky-100 to-sky-100 shadow-inner" />
-                        <div className="w-[157px] h-full left-[366px] top-0 absolute bg-gradient-to-b from-sky-100 to-sky-100 shadow-inner" />
-                        <div className="w-[153px] h-full left-[718px] top-0 absolute bg-gradient-to-b from-sky-100 to-sky-100 shadow-inner" />
-                        <div className="w-[127px] h-full left-[239px] top-0 absolute bg-gradient-to-b from-blue-100 to-blue-100 shadow-inner" />
-                        <div className="w-[127px] h-full left-[871px] top-0 absolute bg-gradient-to-b from-blue-100 to-blue-100 shadow-inner" />
-                        <div className="w-[195px] h-full left-[523px] top-0 absolute bg-gradient-to-b from-blue-200 via-blue-100 to-blue-100 shadow-inner" />
-                        <div className="w-[468px] h-[100px] left-[593px] top-[60px] absolute">
+                  <div className="flex-[0.7] relative h-full flex justify-end">
+                        <div className="w-[144px] h-[90%] bg-gradient-to-b from-sky-100 to-sky-100 shadow-inner" />
+                        <div className="w-[127px] h-full bg-gradient-to-b from-blue-100 to-blue-100 shadow-inner" />
+                        <div className="w-[157px] h-full bg-gradient-to-b from-sky-100 to-sky-100 shadow-inner" />
+                        <div className="w-[195px] h-full bg-gradient-to-b from-blue-200 via-blue-100 to-blue-100 shadow-inner" />
+                        <div className="w-[153px] h-full bg-gradient-to-b from-sky-100 to-sky-100 shadow-inner" />
+                        <div className="w-[127px] h-full bg-gradient-to-b from-blue-100 to-blue-100 shadow-inner" />
+                        <div className="w-[91px] h-full bg-gradient-to-b from-sky-100 to-sky-100 shadow-inner" />
+                        <div className="w-[468px] h-[100px] right-2 top-[60px] absolute">
                               <div className="w-[468px] h-[100px] left-0 top-0 absolute bg-gradient-to-l from-yellow-50 to-pink-300 rounded-md shadow" />
                               <div className="w-[250px] h-[47px] left-[32px] top-[27px] absolute">
                                     <div className="w-[250px] h-4 left-0 top-0 absolute bg-zinc-300 bg-opacity-70 rounded-sm" />
@@ -77,7 +77,7 @@ export const Register = () => {
                               </div>
                               <div className="w-[50px] h-[50px] left-[384px] top-[25px] absolute bg-white rounded-full shadow-inner" />
                         </div>
-                        <div className="w-[728px] h-[100px] left-[119px] top-[200px] absolute">
+                        <div className="w-[728px] h-[100px] right-52 top-[200px] absolute">
                               <div className="w-[728px] h-[100px] left-0 top-0 absolute bg-gradient-to-l from-pink-200 to-violet-300 rounded-md shadow" />
                               <div className="w-[419px] h-[47px] left-[32px] top-[27px] absolute">
                                     <div className="w-[419px] h-4 left-0 top-0 absolute bg-zinc-300 rounded-sm" />
@@ -85,7 +85,7 @@ export const Register = () => {
                               </div>
                               <div className="w-[50px] h-[50px] left-[637px] top-[35px] absolute bg-white rounded-full shadow-inner" />
                         </div>
-                        <div className="w-[499px] h-[100px] left-[468px] top-[360px] absolute">
+                        <div className="w-[499px] h-[100px] right-32 top-[360px] absolute">
                               <div className="w-[499px] h-[100px] left-0 top-0 absolute bg-gradient-to-l from-pink-200 via-indigo-700 to-pink-300 rounded-md shadow" />
                               <div className="w-[250px] h-4 left-[28px] top-[26px] absolute bg-zinc-300 bg-opacity-70 rounded-sm" />
                               <div className="w-[50px] h-[50px] left-[348px] top-[34px] absolute bg-white rounded-full shadow-inner" />
