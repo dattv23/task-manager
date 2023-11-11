@@ -15,7 +15,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
                   return;
             }
 
-            const hashPassword = CryptoJS.HmacSHA256(req.body.password, `${process.env.SECRET_KEY}`);
+            const hashPassword = CryptoJS.HmacSHA256(req.body.password, `${process.env.SECRET_KEY}`).toString();
             await new User({ ...req.body, password: hashPassword }).save();
 
             sendOTP(req.body.email);
@@ -78,17 +78,32 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
                   return;
             }
 
-            const user = await User.findOne({ email: req.body.email, password: CryptoJS.HmacSHA256(req.body.password, `${process.env.SECRET_KEY}`) }, { verify: true });
+            const email = req.body.email;
+            const hashPassword = CryptoJS.HmacSHA256(req.body.password, `${process.env.SECRET_KEY}`).toString();
+            const user = await User.findOne({ email: email });
             if (user) {
-                  const { accessToken, refreshToken } = await generateTokens(user.id, user.roles);
-                  res.cookie("access_token", accessToken);
-                  res.cookie("refresh_token", refreshToken);
-                  res.status(200).json({
-                        error: false, message: "Login sucessfully", accessToken, refreshToken
-                  });
+                  if (hashPassword === user.password) {
+                        if (user.verify) {
+                              const { accessToken, refreshToken } = await generateTokens(user.id, user.roles);
+                              res.cookie("access_token", accessToken);
+                              res.cookie("refresh_token", refreshToken);
+                              res.status(200).json({
+                                    error: false, message: "Login sucessfully", accessToken, refreshToken
+                              });
+                        } else {
+                              res.status(200).json({
+                                    error: true, message: "Account not verify mail!"
+                              })
+                        }
+                  } else {
+                        res.status(200).json({
+                              error: true, message: "Password not incorected!"
+                        });
+                  }
+
             } else {
                   res.status(200).json({
-                        error: true, message: "Email or password not incorected!"
+                        error: true, message: "Email not incorected!"
                   });
             }
       } catch (error) {

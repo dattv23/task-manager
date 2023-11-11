@@ -38,7 +38,7 @@ router.use((req, res, next) => {
 });
 
 /** Routes */
-router.use('/hello', (req, res, next) => {
+router.use('/test', (req, res, next) => {
       return res.status(200).json({
             message: "Hello World!!!"
       });
