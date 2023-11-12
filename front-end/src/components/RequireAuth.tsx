@@ -1,16 +1,13 @@
 import { useAppSelector } from '../hook/redux'
-import { Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom'
+import { TRequireAuth } from '../types/RequireAuth.types'
 
-type Props = {
-      children: JSX.Element
-}
+export const RequireAuth = ({ children }: TRequireAuth) => {
+  const app = useAppSelector(state => state.app)
 
-export const RequireAuth = ({ children }: Props) => {
-      const app = useAppSelector(state => state.app);
+  if (!app.isSigned) {
+    return <Navigate to="/login" />
+  }
 
-      if (!app.isSigned) {
-            return <Navigate to="/login" />;
-      }
-
-      return children;
+  return children
 }
