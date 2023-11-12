@@ -100,7 +100,6 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
                               error: true, message: "Password not incorected!"
                         });
                   }
-
             } else {
                   res.status(200).json({
                         error: true, message: "Email not incorected!"

@@ -4,7 +4,7 @@ import morgan from 'morgan'; // record log request, error in console
 import dotenv from 'dotenv';
 import cors from 'cors';
 import userRouter from './routes/userRoutes';
-import dbConnect from './dbConnect';
+import { connectToMongoDB } from './database/dbConnect';
 
 
 dotenv.config();
@@ -21,7 +21,8 @@ router.use(express.json());
 router.use(cors())
 
 /** Connect to the database */
-dbConnect();
+connectToMongoDB();
+
 
 /** RULES OF OUR API */
 router.use((req, res, next) => {

@@ -118,6 +118,13 @@
   resolved "https://registry.npmjs.org/@types/mime/-/mime-1.3.4.tgz"
   integrity sha512-1Gjee59G25MrQGk8bsNvC6fxNiRgUlGn2wlhGf95a59DrprnnHk80FIMMFG9XHMdrfsuA119ht06QPDXA1Z7tw==
 
+"@types/mongodb@^4.0.7":
+  version "4.0.7"
+  resolved "https://registry.npmjs.org/@types/mongodb/-/mongodb-4.0.7.tgz"
+  integrity sha512-lPUYPpzA43baXqnd36cZ9xxorprybxXDzteVKCPAdp14ppHtFJHnXYvNpmBvtMUTb5fKXVv6sVbzo1LHkWhJlw==
+  dependencies:
+    mongodb "*"
+
 "@types/morgan@^1.9.7":
   version "1.9.7"
   resolved "https://registry.npmjs.org/@types/morgan/-/morgan-1.9.7.tgz"
@@ -763,7 +770,7 @@ mongodb-connection-string-url@^2.6.0:
     "@types/whatwg-url" "^8.2.1"
     whatwg-url "^11.0.0"
 
-mongodb@6.2.0:
+mongodb@*, mongodb@^6.2.0, mongodb@6.2.0:
   version "6.2.0"
   resolved "https://registry.npmjs.org/mongodb/-/mongodb-6.2.0.tgz"
   integrity sha512-d7OSuGjGWDZ5usZPqfvb36laQ9CPhnWkAGHT61x5P95p/8nMVeH8asloMwW6GcYFeB0Vj4CB/1wOTDG2RA9BFA==
