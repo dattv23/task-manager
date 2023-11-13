@@ -5,6 +5,8 @@
   "main": "src/server.ts",
   "types": "src/server.d.ts",
   "scripts": {
+    "lint": "eslint src/**/*.ts",
+    "format": "eslint src/**/*.ts --fix",
     "dev": "nodemon src/server.ts",
     "build": "rm -rf build/ && prettier --write src/ && tsc"
   },
@@ -18,9 +20,16 @@
     "@types/jsonwebtoken": "^9.0.5",
     "@types/morgan": "^1.9.7",
     "@types/nodemailer": "^6.4.14",
+    "@typescript-eslint/eslint-plugin": "^6.10.0",
+    "@typescript-eslint/parser": "^6.10.0",
+    "eslint": "^8.0.1",
+    "eslint-config-standard-with-typescript": "^39.1.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-promise": "^6.0.0",
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
+    "typescript": "*"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -29,6 +38,7 @@
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
     "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.2.0",
     "mongoose": "^8.0.0",
     "morgan": "^1.10.0",
     "nodemailer": "^6.9.7"
