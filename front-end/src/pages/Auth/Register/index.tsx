@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Button } from '../../components/Button'
-import { ICONS } from '../../assets/icons'
+import { Button } from '../../../components/Button'
+import { ICONS } from '../../../assets/icons'
 
 export const Register = () => {
   const [hidePass, setHidePass] = useState(true)

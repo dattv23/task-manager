@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { Button } from '../../components/Button'
-import { ICONS } from '../../assets/icons'
-import { useAppDispatch } from '../../hook/redux'
-import { updateSignIn } from '../../redux/slices/app'
+import { Button } from '../../../components/Button'
+import { ICONS } from '../../../assets/icons'
+import { useAppDispatch } from '../../../hook/redux'
+import { updateSignIn } from '../../../redux/slices/app'
 
 export const Login = () => {
   const [hidePass, setHidePass] = useState(true)

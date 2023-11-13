@@ -1,3 +1,5 @@
-export { Home } from './home'
-export { Login } from './login'
-export { Register } from './register'
+export { Home } from './Home'
+export { Login } from './Auth/Login'
+export { Register } from './Auth/Register'
+export { Boards } from './Boards'
+export { NotFound } from './NotFound'
