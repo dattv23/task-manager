@@ -1,8 +1,8 @@
 import { body } from 'express-validator'
 import CryptoJS from 'crypto-js'
 
-import User from '../model/userModel'
-import OTP from '../model/otpModel'
+import User from '../models/user.model'
+import OTP from '../models/otp.model'
 
 const validateEmail = () => {
   return [

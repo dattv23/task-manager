@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import Token from '../model/tokenModel'
+import Token from '../models/token.model'
 
 const verifyRefreshToken = (refreshToken: string) => {
   return new Promise((resolve, reject) => {

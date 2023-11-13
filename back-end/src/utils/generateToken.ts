@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { ObjectId } from 'mongoose'
-import Token from '../model/tokenModel'
+import Token from '../models/token.model'
 
 // require('crypto').randomBytes(64).toString('hex')
 const generateTokens = async (_id: ObjectId, roles: string[]) => {

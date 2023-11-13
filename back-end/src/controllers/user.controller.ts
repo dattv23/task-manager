@@ -2,8 +2,8 @@ import { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
 import CryptoJS from 'crypto-js'
 
-import User from '../model/userModel'
-import sendOTP from '../utils/sendOTP'
+import User from '../models/user.model'
+import sendOTP from '../providers/sendMail'
 import generateTokens from '../utils/generateToken'
 
 const register = async (req: Request, res: Response) => {

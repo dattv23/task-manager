@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import { validationResult } from 'express-validator'
-import Token from '../model/tokenModel'
+import Token from '../models/token.model'
 import verifyRefreshToken from '../utils/verifyRefreshToken'
 
 // get new access token

@@ -1,8 +1,8 @@
 import express from 'express'
-import userController from '../controller/userController'
-import { validateLogin, validateRefreshToken, validateRegisterUser, validateResendVerifyUser, validateVerifyUser } from '../utils/validator'
-import auth from '../middleware/auth'
-import refreshTokenController from '../controller/refreshTokenController'
+import userController from '../controllers/user.controller'
+import { validateLogin, validateRefreshToken, validateRegisterUser, validateResendVerifyUser, validateVerifyUser } from '../validations/validator'
+import auth from '../middlewares/auth'
+import refreshTokenController from '../controllers/refreshToken.controller'
 const userRouter = express.Router()
 
 userRouter.post('/register', validateRegisterUser(), userController.register)

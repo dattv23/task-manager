@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer'
 import CryptoJS from 'crypto-js'
-import OTP from '../model/otpModel'
-import { generateOTP } from './generateOTP'
+import OTP from '../models/otp.model'
+import { generateOTP } from '../utils/generateOTP'
 
 const sendOTP = (emailTo: string) => {
   const otp = generateOTP()
