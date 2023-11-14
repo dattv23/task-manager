@@ -5,9 +5,9 @@ import morgan from 'morgan' // record log request, error in console
 import cors from 'cors'
 import AsyncExitHook from 'async-exit-hook'
 
-import userRouter from './routes/user.routes'
-import { closeDB, connectDB } from './config/mongodb'
 import { env } from './config/environment'
+import { APIs_V1 } from './routes/v1'
+import { databaseServices } from './services/database.service'
 
 const startServer = () => {
   const router: Express = express()
@@ -42,7 +42,8 @@ const startServer = () => {
     })
   })
 
-  router.use('/api', userRouter)
+
+  router.use('/v1', APIs_V1)
 
   /** Error handling */
   router.use((req, res) => {
@@ -67,10 +68,10 @@ const startServer = () => {
 
 // cleanup before stop server
 AsyncExitHook(() => {
-  closeDB()
+  databaseServices.closeDB()
 })
 
-connectDB()
+databaseServices.connectDB()
   .then(() => console.log('Connected to database!'))
   .then(() => startServer())
   .catch(error => {
