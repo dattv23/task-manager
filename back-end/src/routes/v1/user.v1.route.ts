@@ -1,5 +1,5 @@
 import express from 'express'
-import { userValidation } from '../../validations/user.validation'
+import { userMiddeleware } from '../../middlewares/user.middlewares'
 import { userController } from '../../controllers/user.controller'
 
 const Router = express.Router()
@@ -9,7 +9,7 @@ Router.get('/',
 )
 
 Router.post('/register',
-  userValidation.validateRegister(),
+  userMiddeleware.validateRegister(),
   userController.register
 )
 

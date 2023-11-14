@@ -1,7 +1,7 @@
 import { checkSchema } from 'express-validator'
 import { userService } from '../services/user.service'
 
-class UserValidation {
+class UserMiddeleware {
   validateRegister() {
     return checkSchema({
       name: {
@@ -75,5 +75,5 @@ class UserValidation {
   }
 }
 
-const userValidation = new UserValidation()
-export { userValidation }
+const userMiddeleware = new UserMiddeleware()
+export { userMiddeleware }
