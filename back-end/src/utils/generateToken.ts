@@ -1,25 +1,26 @@
 import jwt from 'jsonwebtoken'
-import { ObjectId } from 'mongoose'
-import Token from '../models/token.model'
+import { ObjectId } from 'mongodb'
+import { ERoles } from '../types/user.type'
+import { env } from '../config/environment'
+import { userService } from '../services/user.service'
 
 // require('crypto').randomBytes(64).toString('hex')
-const generateTokens = async (_id: ObjectId, roles: string[]) => {
+const generateTokens = async (_id: ObjectId, roles: ERoles[]) => {
   try {
     const payload = { _id: _id, roles: roles }
     const accessToken = jwt.sign(
       payload,
-      `${process.env.ACCESS_TOKEN_SECRET}`,
+      `${env.ACCESS_TOKEN_SECRET}`,
       { expiresIn: '20m' }
     )
     const refreshToken = jwt.sign(
       payload,
-      `${process.env.REFRESH_TOKEN_SECRET}`,
+      `${env.REFRESH_TOKEN_SECRET}`,
       { expiresIn: '30d' }
     )
 
-    await Token.findOneAndDelete({ userId: _id })
+    await userService.saveRefreshToken(_id, refreshToken)
 
-    await new Token({ userId: _id, token: refreshToken }).save()
     return Promise.resolve({ accessToken, refreshToken })
   } catch (err) {
     return Promise.reject(err)

@@ -12,12 +12,12 @@ export enum EVerify {
 }
 
 export type TUser = {
-  _id?: ObjectId,
+  _id: ObjectId,
   name: string,
   email: string,
   password: string,
   dateOfBirth: Date,
-  roles?: ERoles[] | ERoles.User,
-  verify?: EVerify | EVerify.Unverified
+  roles: ERoles[],
+  verify: EVerify
 }
 

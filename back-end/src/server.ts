@@ -4,6 +4,7 @@ import express, { Express } from 'express'
 import morgan from 'morgan' // record log request, error in console
 import cors from 'cors'
 import AsyncExitHook from 'async-exit-hook'
+import cookieParser from 'cookie-parser'
 
 import { env } from './config/environment'
 import { APIs_V1 } from './routes/v1'
@@ -16,6 +17,8 @@ const startServer = () => {
   router.use(morgan('dev'))
   /** Parse the request */
   router.use(express.urlencoded({ extended: true }))
+  /** Parse the cookie */
+  router.use(cookieParser())
   /** Takes care of JSON data */
   router.use(express.json())
   /**  Allow requests from the specified origin */
@@ -69,8 +72,10 @@ const startServer = () => {
 // cleanup before stop server
 AsyncExitHook(() => {
   databaseServices.closeDB()
+  console.log('Closed database')
 })
 
+console.log('Connecting to database...')
 databaseServices.connectDB()
   .then(() => console.log('Connected to database!'))
   .then(() => startServer())

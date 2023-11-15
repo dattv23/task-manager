@@ -16,7 +16,7 @@ export default class User {
     this.email = user.email
     this.password = user.password
     this.dateOfBirth = new Date(user.dateOfBirth)
-    this.roles = ERoles.User
+    this.roles = [ERoles.User]
     this.verify = EVerify.Unverified
   }
 }
