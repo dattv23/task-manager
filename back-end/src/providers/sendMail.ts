@@ -1,11 +1,10 @@
 import nodemailer from 'nodemailer'
-import CryptoJS from 'crypto-js'
-import OTP from '../model/otpModel'
-import { generateOTP } from './generateOTP'
+// import CryptoJS from 'crypto-js'
+// import OTP from '../models/otp.model'
+import { generateOTP } from '../utils/generateOTP'
 
 const sendOTP = (emailTo: string) => {
   const otp = generateOTP()
-  // console.log(otp)
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -24,14 +23,10 @@ const sendOTP = (emailTo: string) => {
 
   transporter.sendMail(mailOptions, async (error) => {
     if (error) {
-      // eslint-disable-next-line no-console
-      console.log(error)
-    } else {
-      const hashOTP = CryptoJS.HmacSHA256(otp, `${process.env.SECRET_KEY}`)
-      await new OTP({ email: emailTo, otp: hashOTP }).save()
-      // console.log(info.response);
+      return { error: true, message: otp }
     }
   })
+  return { error: false, message: otp }
 }
 
-export default sendOTP
+export { sendOTP }

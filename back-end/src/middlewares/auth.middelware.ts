@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
+import { env } from '../config/environment'
 
 const auth = async (req: Request, res: Response, next: NextFunction) => {
   const token = req.header('x-access-token')
@@ -11,7 +12,7 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const tokenDetails = jwt.verify(
       token,
-      `${process.env.ACCESS_TOKEN_SECRET}`
+      `${env.ACCESS_TOKEN_SECRET}`
     )
     // console.log(tokenDetails)
     req.body.user = tokenDetails
