@@ -1,17 +1,19 @@
 import { checkSchema } from 'express-validator'
-import { userService } from '../services/user.service'
+import userService from '../services/user.service'
+import tokenService from '../services/token.service'
+import isIsoDate from '../utils/checkISODate'
 
-class UserMiddeleware {
+class UserMiddleware {
   validateRegister() {
     return checkSchema({
       name: {
         isEmpty: {
           negated: true,
-          errorMessage: 'Name cannot be empty'
+          errorMessage: 'Name can not be empty'
         },
         isNumeric: {
           negated: true,
-          errorMessage: 'Name cannot contain number'
+          errorMessage: 'Name can not contain number'
         },
         isLength: {
           options: { min: 6, max: 50 },
@@ -20,7 +22,7 @@ class UserMiddeleware {
       },
       email: {
         notEmpty: {
-          errorMessage: 'Email cannot be empty'
+          errorMessage: 'Email can not be empty'
         },
         isEmail: {
           errorMessage: 'Must be a valid Email address'
@@ -36,17 +38,16 @@ class UserMiddeleware {
       password: {
         isEmpty: {
           negated: true,
-          errorMessage: 'Password cannot be empty'
+          errorMessage: 'Password can not be empty'
         },
         isLength: {
           options: { min: 8 },
           errorMessage: 'Password must be longer than 8 characters'
         }
       },
-      passwordComfirm: {
-        isEmpty: {
-          negated: true,
-          errorMessage: 'Password cannot be empty'
+      password_confirm: {
+        notEmpty: {
+          errorMessage: 'Password can not be empty'
         },
         isLength: {
           options: { min: 8 },
@@ -55,30 +56,33 @@ class UserMiddeleware {
         custom: ({
           options: (val, { req }) => {
             if (val !== req.body.password) {
-              throw new Error('passwordComfirm not match with password')
+              throw new Error('password_confirm not match with password')
             }
             return true
           }
         })
       },
-      dateOfBirth: {
-        isEmpty: {
-          negated: true,
-          errorMessage: 'dateOfBirth cannot be empty'
+      date_of_birth: {
+        notEmpty: {
+          errorMessage: 'date_of_birth can not be empty'
         },
-        isISO8601: {
-          negated: false,
-          errorMessage: 'Date must be format ISO8061'
-        }
+        custom: ({
+          options: (val) => {
+            if (!isIsoDate(val)) {
+              throw new Error('date_of_birth must be format ISO8061')
+            }
+            return true
+          }
+        })
       }
-    })
+    }, ['body'])
   }
 
   validateVerifyUser() {
     return checkSchema({
       email: {
         notEmpty: {
-          errorMessage: 'Email cannot be empty'
+          errorMessage: 'Email can not be empty'
         },
         isEmail: {
           errorMessage: 'Must be a valid Email address'
@@ -93,21 +97,21 @@ class UserMiddeleware {
       },
       code: {
         notEmpty: {
-          errorMessage: 'Code OTP connot be empty'
+          errorMessage: 'Code OTP can not be empty'
         },
         isLength: {
           options: { min: 6, max: 6 },
           errorMessage: 'Code OTP must be length is 6 digits'
         }
       }
-    })
+    }, ['body'])
   }
 
   validateResendVerifyUser() {
     return checkSchema({
       email: {
         notEmpty: {
-          errorMessage: 'Email cannot be empty'
+          errorMessage: 'Email can not be empty'
         },
         isEmail: {
           errorMessage: 'Must be a valid Email address'
@@ -120,31 +124,31 @@ class UserMiddeleware {
           }
         }
       }
-    })
+    }, ['body'])
   }
 
   validateRefreshToken() {
     return checkSchema({
       refreshToken: {
         notEmpty: {
-          errorMessage: 'refreshToken cannot be empty'
+          errorMessage: 'refreshToken can not be empty'
         },
         custom: {
           options: async (value) => {
-            const token = await userService.getRefreshToken(value)
+            const token = await tokenService.getRefreshToken(value)
             if (!token) throw new Error('refreshToken not exist')
             return true
           }
         }
       }
-    })
+    }, ['body'])
   }
 
   validateLogin() {
     return checkSchema({
       email: {
         notEmpty: {
-          errorMessage: 'Email cannot be empty'
+          errorMessage: 'Email can not be empty'
         },
         isEmail: {
           errorMessage: 'Must be a valid Email address'
@@ -158,9 +162,8 @@ class UserMiddeleware {
         }
       },
       password: {
-        isEmpty: {
-          negated: true,
-          errorMessage: 'Password cannot be empty'
+        notEmpty: {
+          errorMessage: 'Password can not be empty'
         },
         isLength: {
           options: { min: 8 },
@@ -174,9 +177,9 @@ class UserMiddeleware {
           }
         }
       }
-    })
+    }, ['body'])
   }
 }
 
-const userMiddeleware = new UserMiddeleware()
-export { userMiddeleware }
+const userMiddleware = new UserMiddleware()
+export default userMiddleware

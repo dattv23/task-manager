@@ -1,7 +1,7 @@
 import express from 'express'
-import { userMiddeleware } from '../../middlewares/user.middleware'
 import { userController } from '../../controllers/user.controller'
-import auth from '../../middlewares/auth.middelware'
+import auth from '../../middlewares/auth.middleware'
+import userMiddleware from '../../middlewares/user.middleware'
 
 const Router = express.Router()
 
@@ -11,17 +11,17 @@ Router.get('/',
 )
 
 Router.post('/register',
-  userMiddeleware.validateRegister(),
+  userMiddleware.validateRegister(),
   userController.register
 )
 
 Router.post('/verify-user',
-  userMiddeleware.validateVerifyUser(),
+  userMiddleware.validateVerifyUser(),
   userController.verifyUser
 )
 
 Router.post('/resend-verify-user',
-  userMiddeleware.validateResendVerifyUser(),
+  userMiddleware.validateResendVerifyUser(),
   userController.resendVerifyUser
 )
 
@@ -30,12 +30,12 @@ Router.get('/refresh-token',
 )
 
 Router.get('/logout',
-  userMiddeleware.validateRefreshToken(),
+  userMiddleware.validateRefreshToken(),
   userController.logout
 )
 
 Router.post('/login',
-  userMiddeleware.validateLogin(),
+  userMiddleware.validateLogin(),
   userController.login
 )
 

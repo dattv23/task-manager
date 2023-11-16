@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 
-export type TToken = {
+export type Token = {
   userId: ObjectId,
   token: string,
 }

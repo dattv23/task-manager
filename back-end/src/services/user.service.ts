@@ -1,116 +1,69 @@
-import { databaseServices } from './database.service'
-import { EVerify, TUser } from '../types/user.type'
-import User from '../models/user.model'
 import { env } from '../config/environment'
-import { ObjectId } from 'mongodb'
-import jwt from 'jsonwebtoken'
-import { TTokenDetails } from '../types/tokenDetails'
 import hashData from '../utils/hashData'
+import createExpirationTime from '../utils/createExpiryTime'
+import databaseServices from './database.service'
+import { OTP, User } from '../types'
+import { UserRole, UserVerifyStatus } from '../constants/enum'
+import UserModel from '../models/user.model'
 
 class UserService {
   async getAllUser() {
     try {
       const usersCollection = await databaseServices.getCollection('users')
-      const users = (await usersCollection.find({}).toArray()) as User[]
-      return users
+      const users = await usersCollection.find({}).toArray()
+      return Promise.resolve(users)
     } catch (error) {
-      // console.log(error)
+      return Promise.reject(error)
     }
   }
 
   async getUserByEmail(email: string) {
     try {
       const usersCollection = await databaseServices.getCollection('users')
-      const user = (await usersCollection.findOne({ email: email })) as TUser
-      return user
+      const user = await usersCollection.findOne({ email: email })
+      return Promise.resolve(user)
     } catch (error) {
-      // console.log(error)
+      return Promise.reject(error)
     }
   }
 
   async updateUserVerified(email: string) {
     try {
       const usersCollection = await databaseServices.getCollection('users')
-      const user = await usersCollection.findOneAndUpdate({ email: email }, { $set: { verify: EVerify.Verified } }, { upsert: true })
-      return user
+      const user = await usersCollection.findOneAndUpdate({ email: email }, { $set: { verify: UserVerifyStatus.Verified } }, { upsert: true })
+      return Promise.resolve(user)
     } catch (error) {
-      // console.log(error)
+      return Promise.reject(error)
     }
   }
 
-  async createUser(data: TUser) {
+  async createUser(data: User) {
     try {
-      const { name, email, password, dateOfBirth } = data
-      const newUser = new User({ name, email, password: hashData(password), dateOfBirth } as TUser)
+      const newUser = new UserModel({ ...data, _id: undefined, role: UserRole.User, status: UserVerifyStatus.Unverified })
       const usersCollection = await databaseServices.getCollection('users')
       const userId = (await usersCollection.insertOne(newUser)).insertedId
-      return userId
+      return Promise.resolve(userId)
     } catch (error) {
-      // console.log(error)
+      return Promise.reject(error)
     }
   }
 
-  async saveOTP(email: string, code: string) {
+  async saveOTP(data: OTP) {
     try {
       const otpsCollection = await databaseServices.getCollection('otps')
-      const timeExpire = new Date()
-      await otpsCollection.insertOne({ email: email, code: hashData(code), expireAt: new Date(timeExpire.setMinutes(timeExpire.getMinutes() + 5)) })
+      await otpsCollection.insertOne({ email: data.email, code: hashData(data.code), expireAt: createExpirationTime(env.OTP_EXPIRY_TIME) })
     } catch (error) {
-      // console.log(error)
+      return Promise.reject(error)
     }
   }
 
-  async verifyUser(email: string, code: string) {
+  async verifyUser(data: OTP) {
     try {
       const otpsCollection = await databaseServices.getCollection('otps')
-      const otp = await otpsCollection.findOne({ email: email, code: hashData(code) })
+      const otp = await otpsCollection.findOne({ email: data.email, code: hashData(data.code) })
       return otp
     } catch (error) {
-      // console.log(error)
-    }
-  }
-
-  async deleteRefreshToken(refreshToken: string) {
-    try {
-      const tokensCollection = await databaseServices.getCollection('tokens')
-      await tokensCollection.findOneAndDelete({ refreshToken: refreshToken })
-    } catch (error) {
-      // console.log(error)
-    }
-  }
-
-  async saveRefreshToken(userId: ObjectId, refreshToken: string) {
-    try {
-      const tokensCollection = await databaseServices.getCollection('tokens')
-      const timeExpire = new Date()
-      await tokensCollection.insertOne({ userId: userId, refreshToken: refreshToken, expireAt: new Date(timeExpire.setDate(timeExpire.getDate() + 30)) })
-    } catch (error) {
-      // console.log(error)
-    }
-  }
-
-  async getRefreshToken(refreshToken: string) {
-    try {
-      const tokensCollection = await databaseServices.getCollection('tokens')
-      const token = await tokensCollection.findOne({ refreshToken: refreshToken })
-      return token
-    } catch (error) {
-      // console.log(error)
-    }
-  }
-
-  async createNewAccessToken(refreshToken: string) {
-    try {
-      const tokenDetails = jwt.verify(refreshToken, `${env.REFRESH_TOKEN_SECRET}`) as TTokenDetails
-      const payload = { _id: tokenDetails._id, roles: tokenDetails.roles }
-      const newAccessToken = jwt.sign(
-        payload,
-        `${env.ACCESS_TOKEN_SECRET}`,
-        { expiresIn: '20m' }
-      )
-      return newAccessToken
-    } catch (error) {
-      // console.log(error)
+      return Promise.reject(error)
     }
   }
 
@@ -120,10 +73,10 @@ class UserService {
       const user = usersCollection.findOne({ email: email, password: hashData(pass) })
       return user
     } catch (error) {
-      // console.log(error)
+      return Promise.reject(error)
     }
   }
 }
 
 const userService = new UserService()
-export { userService }
+export default userService

@@ -1,11 +1,11 @@
 import { ObjectId } from 'mongodb'
-import { TToken } from '../types/token.type'
+import { Token } from '../types'
 
-export default class Token {
+export default class TokenModel {
   userId: ObjectId
   token: string
 
-  constructor(token: TToken) {
+  constructor(token: Token) {
     this.userId = token.userId
     this.token = token.token
   }

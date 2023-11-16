@@ -1,10 +1,10 @@
-import { TOtp } from '../types/otp.type'
+import { OTP } from '../types'
 
-export default class Otp {
+export default class OTPModel {
   email: string
   code: string
 
-  constructor(otp: TOtp) {
+  constructor(otp: OTP) {
     this.email = otp.email
     this.code = otp.code
   }
