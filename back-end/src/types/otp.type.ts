@@ -1,4 +1,4 @@
-export type TOtp = {
+export type OTP = {
   email: string,
   code: string,
 }

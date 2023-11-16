@@ -8,7 +8,7 @@ import cookieParser from 'cookie-parser'
 
 import { env } from './config/environment'
 import { APIs_V1 } from './routes/v1'
-import { databaseServices } from './services/database.service'
+import databaseServices from './services/database.service'
 
 const startServer = () => {
   const router: Express = express()

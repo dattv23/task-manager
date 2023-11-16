@@ -1,23 +1,13 @@
 import { ObjectId } from 'mongodb'
+import { UserRole, UserVerifyStatus } from '../constants/enum'
 
-export enum ERoles {
-  User = 'USER',
-  Admin = 'ADMIN'
-}
-
-export enum EVerify {
-  Verified = 'VERIFIED',
-  Unverified = 'UNVERIFIED',
-  Ban = 'BAN'
-}
-
-export type TUser = {
-  _id: ObjectId,
+export type User = {
+  _id?: ObjectId,
   name: string,
   email: string,
   password: string,
-  dateOfBirth: Date,
-  roles: ERoles[],
-  verify: EVerify
+  date_of_birth: Date,
+  role?: UserRole,
+  status?: UserVerifyStatus
 }
 

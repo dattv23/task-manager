@@ -31,4 +31,4 @@ class DatabaseServices {
 }
 
 const databaseServices = new DatabaseServices()
-export { databaseServices }
+export default databaseServices
