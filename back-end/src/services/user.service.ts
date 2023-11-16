@@ -1,11 +1,11 @@
 import { databaseServices } from './database.service'
-import CryptoJS from 'crypto-js'
 import { EVerify, TUser } from '../types/user.type'
 import User from '../models/user.model'
 import { env } from '../config/environment'
 import { ObjectId } from 'mongodb'
 import jwt from 'jsonwebtoken'
 import { TTokenDetails } from '../types/tokenDetails'
+import hashData from '../utils/hashData'
 
 class UserService {
   async getAllUser() {
@@ -32,7 +32,6 @@ class UserService {
     try {
       const usersCollection = await databaseServices.getCollection('users')
       const user = await usersCollection.findOneAndUpdate({ email: email }, { $set: { verify: EVerify.Verified } }, { upsert: true })
-      // const user = await usersCollection.findOneAndUpdate({ email: email }, { verify: EVerify.Verified }) as TUser
       return user
     } catch (error) {
       // console.log(error)
@@ -42,8 +41,7 @@ class UserService {
   async createUser(data: TUser) {
     try {
       const { name, email, password, dateOfBirth } = data
-      const hashPassword = CryptoJS.HmacSHA256(password, `${env.SECRET_KEY}`).toString()
-      const newUser = new User({ name, email, password: hashPassword, dateOfBirth } as TUser)
+      const newUser = new User({ name, email, password: hashData(password), dateOfBirth } as TUser)
       const usersCollection = await databaseServices.getCollection('users')
       const userId = (await usersCollection.insertOne(newUser)).insertedId
       return userId
@@ -56,8 +54,7 @@ class UserService {
     try {
       const otpsCollection = await databaseServices.getCollection('otps')
       const timeExpire = new Date()
-      const hashCode = CryptoJS.HmacSHA256(code, `${env.SECRET_KEY}`).toString()
-      await otpsCollection.insertOne({ email: email, code: hashCode, expireAt: new Date(timeExpire.setMinutes(timeExpire.getMinutes() + 5)) })
+      await otpsCollection.insertOne({ email: email, code: hashData(code), expireAt: new Date(timeExpire.setMinutes(timeExpire.getMinutes() + 5)) })
     } catch (error) {
       // console.log(error)
     }
@@ -66,8 +63,7 @@ class UserService {
   async verifyUser(email: string, code: string) {
     try {
       const otpsCollection = await databaseServices.getCollection('otps')
-      const hashCode = CryptoJS.HmacSHA256(code, `${env.SECRET_KEY}`).toString()
-      const otp = await otpsCollection.findOne({ email: email, code: hashCode })
+      const otp = await otpsCollection.findOne({ email: email, code: hashData(code) })
       return otp
     } catch (error) {
       // console.log(error)
@@ -121,8 +117,7 @@ class UserService {
   async getUserByMailAndPass(email: string, pass: string) {
     try {
       const usersCollection = await databaseServices.getCollection('users')
-      const hashPass = CryptoJS.HmacSHA256(pass, `${env.SECRET_KEY}`).toString()
-      const user = usersCollection.findOne({ email: email, password: hashPass })
+      const user = usersCollection.findOne({ email: email, password: hashData(pass) })
       return user
     } catch (error) {
       // console.log(error)
