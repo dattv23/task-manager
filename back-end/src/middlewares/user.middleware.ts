@@ -1,7 +1,7 @@
 import { checkSchema } from 'express-validator'
 import userService from '../services/user.service'
 import tokenService from '../services/token.service'
-import isIsoDate from '../utils/checkISODate'
+// import isIsoDate from '../utils/checkISODate'
 
 class UserMiddleware {
   validateRegister() {
@@ -61,20 +61,20 @@ class UserMiddleware {
             return true
           }
         })
-      },
-      date_of_birth: {
-        notEmpty: {
-          errorMessage: 'date_of_birth can not be empty'
-        },
-        custom: ({
-          options: (val) => {
-            if (!isIsoDate(val)) {
-              throw new Error('date_of_birth must be format ISO8061')
-            }
-            return true
-          }
-        })
       }
+      // date_of_birth: {
+      //   notEmpty: {
+      //     errorMessage: 'date_of_birth can not be empty'
+      //   },
+      //   custom: ({
+      //     options: (val) => {
+      //       if (!isIsoDate(val)) {
+      //         throw new Error('date_of_birth must be format ISO8061')
+      //       }
+      //       return true
+      //     }
+      //   })
+      // }
     }, ['body'])
   }
 

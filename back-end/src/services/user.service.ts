@@ -39,7 +39,7 @@ class UserService {
 
   async createUser(data: User) {
     try {
-      const newUser = new UserModel({ ...data, _id: undefined, role: UserRole.User, status: UserVerifyStatus.Unverified })
+      const newUser = new UserModel({ ...data, role: UserRole.User, status: UserVerifyStatus.Unverified })
       const usersCollection = await databaseServices.getCollection('users')
       const userId = (await usersCollection.insertOne(newUser)).insertedId
       return Promise.resolve(userId)

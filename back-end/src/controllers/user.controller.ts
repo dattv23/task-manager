@@ -26,7 +26,7 @@ const userController = {
         return
       }
 
-      const userId = await userService.createUser({ ...req.body, date_of_birth: new Date(req.body.date_of_birth) })
+      const userId = await userService.createUser({ ...req.body })
       const code = await sendOTP(req.body.email)
       await userService.saveOTP({ email: req.body.email, code: code })
       res.status(StatusCodes.CREATED).json({ message: 'Account created successfully', id: userId })
@@ -46,6 +46,7 @@ const userController = {
       const checkOtp = await userService.verifyUser({ email: req.body.email, code: req.body.code })
       if (!checkOtp) {
         res.status(StatusCodes.NOT_FOUND).json({ message: 'Code OTP incorrect' })
+        return
       }
       const user = await userService.updateUserVerified(req.body.email)
       if (user) {
