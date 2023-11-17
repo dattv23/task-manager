@@ -7,7 +7,8 @@ const instance = axios.create({
   baseURL: BASE_URL,
   timeout: TIME_OUT,
   headers: {
-    'Cache-Control': 'no-cache'
+    'Cache-Control': 'no-cache',
+    'Content-Type': 'application/json'
   }
 })
 

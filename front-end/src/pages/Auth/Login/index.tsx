@@ -3,10 +3,13 @@ import { Button } from '../../../components/Button'
 import { ICONS } from '../../../assets/icons'
 import { useAppDispatch } from '../../../hook/redux'
 import { updateSignIn } from '../../../redux/slices/app'
+import { useNavigate } from 'react-router-dom'
 
 export const Login = () => {
   const [hidePass, setHidePass] = useState(true)
   const dispatch = useAppDispatch()
+
+  const navigate = useNavigate()
   return (
     <div className="w-screen h-screen bg-white flex flex-1 flex-wrap relative">
       <div className="flex-[0.3] h-full p-8 gap-2">
@@ -24,7 +27,10 @@ export const Login = () => {
           </div>
           <div className="ml-2 text-slate-500 text-xs font-normal font-['Gelion']">Upto 8 characters with an Uppercase, symbol and number</div>
         </div>
-        <Button className="w-full" size={'sm'} onClick={() => dispatch(updateSignIn(true))}>Log In</Button>
+        <Button className="w-full" size={'sm'} onClick={() => {
+          dispatch(updateSignIn(true))
+          navigate('/boards')
+        }}>Log In</Button>
         <div className="my-2 w-full flex items-center justify-center">
           <div className="w-full h-[2px] border border-neutral-600 border-opacity-20"></div>
           <div className="w-full text-neutral-600 text-opacity-40 text-center font-normal font-['Poppins'] tracking-tight">Or Sign up with</div>
@@ -46,7 +52,7 @@ export const Login = () => {
         </div>
         <div className='flex justify-end items-center'>
           <div className="text-neutral-600 text-opacity-40 text-base font-medium font-['Poppins'] tracking-tight">Not a member?</div>
-          <Button variant={'tetiary'} to='/register' className="text-primary text-base font-semibold font-['Poppins'] tracking-tight">Create an account</Button>
+          <Button variant={'tertiary'} to='/register' className="text-primary text-base font-semibold font-['Poppins'] tracking-tight">Create an account</Button>
         </div>
       </div>
       <div className="flex-[0.7] relative h-full flex justify-end">

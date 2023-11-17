@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { cn } from '../utils'
-import { IButton, buttonVariants } from '../types/Button.types'
+import { cn } from '../../utils'
+import { IButton, buttonVariants } from './types'
 
 const Button = React.forwardRef<HTMLButtonElement, IButton>(
   ({ className, children, to, variant, size, ...props }, ref) => {
