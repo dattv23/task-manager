@@ -7,7 +7,7 @@ export const buttonVariants = cva(
       variant: {
         primary: 'bg-primary text-white',
         secondary: 'border-primary border-2 text-primary',
-        tetiary: 'text-primary'
+        tertiary: 'text-primary'
       },
       size: {
         sm: 'w-48 h-10',

@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 export enum UserVerifyStatus {
-  Unverified,
-  Verified,
-  Banned
+  Unverified = 'UNVERIFIED',
+  Verified = 'VERIFIED',
+  Banned = 'BANNED'
 }
 
 export enum UserRole {
-  Admin,
-  User
+  Admin = 'ADMIN',
+  User = 'USER'
 }

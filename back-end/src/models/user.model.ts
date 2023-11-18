@@ -1,22 +1,21 @@
 import { ObjectId } from 'mongodb'
-import { User } from '../types'
 import { UserRole, UserVerifyStatus } from '../constants/enum'
+import { User } from '../types'
 
-export default class UserModel {
+export class UserModel {
   _id?: ObjectId
   name: string
   email: string
   password: string
-  date_of_birth: Date
   role: UserRole
-  verify: UserVerifyStatus
+  status: UserVerifyStatus
 
   constructor(user: User) {
+    this._id = user._id
     this.name = user.name
     this.email = user.email
     this.password = user.password
-    this.date_of_birth = new Date(user.date_of_birth)
     this.role = user.role || UserRole.User
-    this.verify = user.status || UserVerifyStatus.Unverified
+    this.status = user.status || UserVerifyStatus.Unverified
   }
 }

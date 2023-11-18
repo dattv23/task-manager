@@ -26,5 +26,7 @@ export interface IAlertDialog
   extends React.HTMLAttributes<HTMLDivElement>,
   VariantProps<typeof alertDialogVariants> {
   title: string,
-  description: string
+  description: string,
+  open: boolean,
+  onClose: () => void
 }

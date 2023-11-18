@@ -6,7 +6,6 @@ export type User = {
   name: string,
   email: string,
   password: string,
-  date_of_birth: Date,
   role?: UserRole,
   status?: UserVerifyStatus
 }

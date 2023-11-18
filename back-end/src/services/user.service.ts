@@ -3,8 +3,8 @@ import hashData from '../utils/hashData'
 import createExpirationTime from '../utils/createExpiryTime'
 import databaseServices from './database.service'
 import { OTP, User } from '../types'
-import { UserRole, UserVerifyStatus } from '../constants/enum'
-import UserModel from '../models/user.model'
+import { UserModel } from '../models/user.model'
+import { UserVerifyStatus } from '../constants/enum'
 
 class UserService {
   async getAllUser() {
@@ -30,7 +30,7 @@ class UserService {
   async updateUserVerified(email: string) {
     try {
       const usersCollection = await databaseServices.getCollection('users')
-      const user = await usersCollection.findOneAndUpdate({ email: email }, { $set: { verify: UserVerifyStatus.Verified } }, { upsert: true })
+      const user = await usersCollection.findOneAndUpdate({ email: email }, { $set: { status: UserVerifyStatus.Verified } }, { upsert: true })
       return Promise.resolve(user)
     } catch (error) {
       return Promise.reject(error)
@@ -39,7 +39,7 @@ class UserService {
 
   async createUser(data: User) {
     try {
-      const newUser = new UserModel({ ...data, _id: undefined, role: UserRole.User, status: UserVerifyStatus.Unverified })
+      const newUser = new UserModel({ ...data })
       const usersCollection = await databaseServices.getCollection('users')
       const userId = (await usersCollection.insertOne(newUser)).insertedId
       return Promise.resolve(userId)
