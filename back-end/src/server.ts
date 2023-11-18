@@ -22,12 +22,16 @@ const startServer = () => {
   /** Takes care of JSON data */
   router.use(express.json())
   /**  Allow requests from the specified origin */
-  router.use(cors())
+  const corsOptions = {
+    credentials: true,
+    origin: 'http://localhost:5173'
+  }
+  router.use(cors(corsOptions))
 
   /** RULES OF OUR API */
   router.use((req, res, next) => {
     // set the CORS policy
-    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Origin', 'http://localhost:5173')
     // set the CORS headers
     res.header('Access-Control-Allow-Headers', 'origin, X-Requested-With,Content-Type,Accept, Authorization')
     // set the CORS method headers

@@ -5,6 +5,7 @@ import { AlertDialog } from '../../../components/AlertDialog'
 import { useNavigate } from 'react-router-dom'
 import { checkEmail, checkPass } from '../../../utils'
 import { registerAPI } from '../../../api/auth/Register'
+import { Loading } from '../../../components/Loading'
 
 export const Register = () => {
   const navigate = useNavigate()
@@ -19,6 +20,8 @@ export const Register = () => {
 
   const [description, setDescription] = useState('')
   const [alertOpen, setAlertOpen] = useState(false)
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleRegister = () => {
     if (name === '' || email === '' || password === '' || passwordConfirm === '') {
@@ -51,20 +54,19 @@ export const Register = () => {
       return
     }
 
+    setIsLoading(true)
     registerAPI({ name: name, email: email, password: password, password_confirm: passwordConfirm })
       .then(response => {
         localStorage.setItem('userID', response.data._id)
         localStorage.setItem('email', email)
         navigate('/verify-email')
       })
-      .catch(error => {
-        // eslint-disable-next-line no-console
-        console.error(error)
+      .catch(() => {
         setDescription('Please try again later!')
         setAlertOpen(true)
-        return
       })
-
+      .finally(() => setIsLoading(false))
+    return
   }
 
   return (
@@ -99,7 +101,8 @@ export const Register = () => {
             </div>
             <div className="ml-2 text-slate-500 text-xs font-normal font-['Gelion']">Minimum 8 characters with an Uppercase, symbol and number</div>
           </div>
-          <Button className="w-full" size={'sm'} onClick={handleRegister}>Continue</Button>
+          {!isLoading ? <Button className="w-full" size={'sm'} onClick={handleRegister}>Continue</Button>
+            : <Loading />}
           <div className="my-2 w-full flex items-center justify-center">
             <div className="w-full h-[2px] border border-neutral-600 border-opacity-20"></div>
             <div className="w-full text-neutral-600 text-opacity-40 text-center font-normal font-['Poppins'] tracking-tight">Or Sign up with</div>

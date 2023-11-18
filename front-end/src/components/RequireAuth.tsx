@@ -1,4 +1,4 @@
-import { useAppSelector } from '../hook/redux'
+import { useAppSelector } from '../hooks/redux'
 import { Navigate } from 'react-router-dom'
 
 type Props = {

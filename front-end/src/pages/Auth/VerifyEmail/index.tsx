@@ -4,8 +4,9 @@ import { AlertDialog } from '../../../components/AlertDialog'
 import { verifyEmailAPI } from '../../../api/auth/VerifyEmail'
 import { useNavigate } from 'react-router-dom'
 import { resendVerifyAPI } from '../../../api/auth/ResendVerify'
-import { useAppDispatch } from '../../../hook/redux'
+import { useAppDispatch } from '../../../hooks/redux'
 import { updateSignIn } from '../../../redux/slices/app'
+import { Loading } from '../../../components/Loading'
 
 export const VerifyEmail = () => {
   const dispatch = useAppDispatch()
@@ -15,6 +16,8 @@ export const VerifyEmail = () => {
   const [alertWarningOpen, setAlertWarningOpen] = useState(false)
   const [alertSuccessOpen, setAlertSuccessOpen] = useState(false)
   const [description, setDescription] = useState('')
+
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const email = localStorage.getItem('email')
@@ -42,11 +45,16 @@ export const VerifyEmail = () => {
       setAlertWarningOpen(true)
       return
     }
+    setIsLoading(true)
     verifyEmailAPI({ email: email, code: code })
       .then((response) => {
         if (response.status === 200) {
           dispatch(updateSignIn(true))
           navigate('/boards')
+        } else if (response.status === 404) {
+          setDescription(response.data.message)
+          setAlertWarningOpen(true)
+          return
         }
       })
       .catch(error => {
@@ -65,6 +73,8 @@ export const VerifyEmail = () => {
           setAlertWarningOpen(true)
         }
       })
+      .finally(() => setIsLoading(false))
+    return
   }
 
   const handleResendVerify = () => {
@@ -79,6 +89,7 @@ export const VerifyEmail = () => {
         setAlertWarningOpen(true)
         return
       })
+    return
   }
 
   return (
@@ -101,7 +112,8 @@ export const VerifyEmail = () => {
             <input type="number" className="m-3 h-20 w-16 bg-slate-100 border border-[#eee] text-center rounded" placeholder="0" min="0" max="9" required />
           </div>
           <div>
-            <Button variant={'primary'} className='mt-2 mb-8' onClick={handleVerify}>Verify</Button>
+            {!isLoading ? <Button variant={'primary'} className='mt-2 mb-8' onClick={handleVerify}>Verify</Button>
+              : <Loading />}
           </div>
           <small className="text-base">
             If you didn't receive a code !! <Button variant={'tertiary'} className='w-50 text-red-600' onClick={handleResendVerify}> RESEND</Button>
