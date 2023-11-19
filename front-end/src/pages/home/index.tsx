@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { Button } from '../../components/Button'
 import { IMAGES } from '../../assets/images/images'
 
-export const Home = () => {
+export default function Home() {
   return (
     <div className="container mx-auto relative h-screen">
       <div className="flex justify-between px-8">
@@ -18,7 +18,7 @@ export const Home = () => {
             Task Management &<br />To-Do List
           </p>
           <p className="text-zinc-500 text-[24px] font-normal font-['Poppins']">This productive tool is designed to help<br />you better manage your task project-wise <br />conveniently!</p>
-          <Button to="/boards" className="w-full max-w-[448px] mt-4 text-2xl font-semibold">Let’s Start</Button>
+          <Button to="/tasks" className="w-full max-w-[448px] mt-4 text-2xl font-semibold">Let’s Start</Button>
         </div>
         <div className="z-10">
           <img src={IMAGES.female} className="absolute top-40 left-[780px] w-[448px]" />
