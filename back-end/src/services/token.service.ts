@@ -80,7 +80,7 @@ class TokenService {
   async saveRefreshToken(userId: ObjectId, refreshToken: string) {
     try {
       const tokensCollection = await databaseServices.getCollection('tokens')
-      await tokensCollection.insertOne({ userId: userId, refreshToken: refreshToken, expireAt: createExpiryTime(env.REFRESH_TOKEN_EXPIRY_TIME) })
+      await tokensCollection.findOneAndReplace({ userId: userId }, { userId: userId, refreshToken: refreshToken, expireAt: createExpiryTime(env.REFRESH_TOKEN_EXPIRY_TIME) }, { upsert: true })
       return Promise.resolve(true)
     } catch (error) {
       return Promise.reject(error)

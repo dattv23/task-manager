@@ -127,7 +127,7 @@ const userController = {
       // httpOnly: true to server can get data from cookie and client can't get data from cookie
       res.cookie('accessToken', accessToken, { httpOnly: true, maxAge: env.ACCESS_TOKEN_EXPIRY_TIME * 60 * 1000 })
       res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: env.REFRESH_TOKEN_EXPIRY_TIME * 60 * 1000 })
-      res.status(StatusCodes.OK).json({ message: 'Login successfully' })
+      res.status(StatusCodes.OK).json({ message: 'Login successfully', accessToken: accessToken, refreshToken: refreshToken })
 
     } catch (error) {
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error })
