@@ -1,37 +1,12 @@
-import { Link } from 'react-router-dom';
 import { Button } from '../../components/Button';
 import { IMAGES } from '../../assets/images/images';
+import { Navbar } from './Navbar';
 
 export default function Home() {
 	return (
-		<div className='container mx-auto relative h-screen'>
-			<div className='flex px-8 flex-col items-center 2xl:flex-row 2xl:justify-between'>
-				<Link
-					to={'/'}
-					className="text-primary text-[48px] font-semibold font-['Poppins']"
-				>
-					Alliance.
-				</Link>
-				<div className='flex justify-end items-center gap-2'>
-					<Button
-						to='/register'
-						variant={'primary'}
-						size={'sm'}
-						className='w-28'
-					>
-						Sign Up
-					</Button>
-					<Button
-						to='/login'
-						variant={'secondary'}
-						size={'sm'}
-						className='w-28'
-					>
-						Sign In
-					</Button>
-				</div>
-			</div>
-			<div className='px-8 grid lg:grid-cols-2 md:grid-cols-1 md:gap-2 mt-14'>
+		<div className='px-8'>
+			<Navbar />
+			<div className='grid grid-cols-2'>
 				<div className='mt-36 flex flex-col gap-2'>
 					<p className="text-5xl font-semibold font-['Poppins']">
 						Task Management &<br />
@@ -50,15 +25,32 @@ export default function Home() {
 						Let’s Start
 					</Button>
 				</div>
-				<div className='relative w-0 2xl:w-full'>
-					<img src={IMAGES.female} className='absolute top-40 left-32' />
-					<img src={IMAGES.calendar} className='absolute top-32 right-2' />
-					<img src={IMAGES.stopwatch} className='absolute top-4 left-8' />
-					<img src={IMAGES.pie_chart} className='absolute top-72' />
+				<div className='invisible desktop:visible'>
+					<img
+						src={IMAGES.female}
+						width={500}
+						className='fixed z-10 bottom-3'
+					/>
+					<img
+						src={IMAGES.stopwatch}
+						className='fixed top-30 left-98'
+						width={110}
+					/>
+					<img
+						src={IMAGES.pie_chart}
+						width={60}
+						className='fixed top-64 left-[600px]'
+					/>
+					<img
+						src={IMAGES.calendar}
+						width={90}
+						className='fixed top-56 left-[1100px]'
+					/>
 					<img
 						src={IMAGES.notifications}
-						className='absolute top-[410px] left-[520px]'
+						className='fixed z-10 bottom-52 left-[1048px]'
 					/>
+					<img src={IMAGES.vector} className='fixed bottom-0 left-0 h-44' />
 				</div>
 			</div>
 		</div>
