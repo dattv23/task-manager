@@ -1,5 +1,8 @@
-.register {
-	.ant-form-item-label > label {
-		font-size: 16px;
-	}
+.bg-left {
+	height: 100%;
+	background-image: url('../../../assets/images/bg_left.png');
+	border-radius: 10px;
+	background-repeat: no-repeat;
+	background-size: cover;
+	width: 50%;
 }

@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row } from 'antd';
+import { Button, Form, Input } from 'antd';
 import './style.scss';
 
 type FieldType = {
@@ -9,34 +9,48 @@ type FieldType = {
 
 export default function Register() {
 	return (
-		<Row className='p-5 register'>
-			<Col xs={{ span: 0 }}></Col>
-			<Col xs={{ span: 24 }} className='flex flex-col items-end'>
-				<Button className='float-right w-[180px] h-12 border-2 border-primary text-primary text-lg font-medium font-sans'>
-					Login
+		<div className='flex p-4 h-screen'>
+			<div className='w-1/2 hidden lg:block relative bg-left px-24 py-7'>
+				<h2 className='text-5xl font-semibold text-white mt-28'>
+					Take your productivity to the next level.
+				</h2>
+				<fieldset className='border border-[#ccc] py-2 px-4 rounded-md mt-36 w-[370px]'>
+					<legend className='ml-2 px-2 text-white font-semibold'>
+						Get the Mobile App
+					</legend>
+					<Button className='bg-yellow-400 font-semibold text-primary mr-4'>
+						Download on Apple
+					</Button>
+					<Button className='bg-white font-semibold text-primary'>
+						Download on Apple
+					</Button>
+				</fieldset>
+				<p className='text-white font-light mt-20'>
+					Copyright 2023 | All Right Reserved
+				</p>
+			</div>
+			<div className='w-full lg:w-1/2'>
+				<Button className='float-right mt-2 mr-2 px-8 font-semibold border-primary text-primary'>
+					Log In
 				</Button>
-				<div className='w-full mt-[135px]'>
-					<h2 className='text-black text-4xl font-bold'>Create an Account</h2>
-					<p className='text-gray text-lg mt-2'>It’s Simple and Easy!!</p>
-					<Form name='basic' className='mt-10'>
+				<div className='mt-32 px-16'>
+					<h3 className='text-3xl font-bold'>Create an Account</h3>
+					<p className='text-stone-600 mb-9'>It's Simple and Easy!</p>
+					<Form name='basic' autoComplete='off'>
 						<Form.Item<FieldType>
 							label='Fullname'
 							name='fullname'
 							rules={[
-								{ required: true, message: 'Please input your fullname!' },
+								{ required: true, message: 'Please input your Fullname!' },
 							]}
-							required={false}
 						>
 							<Input />
 						</Form.Item>
 
 						<Form.Item<FieldType>
-							label='Email address'
+							label='Email Address'
 							name='email'
-							rules={[
-								{ required: true, message: 'Please input your email address!' },
-							]}
-							required={false}
+							rules={[{ required: true, message: 'Please input your email!' }]}
 						>
 							<Input />
 						</Form.Item>
@@ -47,17 +61,22 @@ export default function Register() {
 							rules={[
 								{ required: true, message: 'Please input your password!' },
 							]}
-							required={false}
 						>
 							<Input.Password />
 						</Form.Item>
 
-						<Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-							<Button htmlType='submit'>Submit</Button>
+						<Form.Item className='w-full'>
+							<Button
+								type='primary'
+								htmlType='submit'
+								className='bg-primary w-full font-semibold'
+							>
+								Create Account
+							</Button>
 						</Form.Item>
 					</Form>
 				</div>
-			</Col>
-		</Row>
+			</div>
+		</div>
 	);
 }
