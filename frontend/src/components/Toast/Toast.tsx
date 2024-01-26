@@ -84,7 +84,7 @@ const Toast: React.FC<ToastProps> = ({
       <div className='w-[250px] break-words'>
         <h4 className='text-lg font-medium first-letter:uppercase'>{title}</h4>
         <p className='mb-2 text-xs font-light'>{description}</p>
-        {progress && <Progressbar time={10000} />}
+        {progress && <Progressbar time={time} />}
       </div>
       <button className='w-10 hover:text-dark' onClick={onClose}>
         <CloseOutlined />

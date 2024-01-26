@@ -21,7 +21,9 @@ const App = () => {
         title='Notification'
         description='This is a custom alert created using React and TypeScript.'
         onClose={handleToastClose}
-        type={'error'}
+        type={'info'}
+        progress={true}
+        time={5000}
       />
     </div>
   )
