@@ -1,26 +1,28 @@
 import { useState } from 'react'
-import Alert from './components/Alert'
+import Toast from '~/components/Toast'
 
 const App = () => {
-  const [alertOpen, setAlertOpen] = useState(false)
+  const [toastOpen, setToastOpen] = useState(false)
 
-  const handleAlertClose = () => {
-    setAlertOpen(false)
+  const handleToastClose = () => {
+    setToastOpen(false)
   }
 
-  const handleShowAlert = () => {
-    setAlertOpen(true)
+  const handleShowToast = () => {
+    setToastOpen(true)
   }
 
   return (
     <div>
-      <button onClick={handleShowAlert}>Show Alert</button>
+      <button onClick={handleShowToast}>Show Toast</button>
 
-      <Alert
-        open={alertOpen}
-        content='This is a custom alert created using React and TypeScript.'
-        onClose={handleAlertClose}
+      <Toast
+        open={toastOpen}
+        title='Notification'
+        description='This is a custom alert created using React and TypeScript.'
+        onClose={handleToastClose}
         type={'info'}
+        progress={true}
       />
     </div>
   )
