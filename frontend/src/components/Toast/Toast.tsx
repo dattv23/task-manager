@@ -6,7 +6,7 @@ import {
   WarningOutlined
 } from '@ant-design/icons'
 import { VariantProps, cva } from 'class-variance-authority'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { cn } from '~/utils'
 import Progressbar from '../Progressbar/Progressbar'
 
@@ -78,12 +78,12 @@ const Toast: React.FC<ToastProps> = ({
 
   return (
     <div className={cn(toastVariants({ type, className }))} {...props}>
-      <div className='w-10 h-10 bg-dark bg-opacity-5 rounded-full flex justify-center items-center text-xl'>
+      <div className='flex h-10 w-10 items-center justify-center rounded-full bg-dark bg-opacity-5 text-xl'>
         {renderIcon(type!)}
       </div>
       <div className='w-[250px] break-words'>
-        <h4 className='first-letter:uppercase text-lg font-medium'>{title}</h4>
-        <p className='text-xs font-light mb-2'>{description}</p>
+        <h4 className='text-lg font-medium first-letter:uppercase'>{title}</h4>
+        <p className='mb-2 text-xs font-light'>{description}</p>
         {progress && <Progressbar time={10000} />}
       </div>
       <button className='w-10 hover:text-dark' onClick={onClose}>
