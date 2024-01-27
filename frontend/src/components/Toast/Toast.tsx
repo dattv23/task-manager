@@ -8,7 +8,7 @@ import {
 import { VariantProps, cva } from 'class-variance-authority'
 import React, { useEffect } from 'react'
 import { cn } from '~/utils'
-import Progressbar from '../Progressbar/Progressbar'
+import Progressbar from '../Progressbar'
 
 const toastVariants = cva('w-[400px] p-5 rounded-xl fixed top-5 right-5 border-2 bg-white', {
   variants: {
@@ -79,7 +79,7 @@ const Toast: React.FC<ToastProps> = ({
   }
 
   return (
-    <div className={cn(toastVariants({ type, className }))} {...props}>
+    <div className={cn(toastVariants({ type, className }), 'animate__animated animate__fadeInRight')} {...props}>
       <div className='flex items-start justify-between'>
         <div className='flex h-10 w-10 items-center justify-center rounded-full bg-dark bg-opacity-5 text-xl'>
           {renderIcon(type!)}
@@ -92,8 +92,8 @@ const Toast: React.FC<ToastProps> = ({
           <CloseOutlined />
         </button>
       </div>
-      <div className='absolute bottom-0 left-0 right-0'>
-        {progress && <Progressbar time={time} color={colorProgress} className='rounded-b-[24px] rounded-r-[20px]' />}
+      <div className='absolute bottom-0 left-1 right-0'>
+        {progress && <Progressbar time={time} color={colorProgress} className='rounded-b-[28px] rounded-r-[28px]' />}
       </div>
     </div>
   )

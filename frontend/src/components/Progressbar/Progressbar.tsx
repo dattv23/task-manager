@@ -16,7 +16,7 @@ const Progressbar: React.FC<ProgressbarProps> = ({ time, color = '#cccc', classN
 
   return (
     <div
-      className={cn('h-2 w-full', className)}
+      className={cn('h-1 w-full', className)}
       {...props}
       style={{
         width: `${100 - filled}%`,
