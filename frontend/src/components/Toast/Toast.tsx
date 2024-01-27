@@ -10,7 +10,7 @@ import React, { useEffect } from 'react'
 import { cn } from '~/utils'
 import Progressbar from '../Progressbar/Progressbar'
 
-const toastVariants = cva('w-[400px] flex justify-between items-start p-5 rounded-xl fixed top-5 right-5 border', {
+const toastVariants = cva('w-[400px] p-5 rounded-xl fixed top-5 right-5 border-2 bg-white', {
   variants: {
     type: {
       error: 'border-error text-error',
@@ -30,6 +30,7 @@ interface ToastProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<
   open: boolean
   onClose: () => void
   progress?: boolean
+  colorProgress?: string
   time?: number // milliseconds
 }
 
@@ -54,6 +55,7 @@ const Toast: React.FC<ToastProps> = ({
   title,
   description,
   progress,
+  colorProgress,
   time = 3000,
   ...props
 }) => {
@@ -78,17 +80,21 @@ const Toast: React.FC<ToastProps> = ({
 
   return (
     <div className={cn(toastVariants({ type, className }))} {...props}>
-      <div className='flex h-10 w-10 items-center justify-center rounded-full bg-dark bg-opacity-5 text-xl'>
-        {renderIcon(type!)}
+      <div className='flex items-start justify-between'>
+        <div className='flex h-10 w-10 items-center justify-center rounded-full bg-dark bg-opacity-5 text-xl'>
+          {renderIcon(type!)}
+        </div>
+        <div className='w-[250px] break-words'>
+          <h4 className='text-lg font-medium first-letter:uppercase'>{title}</h4>
+          <p className='mb-2 text-xs font-light'>{description}</p>
+        </div>
+        <button className='w-10 hover:text-dark' onClick={onClose}>
+          <CloseOutlined />
+        </button>
       </div>
-      <div className='w-[250px] break-words'>
-        <h4 className='text-lg font-medium first-letter:uppercase'>{title}</h4>
-        <p className='mb-2 text-xs font-light'>{description}</p>
-        {progress && <Progressbar time={time} />}
+      <div className='absolute bottom-0 left-0 right-0'>
+        {progress && <Progressbar time={time} color={colorProgress} className='rounded-b-[24px] rounded-r-[20px]' />}
       </div>
-      <button className='w-10 hover:text-dark' onClick={onClose}>
-        <CloseOutlined />
-      </button>
     </div>
   )
 }
