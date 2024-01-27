@@ -1,32 +1,10 @@
-import { useState } from 'react'
-import Toast from '~/components/Toast'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import Root from '~/components/Root/Root'
+
+const router = createBrowserRouter([{ path: '*', Component: Root }])
 
 const App = () => {
-  const [toastOpen, setToastOpen] = useState(false)
-
-  const handleToastClose = () => {
-    setToastOpen(false)
-  }
-
-  const handleShowToast = () => {
-    setToastOpen(true)
-  }
-
-  return (
-    <div>
-      <button onClick={handleShowToast}>Show Toast</button>
-
-      <Toast
-        open={toastOpen}
-        title='Notification'
-        description='This is a custom alert created using React and TypeScript.'
-        onClose={handleToastClose}
-        type={'info'}
-        progress={true}
-        time={5000}
-      />
-    </div>
-  )
+  return <RouterProvider router={router} />
 }
 
 export default App
