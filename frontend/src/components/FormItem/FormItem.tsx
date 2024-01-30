@@ -12,7 +12,7 @@ interface FormItemProps {
 const FormItem: React.FC<FormItemProps> = ({ name, label = '', placeholder = '', rules, type = 'text' }) => {
   return (
     <>
-      <p className='mb-3 text-base font-normal text-gray-800'>{label}</p>
+      <p className='mb-3 text-base font-semibold text-gray-800'>{label}</p>
       <Form.Item name={name} rules={rules}>
         {type === 'text' ? (
           <Input
