@@ -2,6 +2,7 @@ import { Form, Input } from 'antd'
 import { useState } from 'react'
 import Button from '~/components/Button'
 import Toast from '~/components/Toast'
+import './style.scss'
 
 const onFinish = (values: any) => {
   console.log('Success:', values)
@@ -28,7 +29,7 @@ const Register: React.FC = () => {
               <Form.Item
                 label='Fullname'
                 name='fullname'
-                rules={[{ required: true, message: 'Please input your Fullname!' }]}
+                rules={[{ required: true, message: 'Please input your full name!' }]}
               >
                 <Input />
               </Form.Item>
@@ -36,7 +37,7 @@ const Register: React.FC = () => {
               <Form.Item
                 label='Email Address'
                 name='email'
-                rules={[{ required: true, message: 'Please input your Email Address!' }]}
+                rules={[{ required: true, message: 'Please input your email address!' }]}
               >
                 <Input />
               </Form.Item>

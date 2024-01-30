@@ -3,9 +3,9 @@ import { RouteObject } from 'react-router-dom'
 import config from '~/config'
 
 const HomePage = React.lazy(() => import('~/container/Home'))
-const LoginPage = React.lazy(() => import('~/container/Auth/Login'))
-const RegisterPage = React.lazy(() => import('~/container/Auth/Register'))
-const NotFoundPage = React.lazy(() => import('~/container/NotFound'))
+const LoginPage = React.lazy(() => import('~/container/Auth/pages/Login'))
+const RegisterPage = React.lazy(() => import('~/container/Auth/pages/Register'))
+const NotFoundPage = React.lazy(() => import('~/components/NotFound'))
 
 const publicRoute: RouteObject[] = [
   { path: config.routes.notFound, Component: NotFoundPage },
