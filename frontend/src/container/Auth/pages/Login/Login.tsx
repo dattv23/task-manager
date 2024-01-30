@@ -15,12 +15,12 @@ const onFinishFailed = (errorInfo: any) => {
 
 const Login: React.FC = () => {
   const [toastOpen, setToastOpen] = useState(false)
-  const [isLogin, setIsLogin] = useState(false)
+  const [isLogin, setIsLogin] = useState(true)
   return (
     <>
       <div className='flex h-screen p-5'>
-        <div className='z-10 flex h-full w-full flex-col items-center justify-center bg-white px-[120px] xl:w-1/2'>
-          <div className='w-[384px]'>
+        <div className='z-10 flex h-full w-full flex-col items-center justify-center bg-white  xl:w-1/2'>
+          <div className='w-full lg:px-8 xl:px-40'>
             {!isLogin ? (
               <h3 className='mb-8 text-left text-[32px] font-bold text-black'>Welcome Back.</h3>
             ) : (
@@ -47,17 +47,23 @@ const Login: React.FC = () => {
               />
 
               <Form.Item>
-                <Button type='submit' className='my-8 w-[204px]' onClick={() => setToastOpen(true)}>
+                <Button type='submit' className='my-3 w-[204px]' onClick={() => setToastOpen(true)}>
                   Log In
                 </Button>
               </Form.Item>
             </Form>
-            <Link to='/forgot-password' className='w-full text-left text-lg font-semibold text-blue-700'>
+            <Link
+              to='/forgot-password'
+              className='w-full text-left text-lg font-semibold text-blue-700 hover:opacity-80'
+            >
               Forgot Password?
             </Link>
           </div>
         </div>
-        <div className='relative hidden items-center justify-center rounded-[32px] bg-primary px-[100px] lg:flex xl:w-1/2'>
+        <div className='relative hidden flex-col items-center justify-center rounded-[32px] bg-primary px-[100px] lg:flex xl:w-1/2'>
+          <Button variant={'secondary'} className='absolute right-8 top-8 w-fit'>
+            Create Account
+          </Button>
           <div className='z-10 w-full'>
             <h2 className='z-10 mb-32 text-right text-[56px] font-semibold leading-[66px] text-white'>
               Take your productivity to the next level.
