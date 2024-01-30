@@ -19,8 +19,8 @@ const Register: React.FC = () => {
   return (
     <>
       <div className='flex h-screen p-5'>
-        <div className='relative hidden items-center justify-center rounded-[32px] bg-primary px-[100px] lg:flex xl:w-1/2'>
-          <div className='flex-1'>
+        <div className='relative hidden items-center justify-center rounded-[32px] bg-primary lg:flex lg:px-[100px] xl:w-1/2'>
+          <div className='z-10 flex-1'>
             <h2 className='z-20 mb-32 w-[454px] text-[56px] font-semibold leading-[66px] text-white'>
               Take your productivity to the next level.
             </h2>
@@ -32,13 +32,11 @@ const Register: React.FC = () => {
           </div>
           <div className='absolute left-3/4 h-[460px] w-[460px] overflow-hidden rounded-full border-[72px] border-[#FBBE37]'></div>
         </div>
-        <div className='z-10 flex h-full w-full flex-col gap-20 bg-white p-5 xl:w-1/2'>
-          <div className='flex justify-end'>
-            <Button variant={'secondary'} onClick={() => navigate('/login')}>
-              Log in
-            </Button>
-          </div>
-          <div className='px-10 lg:px-[126px]'>
+        <div className='relative  z-10 flex h-full w-full items-center  justify-center bg-white xl:w-1/2'>
+          <Button variant={'secondary'} onClick={() => navigate('/login')} className='absolute right-8 top-8'>
+            Log in
+          </Button>
+          <div className='w-full flex-col items-center justify-end lg:px-8 xl:px-40'>
             <h3 className='text-[32px] font-bold text-black'>Create an Account</h3>
             <p className='text-base font-normal text-gray-500'>It's Simple and Easy!!</p>
             <Form name='basic' onFinish={onFinish} onFinishFailed={onFinishFailed}>
