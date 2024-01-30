@@ -2,7 +2,7 @@ import React from 'react'
 import { RouteObject } from 'react-router-dom'
 import config from '~/config'
 
-const HomePage = React.lazy(() => import('~/container/Home'))
+const HomePage = React.lazy(() => import('~/container/Home/pages/MainHome'))
 const LoginPage = React.lazy(() => import('~/container/Auth/pages/Login'))
 const RegisterPage = React.lazy(() => import('~/container/Auth/pages/Register'))
 const NotFoundPage = React.lazy(() => import('~/components/NotFound'))
