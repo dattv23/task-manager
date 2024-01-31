@@ -61,7 +61,7 @@ const Login: React.FC = () => {
           </div>
         </div>
         <div className='relative hidden flex-col items-center justify-center rounded-[32px] bg-primary px-[100px] lg:flex xl:w-1/2'>
-          <Button variant={'secondary'} className='absolute right-8 top-8 w-fit'>
+          <Button variant={'secondary'} className='absolute right-8 top-8'>
             Create Account
           </Button>
           <div className='z-10 w-full'>

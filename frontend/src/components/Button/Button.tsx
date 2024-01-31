@@ -3,7 +3,7 @@ import React from 'react'
 import { cn } from '~/utils'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-xl px-16 text-base font-medium hover:opacity-80',
+  'inline-flex items-center justify-center rounded-xl px-6 text-base font-medium hover:opacity-80',
   {
     variants: {
       variant: {
