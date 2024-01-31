@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import { publicRoute } from '~/routes'
 
-const Root = () => {
+const Root: React.FC = () => {
   return (
     <Routes>
       {publicRoute.map((route, id) => {

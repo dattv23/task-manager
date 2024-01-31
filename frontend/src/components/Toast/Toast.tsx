@@ -8,7 +8,7 @@ import {
 import { VariantProps, cva } from 'class-variance-authority'
 import React, { useEffect } from 'react'
 import { cn } from '~/utils'
-import Progressbar from '../Progressbar'
+import Progressbar from '../Progress'
 
 const toastVariants = cva('w-[400px] p-5 rounded-xl fixed top-5 right-5 border-2 bg-white', {
   variants: {
