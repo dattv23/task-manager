@@ -10,14 +10,12 @@ export class ErrorWithStatus {
   message: string
   created_at: string
   updated_at: string
-  messageConstants: string
 
-  constructor({ statusCode, message, created_at, updated_at, messageConstants }: ErrorType) {
+  constructor({ statusCode, message, created_at, updated_at }: ErrorType) {
     this.statusCode = statusCode
     this.message = message
     this.created_at = created_at || moment(new Date()).format('DD-MM-YYYY\\tHH:mm:ssSSS')
     this.updated_at = updated_at || moment(new Date()).format('DD-MM-YYYY\\tHH:mm:ssSSS')
-    this.messageConstants = messageConstants || null
   }
 }
 

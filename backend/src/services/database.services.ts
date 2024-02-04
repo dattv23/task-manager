@@ -8,7 +8,7 @@ class DatabaseService {
   private db: Db
 
   constructor() {
-    this.client = new MongoClient(env.database.url, {
+    this.client = new MongoClient(env.database.url!, {
       serverApi: {
         version: ServerApiVersion.v1,
         strict: true,
