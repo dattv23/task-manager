@@ -1,6 +1,7 @@
 import { Collection, Db, MongoClient, ServerApiVersion } from 'mongodb'
 import { env } from '~/config/env.config'
 import { DATABASE_MESSAGE } from '~/constants/messages'
+import RefreshToken from '~/models/database/RefreshToken'
 import User from '~/models/database/User'
 
 class DatabaseService {
@@ -38,6 +39,10 @@ class DatabaseService {
 
   public get users(): Collection<User> {
     return this.db.collection('users')
+  }
+
+  public get refreshTokens(): Collection<RefreshToken> {
+    return this.db.collection('refresh-tokens')
   }
 }
 

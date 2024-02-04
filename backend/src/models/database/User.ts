@@ -1,12 +1,12 @@
 import { ObjectId } from 'mongodb'
-import UserType from '~/@types/user.types'
+import { UserType } from '~/@types/user.types'
 import { UserRole, UserVerifyStatus } from '~/constants/enums'
 
 export default class User {
-  _id: ObjectId
-  fullName: string
+  _id?: ObjectId
+  fullName?: string
   email: string
-  password: string
+  password?: string
   date_of_birth: Date
   avatar: string
   bio: string
@@ -30,6 +30,6 @@ export default class User {
     this.verify = user.verify || UserVerifyStatus.Unverified
     this._destroy = user._destroy || false
     this.created_at = user.created_at || new Date()
-    this.updated_at = user.updated_at || null
+    this.updated_at = user.updated_at || new Date()
   }
 }

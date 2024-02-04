@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb'
 import { UserRole, UserVerifyStatus } from '~/constants/enums'
 
-export default interface UserType {
+export type UserType = {
   _id?: ObjectId
   fullName?: string
   email: string
