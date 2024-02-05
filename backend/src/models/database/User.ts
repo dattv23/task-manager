@@ -4,9 +4,9 @@ import { UserRole, UserVerifyStatus } from '~/constants/enums'
 
 export default class User {
   _id?: ObjectId
-  fullName?: string
+  fullName: string
   email: string
-  password?: string
+  password: string
   date_of_birth: Date
   avatar: string
   bio: string

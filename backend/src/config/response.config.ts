@@ -43,6 +43,14 @@ export const sendResponse = {
       dataTime: moment(new Date()).format('DD-MM-YYYY\\tHH:mm:ss')
     })
   },
+  validation: (response: Response, errors: any, message: string) => {
+    response.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+      statusCode: StatusCodes.UNPROCESSABLE_ENTITY,
+      errors: errors,
+      message: message,
+      dataTime: moment(new Date()).format('DD-MM-YYYY\\tHH:mm:ss')
+    })
+  },
   forbidden: (response: Response, message: string) => {
     response.status(StatusCodes.FORBIDDEN).json({
       statusCode: StatusCodes.FORBIDDEN,

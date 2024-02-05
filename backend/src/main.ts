@@ -1,5 +1,4 @@
-import express, { Express, NextFunction, Request, Response } from 'express'
-import dotenv from 'dotenv'
+import express, { NextFunction, Request, Response } from 'express'
 import { sendResponse } from '~/config/response.config'
 import { createServer } from 'http'
 import cors from 'cors'
@@ -9,11 +8,12 @@ import cookieParser from 'cookie-parser'
 import rootRouter from './routes'
 import { env } from './config/env.config'
 import { databaseService } from './services/database.services'
-import { defaultErrorHandler } from './middlewares/error.middlewares'
+import { errorHandler } from './middlewares/error.middlewares'
+import exitHook from 'async-exit-hook'
+import { DATABASE_MESSAGE } from './constants/messages'
+import 'express-async-errors'
 
-dotenv.config()
-
-const app: Express = express()
+const app = express()
 const httpServer = createServer(app)
 
 // enable all CORS requests
@@ -42,6 +42,7 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 app.use('/api', rootRouter)
+
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
@@ -56,8 +57,13 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 databaseService.connect()
 
 // Error handling
-app.use(defaultErrorHandler)
+app.use(errorHandler)
 
-httpServer.listen(env.server.port, () => {
-  console.log(`[Server]: Server is running at http://localhost:${env.server.port}`)
+httpServer.listen({ port: env.server.port, hostname: env.server.host }, () => {
+  console.log(`🚀 Server Is Running At http://${env.server.host}:${env.server.port}`)
+})
+
+exitHook(() => {
+  databaseService.disConnect()
+  console.log(DATABASE_MESSAGE.DISCONNECT)
 })
