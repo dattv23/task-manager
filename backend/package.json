@@ -28,6 +28,7 @@
     "moment": "^2.30.1",
     "mongodb": "^6.3.0",
     "morgan": "^1.10.0",
+    "nodemailer": "^6.9.9",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -40,6 +41,7 @@
     "@types/lodash": "^4.14.202",
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.11.7",
+    "@types/nodemailer": "^6.4.14",
     "@typescript-eslint/eslint-plugin": "^6.20.0",
     "@typescript-eslint/parser": "^6.20.0",
     "async-exit-hook": "^2.0.1",

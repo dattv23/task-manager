@@ -20,6 +20,7 @@ export const VALIDATION_MESSAGES = {
 
 export const RESULT_RESPONSE_MESSAGES = {
   USER: {
-    REGISTER: 'Created account successfully!'
+    REGISTER: 'Created account successfully!',
+    SEND_OTP_FAILED: 'Failed to send otp. Please try again!'
   }
 }

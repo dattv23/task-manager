@@ -19,5 +19,9 @@ export const env = {
     accessTokenEXP: process.env.ACCESS_TOKEN_EXPIRED,
     refreshTokenEXP: process.env.REFRESH_TOKEN_EXPIRED,
     jwtAlgorithm: process.env.JWT_ALGORITHM
+  },
+  email: {
+    address: process.env.EMAIL,
+    password: process.env.PASS_EMAIL
   }
 }
