@@ -7,6 +7,8 @@
  */
 export const regexPassword: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,16}$/
 
+export const regexOTP: RegExp = /^\d{6}$/
+
 export const generateOTP = () => {
   const digits = '0123456789'
   let OTP = ''

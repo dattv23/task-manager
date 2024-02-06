@@ -32,7 +32,7 @@ const sendOTP = async (emailTo: string) => {
     await transporter.sendMail(mailOptions)
     return Promise.resolve(otp)
   } catch (error) {
-    throw new ErrorWithStatus({ statusCode: StatusCodes.INTERNAL_SERVER_ERROR, message: RESULT_RESPONSE_MESSAGES.USER.SEND_OTP_FAILED })
+    throw new ErrorWithStatus({ statusCode: StatusCodes.INTERNAL_SERVER_ERROR, message: RESULT_RESPONSE_MESSAGES.MAIL.SEND_OTP_FAILED })
   }
 }
 

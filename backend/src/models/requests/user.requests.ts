@@ -17,3 +17,12 @@ export interface RefreshTokenPayload {
   role: UserRole
   tokenType: TokenType.RefreshToken
 }
+
+export interface VerifyOTPBody {
+  email: string
+  code: string
+}
+
+export interface ResendOTPBody {
+  email: string
+}
