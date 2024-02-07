@@ -26,3 +26,8 @@ export interface VerifyOTPBody {
 export interface ResendOTPBody {
   email: string
 }
+
+export interface ResetPasswordBody {
+  email: string
+  password: string
+}

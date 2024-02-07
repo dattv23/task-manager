@@ -38,5 +38,8 @@ export const RESULT_RESPONSE_MESSAGES = {
   },
   RESEND_OTP: {
     IS_SUCCESS: 'Resend OTP successfully'
+  },
+  RESET_PASSWORD: {
+    IS_SUCCESS: 'Reset password successfully'
   }
 }

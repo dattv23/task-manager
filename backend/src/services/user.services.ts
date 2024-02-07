@@ -1,13 +1,13 @@
 import { ResultRegisterType } from '~/@types/response.types'
 import User from '~/models/database/User'
-import { RegisterBody, ResendOTPBody, VerifyOTPBody } from '~/models/requests/user.requests'
+import { RegisterBody, ResendOTPBody, ResetPasswordBody, VerifyOTPBody } from '~/models/requests/user.requests'
 import { databaseService } from './database.services'
 import { hashText } from '~/utils/crypto'
 import OTP from '~/models/database/OTP'
 import { sendOTP } from '~/utils/email'
 import { ErrorWithStatus } from '~/models/Error'
 import { StatusCodes } from 'http-status-codes'
-import { RESULT_RESPONSE_MESSAGES } from '~/constants/messages'
+import { RESULT_RESPONSE_MESSAGES, VALIDATION_MESSAGES } from '~/constants/messages'
 
 class UserServices {
   async register(payload: RegisterBody): Promise<ResultRegisterType> {
@@ -50,6 +50,15 @@ class UserServices {
     })
     await databaseService.otps.findOneAndDelete({ email })
     await databaseService.otps.insertOne(newOTP)
+    return true
+  }
+
+  async resetPassword(payload: ResetPasswordBody): Promise<boolean> {
+    const { email, password } = payload
+    const user = await databaseService.users.findOneAndUpdate({ email }, { $set: { password: hashText(password) } })
+    if (!user) {
+      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: VALIDATION_MESSAGES.USER.EMAIL_NOT_EXIST })
+    }
     return true
   }
 }

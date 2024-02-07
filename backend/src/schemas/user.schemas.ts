@@ -72,3 +72,18 @@ export const resendOTPSchema = z.object({
       { message: VALIDATION_MESSAGES.USER.EMAIL_NOT_EXIST }
     )
 })
+
+export const resetPasswordSchema = z.object({
+  email: z
+    .string({
+      required_error: VALIDATION_MESSAGES.USER.EMAIL_IS_REQUIRED,
+      invalid_type_error: VALIDATION_MESSAGES.USER.EMAIL_MUST_BE_STRING
+    })
+    .email({ message: VALIDATION_MESSAGES.USER.EMAIL_INVALID }),
+  password: z
+    .string({
+      required_error: VALIDATION_MESSAGES.USER.PASSWORD_IS_REQUIRED,
+      invalid_type_error: VALIDATION_MESSAGES.USER.PASSWORD_MUST_BE_STRING
+    })
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,15}$/, { message: VALIDATION_MESSAGES.USER.PASSWORD_INVALID })
+})
