@@ -26,8 +26,8 @@ class UserServices {
       email: email
     })
     await databaseService.otps.insertOne(newOTP)
-    const user_id = userResult.insertedId.toString()
-    const content: ResultRegisterType = { _id: user_id, fullName, email }
+    const userId = userResult.insertedId.toString()
+    const content: ResultRegisterType = { userId, fullName, email }
     return content
   }
 
@@ -73,6 +73,7 @@ class UserServices {
     if (user.password !== hashText(password)) {
       throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.LOGIN.PASSWORD_INCORRECT })
     }
+    const { _id, fullName } = user
     const [accessToken, refreshToken] = await tokenServices.signAccessAndRefreshToken(user._id.toString(), user.role)
     await databaseService.refreshTokens.insertOne(
       new RefreshToken({
@@ -80,7 +81,7 @@ class UserServices {
         user_id: user._id
       })
     )
-    const content: ResultLoginType = { accessToken, refreshToken }
+    const content: ResultLoginType = { userId: _id.toString(), email, fullName, accessToken, refreshToken }
     return content
   }
 }

@@ -1,12 +1,11 @@
 import { Form } from 'antd'
-import { useEffect, useState } from 'react'
 import Button from '~/components/Button'
-import Toast from '~/components/Toast'
 import FormItem from '~/components/FormItem'
-import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '~/redux/config'
-import { loginFieldType } from '~/@types/api.type'
+import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { useLoginMutation } from '~/apis/api'
+import { loginField, loginResult } from '~/@types/api.type'
+import { getStore, setStore } from '~/utils'
 import { authAction } from '~/redux/reducers/user.reducers'
 
 const onFinishFailed = (errorInfo: any) => {
@@ -14,16 +13,28 @@ const onFinishFailed = (errorInfo: any) => {
 }
 
 const Login: React.FC = () => {
-  const [toastOpen, setToastOpen] = useState(false)
-  const isLogin = useSelector((state: RootState) => state.user.isLogin)
   const dispatch = useDispatch()
+  const [login, { isLoading, error }] = useLoginMutation()
+  const email = getStore('email')
+  const fullName = getStore('fullName')
 
-  const onFinish = (values: loginFieldType) => {
+  const onFinish = async (values: loginField) => {
     const { email, password } = values
-    console.log('====================================')
-    console.log(email, password)
-    console.log('====================================')
-    dispatch(authAction(true))
+    const res = await login({ email, password })
+    if ('data' in res) {
+      const { accessToken, fullName } = res.data.data as loginResult
+      setStore('accessToken', accessToken)
+      setStore('email', email)
+      setStore('fullName', fullName)
+      dispatch(authAction(true))
+    }
+    if ('error' in res) {
+      if (res.error && 'data' in res.error) {
+        console.log(res.error.data)
+      } else {
+        console.log(res.error)
+      }
+    }
   }
 
   return (
@@ -31,16 +42,16 @@ const Login: React.FC = () => {
       <div className='flex h-screen p-5'>
         <div className='z-10 flex h-full w-full flex-col items-center justify-center bg-white  xl:w-1/2'>
           <div className='w-full lg:px-8 xl:px-40'>
-            {!isLogin ? (
+            {!email ? (
               <h3 className='mb-8 text-left text-[32px] font-bold text-black'>Welcome Back.</h3>
             ) : (
               <div>
                 <h3 className='mb-1 text-left text-[32px] font-normal text-black'>Welcome Back</h3>
-                <p className='mb-4 text-3xl font-bold text-black'>Mano!</p>
+                <p className='mb-4 text-3xl font-bold text-black'>{fullName}!</p>
               </div>
             )}
             <Form name='basic' onFinish={onFinish} onFinishFailed={onFinishFailed}>
-              {!isLogin && (
+              {!email && (
                 <FormItem
                   name='email'
                   label='Email Address'
@@ -56,9 +67,11 @@ const Login: React.FC = () => {
                 type='password'
               />
 
+              {error && <p className='text-lg text-error'>{!email ? 'Password' : 'Email or password'} is incorrect</p>}
+
               <Form.Item>
                 <Button type='submit' className='my-3 w-[204px]'>
-                  Log In
+                  {isLoading ? 'Loading...' : 'Log In'}
                 </Button>
               </Form.Item>
             </Form>
@@ -87,15 +100,6 @@ const Login: React.FC = () => {
           <div className='absolute right-3/4 z-0 h-[460px] w-[460px] overflow-hidden rounded-full border-[72px] border-[#FBBE37]'></div>
         </div>
       </div>
-      <Toast
-        open={toastOpen}
-        title='Notification'
-        description='Create account successfully.'
-        onClose={() => setToastOpen(false)}
-        type={'info'}
-        progress={true}
-        colorProgress={'#6684FF'}
-      />
     </>
   )
 }
