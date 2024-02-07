@@ -54,7 +54,7 @@ export const verifyOTPSchema = z.object({
     .regex(regexOTP, { message: VALIDATION_MESSAGES.USER.OTP.IS_INVALID })
 })
 
-export const resendOTP = z.object({
+export const resendOTPSchema = z.object({
   email: z
     .string({
       required_error: VALIDATION_MESSAGES.USER.EMAIL_IS_REQUIRED,
