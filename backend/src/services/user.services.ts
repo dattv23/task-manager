@@ -1,6 +1,6 @@
-import { ResultRegisterType } from '~/@types/response.types'
+import { ResultLoginType, ResultRegisterType } from '~/@types/response.types'
 import User from '~/models/database/User'
-import { RegisterBody, ResendOTPBody, ResetPasswordBody, VerifyOTPBody } from '~/models/requests/user.requests'
+import { LoginBody, RegisterBody, ResendOTPBody, ResetPasswordBody, VerifyOTPBody } from '~/models/requests/user.requests'
 import { databaseService } from './database.services'
 import { hashText } from '~/utils/crypto'
 import OTP from '~/models/database/OTP'
@@ -8,6 +8,8 @@ import { sendOTP } from '~/utils/email'
 import { ErrorWithStatus } from '~/models/Error'
 import { StatusCodes } from 'http-status-codes'
 import { RESULT_RESPONSE_MESSAGES, VALIDATION_MESSAGES } from '~/constants/messages'
+import tokenServices from './token.services'
+import RefreshToken from '~/models/database/RefreshToken'
 
 class UserServices {
   async register(payload: RegisterBody): Promise<ResultRegisterType> {
@@ -57,9 +59,29 @@ class UserServices {
     const { email, password } = payload
     const user = await databaseService.users.findOneAndUpdate({ email }, { $set: { password: hashText(password) } })
     if (!user) {
-      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: VALIDATION_MESSAGES.USER.EMAIL_NOT_EXIST })
+      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.RESET_PASSWORD.EMAIL_NOT_EXIST })
     }
     return true
+  }
+
+  async login(payload: LoginBody): Promise<ResultLoginType> {
+    const { email, password } = payload
+    const user = await databaseService.users.findOne({ email })
+    if (!user) {
+      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.LOGIN.EMAIL_NOT_EXIST })
+    }
+    if (user.password !== hashText(password)) {
+      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.LOGIN.PASSWORD_INCORRECT })
+    }
+    const [accessToken, refreshToken] = await tokenServices.signAccessAndRefreshToken(user._id.toString(), user.role)
+    await databaseService.refreshTokens.insertOne(
+      new RefreshToken({
+        token: refreshToken,
+        user_id: user._id
+      })
+    )
+    const content: ResultLoginType = { accessToken, refreshToken }
+    return content
   }
 }
 

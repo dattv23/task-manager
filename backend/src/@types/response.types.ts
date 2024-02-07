@@ -3,3 +3,8 @@ export type ResultRegisterType = {
   fullName: string
   email: string
 }
+
+export type ResultLoginType = {
+  accessToken: string
+  refreshToken: string
+}
