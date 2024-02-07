@@ -1,13 +1,13 @@
 import { Form } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Button from '~/components/Button'
 import Toast from '~/components/Toast'
 import FormItem from '~/components/FormItem'
-import { Link } from 'react-router-dom'
-
-const onFinish = (values: any) => {
-  console.log('Success:', values)
-}
+import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '~/redux/config'
+import { loginFieldType } from '~/@types/api.type'
+import { authAction } from '~/redux/reducers/user.reducers'
 
 const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo)
@@ -15,7 +15,17 @@ const onFinishFailed = (errorInfo: any) => {
 
 const Login: React.FC = () => {
   const [toastOpen, setToastOpen] = useState(false)
-  const [isLogin, setIsLogin] = useState(true)
+  const isLogin = useSelector((state: RootState) => state.user.isLogin)
+  const dispatch = useDispatch()
+
+  const onFinish = (values: loginFieldType) => {
+    const { email, password } = values
+    console.log('====================================')
+    console.log(email, password)
+    console.log('====================================')
+    dispatch(authAction(true))
+  }
+
   return (
     <>
       <div className='flex h-screen p-5'>
@@ -47,7 +57,7 @@ const Login: React.FC = () => {
               />
 
               <Form.Item>
-                <Button type='submit' className='my-3 w-[204px]' onClick={() => setToastOpen(true)}>
+                <Button type='submit' className='my-3 w-[204px]'>
                   Log In
                 </Button>
               </Form.Item>
