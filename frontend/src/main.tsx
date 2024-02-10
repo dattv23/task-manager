@@ -8,14 +8,17 @@ import { persistor, store } from './redux/config.ts'
 import { PersistGate } from 'redux-persist/integration/react'
 import { Spin } from 'antd'
 import ToastsProvider from './hooks/useToasts.tsx'
+import { AuthProvider } from './hooks/useAuth.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate persistor={persistor} loading={<Spin size='large' />}>
-        <ToastsProvider>
-          <App />
-        </ToastsProvider>
+        <AuthProvider>
+          <ToastsProvider>
+            <App />
+          </ToastsProvider>
+        </AuthProvider>
       </PersistGate>
     </Provider>
   </React.StrictMode>

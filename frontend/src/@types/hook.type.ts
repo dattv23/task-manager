@@ -1,3 +1,5 @@
+import { LoginResult } from './api.type'
+
 export type ToastsContextType = {
   toasts: ToastType[]
   addToast: (toast: ToastType) => string
@@ -16,4 +18,10 @@ export type ToastType = {
   handleDismiss?: () => void
   progress?: boolean
   timeOut?: number // milliseconds
+}
+
+export type AuthContextType = {
+  isAuthenticated: boolean
+  loginUser: (data: LoginResult) => void
+  logoutUser: () => void
 }

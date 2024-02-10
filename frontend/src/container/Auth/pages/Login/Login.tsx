@@ -1,35 +1,40 @@
 import { Form } from 'antd'
 import Button from '~/components/Button'
 import FormItem from '~/components/FormItem'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useLoginMutation } from '~/apis/api'
-import { loginField, loginResult } from '~/@types/api.type'
-import { getStore, setStore } from '~/utils'
+import { getStore } from '~/utils'
 import { authAction } from '~/redux/reducers/user.reducers'
 import { useEffect } from 'react'
 import { useToasts } from '~/hooks/useToasts'
+import { useAuth } from '~/hooks/useAuth'
+import { LoginField, LoginResult } from '~/@types/api.type'
 
 const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo)
 }
 
 const Login: React.FC = () => {
-  const dispatch = useDispatch()
   const [login, { isLoading, error }] = useLoginMutation()
   const email = getStore('email')
   const fullName = getStore('fullName')
   const { addToast, clearToasts } = useToasts()
+  const { isAuthenticated, loginUser } = useAuth()
+  const navigate = useNavigate()
 
-  const onFinish = async (values: loginField) => {
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard')
+    }
+  }, [])
+
+  const onFinish = async (values: LoginField) => {
     const { email, password } = values
     const res = await login({ email, password })
     if ('data' in res) {
-      const { accessToken, fullName } = res.data.data as loginResult
-      setStore('accessToken', accessToken)
-      setStore('email', email)
-      setStore('fullName', fullName)
-      dispatch(authAction(true))
+      const data = res.data.data as LoginResult
+      loginUser(data)
       addToast({ title: 'Login', message: 'Login successfully', type: 'success', progress: true, timeOut: 5 })
     }
     if ('error' in res) {
