@@ -7,6 +7,8 @@ import { useLoginMutation } from '~/apis/api'
 import { loginField, loginResult } from '~/@types/api.type'
 import { getStore, setStore } from '~/utils'
 import { authAction } from '~/redux/reducers/user.reducers'
+import { useEffect } from 'react'
+import { useToasts } from '~/hooks/useToasts'
 
 const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo)
@@ -17,6 +19,7 @@ const Login: React.FC = () => {
   const [login, { isLoading, error }] = useLoginMutation()
   const email = getStore('email')
   const fullName = getStore('fullName')
+  const { addToast, clearToasts } = useToasts()
 
   const onFinish = async (values: loginField) => {
     const { email, password } = values
@@ -27,6 +30,7 @@ const Login: React.FC = () => {
       setStore('email', email)
       setStore('fullName', fullName)
       dispatch(authAction(true))
+      addToast({ title: 'Login', message: 'Login successfully', type: 'success', progress: true, timeOut: 5 })
     }
     if ('error' in res) {
       if (res.error && 'data' in res.error) {
@@ -34,8 +38,15 @@ const Login: React.FC = () => {
       } else {
         console.log(res.error)
       }
+      addToast({ title: 'Login', message: 'Login failed', type: 'error', progress: true, timeOut: 5 })
     }
   }
+
+  useEffect(() => {
+    return () => {
+      clearToasts()
+    }
+  }, [])
 
   return (
     <>

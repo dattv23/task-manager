@@ -1,7 +1,5 @@
 import { Form } from 'antd'
-import { useState } from 'react'
 import Button from '~/components/Button'
-import Toast from '~/components/Toast'
 import FormItem from '~/components/FormItem'
 import { useNavigate } from 'react-router-dom'
 
@@ -14,7 +12,6 @@ const onFinishFailed = (errorInfo: any) => {
 }
 
 const Register: React.FC = () => {
-  const [toastOpen, setToastOpen] = useState(false)
   const navigate = useNavigate()
   return (
     <>
@@ -62,7 +59,7 @@ const Register: React.FC = () => {
               />
 
               <Form.Item>
-                <Button type='submit' className='mt-12 w-full' onClick={() => setToastOpen(true)}>
+                <Button type='submit' className='mt-12 w-full'>
                   Create Account
                 </Button>
               </Form.Item>
@@ -70,15 +67,6 @@ const Register: React.FC = () => {
           </div>
         </div>
       </div>
-      <Toast
-        open={toastOpen}
-        title='Notification'
-        description='Create account successfully.'
-        onClose={() => setToastOpen(false)}
-        type={'info'}
-        progress={true}
-        colorProgress={'#6684FF'}
-      />
     </>
   )
 }
