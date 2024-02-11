@@ -26,6 +26,9 @@ const Login: React.FC = () => {
     if (isAuthenticated) {
       navigate('/dashboard')
     }
+    return () => {
+      clearToasts()
+    }
   }, [])
 
   const onFinish = async (values: LoginField) => {
@@ -52,18 +55,12 @@ const Login: React.FC = () => {
     }
   }
 
-  useEffect(() => {
-    return () => {
-      clearToasts()
-    }
-  }, [])
-
   return (
     <>
       <div className='flex h-screen p-5'>
         <div className='z-10 flex h-full w-full flex-col items-center justify-center bg-white  xl:w-1/2'>
           <div className='w-full lg:px-8 xl:px-40'>
-            {!email ? (
+            {!email || isAuthenticated ? (
               <h3 className='mb-8 text-left text-[32px] font-bold text-black'>Welcome Back.</h3>
             ) : (
               <div>
@@ -72,7 +69,7 @@ const Login: React.FC = () => {
               </div>
             )}
             <Form name='basic' onFinish={onFinish} onFinishFailed={onFinishFailed}>
-              {!email && (
+              {!email || isAuthenticated ? (
                 <FormItem
                   name='email'
                   label='Email Address'
@@ -82,7 +79,7 @@ const Login: React.FC = () => {
                     { pattern: emailRegex, message: 'Email not valid!' }
                   ]}
                 />
-              )}
+              ) : null}
 
               <FormItem
                 name='password'
@@ -97,7 +94,7 @@ const Login: React.FC = () => {
                 type='password'
               />
 
-              {error && <p className='text-lg text-error'>{!email ? 'Password' : 'Email or password'} is incorrect</p>}
+              {error && <p className='text-lg text-error'>{email ? 'Password' : 'Email or password'} is incorrect</p>}
 
               <Form.Item>
                 <Button type='submit' className='my-3 w-[204px]'>
