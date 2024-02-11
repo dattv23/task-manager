@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { userStateType } from '~/@types/user.type'
 
 const initialState: userStateType = {
-  isLogin: false
+  isAuthenticated: false
 }
 
 const userReducer = createSlice({
@@ -10,7 +10,7 @@ const userReducer = createSlice({
   initialState,
   reducers: {
     authAction: (state: userStateType, action: PayloadAction<boolean>) => {
-      state.isLogin = action.payload
+      state.isAuthenticated = action.payload
     }
   }
 })

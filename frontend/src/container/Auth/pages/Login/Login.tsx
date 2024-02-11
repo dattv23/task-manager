@@ -2,14 +2,13 @@ import { Form } from 'antd'
 import Button from '~/components/Button'
 import FormItem from '~/components/FormItem'
 import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 import { useLoginMutation } from '~/apis/api'
 import { getStore } from '~/utils'
-import { authAction } from '~/redux/reducers/user.reducers'
 import { useEffect } from 'react'
 import { useToasts } from '~/hooks/useToasts'
 import { useAuth } from '~/hooks/useAuth'
 import { LoginField, LoginResult } from '~/@types/api.type'
+import { emailRegex, passwordRegex } from '~/utils/regex'
 
 const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo)
@@ -30,12 +29,18 @@ const Login: React.FC = () => {
   }, [])
 
   const onFinish = async (values: LoginField) => {
-    const { email, password } = values
-    const res = await login({ email, password })
+    const { password } = values
+    let res
+    if (email) {
+      res = await login({ email, password })
+    } else {
+      const { email } = values
+      res = await login({ email, password })
+    }
     if ('data' in res) {
       const data = res.data.data as LoginResult
       loginUser(data)
-      addToast({ title: 'Login', message: 'Login successfully', type: 'success', progress: true, timeOut: 5 })
+      navigate('/dashboard')
     }
     if ('error' in res) {
       if (res.error && 'data' in res.error) {
@@ -72,14 +77,23 @@ const Login: React.FC = () => {
                   name='email'
                   label='Email Address'
                   placeholder='johndoe@gmail.com'
-                  rules={[{ required: true, message: 'Please input your email address!' }]}
+                  rules={[
+                    { required: true, message: 'Please input your email address!' },
+                    { pattern: emailRegex, message: 'Email not valid!' }
+                  ]}
                 />
               )}
 
               <FormItem
                 name='password'
                 label='Enter Your Password'
-                rules={[{ required: true, message: 'Please input your password!' }]}
+                rules={[
+                  { required: true, message: 'Please input your password!' },
+                  {
+                    pattern: passwordRegex,
+                    message: 'Upto 8 characters with an Uppercase, symbol and number!'
+                  }
+                ]}
                 type='password'
               />
 

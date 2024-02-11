@@ -1,3 +1,3 @@
 export type userStateType = {
-  isLogin: boolean
+  isAuthenticated: boolean
 }

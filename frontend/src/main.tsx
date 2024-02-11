@@ -14,11 +14,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate persistor={persistor} loading={<Spin size='large' />}>
-        <AuthProvider>
-          <ToastsProvider>
+        <ToastsProvider>
+          <AuthProvider>
             <App />
-          </ToastsProvider>
-        </AuthProvider>
+          </AuthProvider>
+        </ToastsProvider>
       </PersistGate>
     </Provider>
   </React.StrictMode>

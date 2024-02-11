@@ -1,13 +1,19 @@
 import Cookies from 'js-cookie'
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { LoginResult } from '~/@types/api.type'
 import { AuthContextType } from '~/@types/hook.type'
+import { RootState } from '~/redux/config'
+import { authAction } from '~/redux/reducers/user.reducers'
 import { clearStore, setStore } from '~/utils'
+import { useToasts } from './useToasts'
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated)
+  const dispatch = useDispatch()
+  const { addToast, clearToasts } = useToasts()
 
   const loginUser = (data: LoginResult) => {
     // Perform authentication logic
@@ -16,7 +22,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setStore('accessToken', accessToken)
     setStore('email', email)
     setStore('fullName', fullName)
-    setIsAuthenticated(true)
+    dispatch(authAction(true))
+    addToast({ title: 'Login', message: 'Login successfully', type: 'success', progress: true, timeOut: 5 })
   }
 
   const logoutUser = () => {
@@ -25,8 +32,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     clearStore('accessToken')
     clearStore('email')
     clearStore('fullName')
-    setIsAuthenticated(false)
+    dispatch(authAction(false))
   }
+
+  useEffect(() => {
+    return () => {
+      clearToasts()
+    }
+  }, [])
 
   return <AuthContext.Provider value={{ isAuthenticated, loginUser, logoutUser }}>{children}</AuthContext.Provider>
 }
