@@ -5,22 +5,18 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useLoginMutation } from '~/apis/api'
 import { getStore } from '~/utils'
 import { useEffect } from 'react'
-import { useToasts } from '~/hooks/useToasts'
 import { useAuth } from '~/hooks/useAuth'
 import { LoginField, LoginResult } from '~/@types/api.type'
 import { emailRegex, passwordRegex } from '~/utils/regex'
-
-const onFinishFailed = (errorInfo: any) => {
-  console.log('Failed:', errorInfo)
-}
+import { useToasts } from '~/hooks/useToasts'
 
 const Login: React.FC = () => {
-  const [login, { isLoading, error }] = useLoginMutation()
+  const [login, { isLoading }] = useLoginMutation()
   const email = getStore('email')
   const fullName = getStore('fullName')
-  const { addToast, clearToasts } = useToasts()
   const { isAuthenticated, loginUser } = useAuth()
   const navigate = useNavigate()
+  const { addToast, clearToasts } = useToasts()
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -47,11 +43,21 @@ const Login: React.FC = () => {
     }
     if ('error' in res) {
       if (res.error && 'data' in res.error) {
-        console.log(res.error.data)
+        // console.log(res.error.data)
+        if ('message' in res.error.data) {
+          addToast({
+            title: 'Login failed',
+            message: res.error.data.message,
+            type: 'error',
+            progress: true,
+            timeOut: 5
+          })
+        } else {
+          addToast({ title: 'Login failed', message: res.error.data, type: 'error', progress: true, timeOut: 5 })
+        }
       } else {
-        console.log(res.error)
+        // console.log(res.error)
       }
-      addToast({ title: 'Login', message: 'Login failed', type: 'error', progress: true, timeOut: 5 })
     }
   }
 
@@ -68,7 +74,7 @@ const Login: React.FC = () => {
                 <p className='mb-4 text-3xl font-bold text-black'>{fullName}!</p>
               </div>
             )}
-            <Form name='basic' onFinish={onFinish} onFinishFailed={onFinishFailed}>
+            <Form name='basic' onFinish={onFinish}>
               {!email || isAuthenticated ? (
                 <FormItem
                   name='email'
@@ -93,8 +99,6 @@ const Login: React.FC = () => {
                 ]}
                 type='password'
               />
-
-              {error && <p className='text-lg text-error'>{email ? 'Password' : 'Email or password'} is incorrect</p>}
 
               <Form.Item>
                 <Button type='submit' className='my-3 w-[204px]'>
