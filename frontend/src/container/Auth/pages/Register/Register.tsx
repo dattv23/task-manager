@@ -23,11 +23,11 @@ const Register: React.FC = () => {
       navigate('/verify-email')
     }
     if ('error' in res) {
-      if (res.error && 'data' in res.error) {
-        console.log(res.error.data)
-        if ('errors' in res.error.data) {
+      if ('status' in res.error && 'data' in res.error) {
+        const status = res.error.status
+        if (status === 422 && 'errors' in res.error.data) {
           const errors = res.error.data.errors as ErrorValidation[]
-          errors.forEach((err) =>
+          errors.map((err) =>
             addToast({
               title: 'Register failed',
               message: err.message,
@@ -36,9 +36,7 @@ const Register: React.FC = () => {
               timeOut: 5
             })
           )
-          return
-        }
-        if ('message' in res.error.data) {
+        } else {
           addToast({
             title: 'Register failed',
             message: res.error.data.message,
@@ -46,11 +44,15 @@ const Register: React.FC = () => {
             progress: true,
             timeOut: 5
           })
-          return
         }
-        addToast({ title: 'Login failed', message: res.error.data, type: 'error', progress: true, timeOut: 5 })
       } else {
-        // console.log(res.error)
+        addToast({
+          title: 'Register failed',
+          message: 'Please try again later!',
+          type: 'error',
+          progress: true,
+          timeOut: 5
+        })
       }
     }
   }
