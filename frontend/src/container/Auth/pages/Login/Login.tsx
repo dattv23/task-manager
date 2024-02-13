@@ -6,9 +6,10 @@ import { useLoginMutation } from '~/apis/api'
 import { getStore } from '~/utils'
 import { useEffect } from 'react'
 import { useAuth } from '~/hooks/useAuth'
-import { LoginField, LoginResult } from '~/@types/api.type'
+import { LoginResult } from '~/@types/api.type'
 import { emailRegex, passwordRegex } from '~/utils/regex'
 import { useToasts } from '~/hooks/useToasts'
+import { LoginField } from '~/@types/form.type'
 
 const Login: React.FC = () => {
   const [login, { isLoading }] = useLoginMutation()
@@ -101,7 +102,7 @@ const Login: React.FC = () => {
               />
 
               <Form.Item>
-                <Button type='submit' className='my-3 w-[204px]'>
+                <Button type='submit' className='my-3 w-full lg:w-[204px]'>
                   {isLoading ? 'Loading...' : 'Log In'}
                 </Button>
               </Form.Item>
@@ -115,7 +116,7 @@ const Login: React.FC = () => {
           </div>
         </div>
         <div className='relative hidden flex-col items-center justify-center rounded-[32px] bg-primary px-[100px] lg:flex xl:w-1/2'>
-          <Button variant={'secondary'} className='absolute right-8 top-8'>
+          <Button variant={'secondary'} className='absolute right-8 top-8' onClick={() => navigate('/register')}>
             Create Account
           </Button>
           <div className='z-10 w-full'>

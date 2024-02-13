@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import type { BaseQueryFn } from '@reduxjs/toolkit/query/react'
 import axios from 'axios'
 import type { AxiosRequestConfig, AxiosError } from 'axios'
-import { LoginField } from '~/@types/api.type'
+import { LoginField, RegisterField } from '~/@types/form.type'
 import { getStore } from '~/utils'
 
 type AxiosBaseQueryResult = {
@@ -56,9 +56,12 @@ export const api = createApi({
     return {
       login: build.mutation({
         query: (data: LoginField) => ({ url: '/users/login', method: 'post', data: data })
+      }),
+      register: build.mutation({
+        query: (data: RegisterField) => ({ url: '/users/register', method: 'post', data: data })
       })
     }
   }
 })
 
-export const { useLoginMutation } = api
+export const { useLoginMutation, useRegisterMutation } = api
