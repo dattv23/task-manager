@@ -6,7 +6,7 @@ import { useLoginMutation } from '~/apis/api'
 import { getStore } from '~/utils'
 import { useEffect } from 'react'
 import { useAuth } from '~/hooks/useAuth'
-import { LoginResult } from '~/@types/api.type'
+import { ErrorValidation, LoginResult } from '~/@types/api.type'
 import { emailRegex, passwordRegex } from '~/utils/regex'
 import { useToasts } from '~/hooks/useToasts'
 import { LoginField } from '~/@types/form.type'
@@ -43,9 +43,23 @@ const Login: React.FC = () => {
       navigate('/dashboard')
     }
     if ('error' in res) {
-      if (res.error && 'data' in res.error) {
-        // console.log(res.error.data)
-        if ('message' in res.error.data) {
+      console.log('====================================')
+      console.log(res.error)
+      console.log('====================================')
+      if ('status' in res.error && 'data' in res.error) {
+        const status = res.error.status
+        if (status === 422 && 'errors' in res.error.data) {
+          const errors = res.error.data.errors as ErrorValidation[]
+          errors.map((err) =>
+            addToast({
+              title: 'Login failed',
+              message: err.message,
+              type: 'error',
+              progress: true,
+              timeOut: 5
+            })
+          )
+        } else {
           addToast({
             title: 'Login failed',
             message: res.error.data.message,
@@ -53,11 +67,12 @@ const Login: React.FC = () => {
             progress: true,
             timeOut: 5
           })
-        } else {
-          addToast({ title: 'Login failed', message: res.error.data, type: 'error', progress: true, timeOut: 5 })
+          if (status === 401) {
+            setTimeout(() => {
+              navigate('/verify-email')
+            }, 5000)
+          }
         }
-      } else {
-        // console.log(res.error)
       }
     }
   }
@@ -95,7 +110,7 @@ const Login: React.FC = () => {
                   { required: true, message: 'Please input your password!' },
                   {
                     pattern: passwordRegex,
-                    message: 'Over 8 characters and under 36 characters with an Uppercase, symbol and number!'
+                    message: 'Over 8 characters and under 16 characters with an Uppercase, symbol and number!'
                   }
                 ]}
                 type='password'
