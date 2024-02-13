@@ -95,7 +95,7 @@ const Login: React.FC = () => {
                   { required: true, message: 'Please input your password!' },
                   {
                     pattern: passwordRegex,
-                    message: 'Upto 8 characters with an Uppercase, symbol and number!'
+                    message: 'Over 8 characters and under 36 characters with an Uppercase, symbol and number!'
                   }
                 ]}
                 type='password'

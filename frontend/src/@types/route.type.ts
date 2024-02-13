@@ -7,4 +7,5 @@ export type RoutesType = {
   dashboard: string
   tasks: string
   settings: string
+  verifyEmail: string
 }

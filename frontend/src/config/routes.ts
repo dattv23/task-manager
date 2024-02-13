@@ -4,6 +4,7 @@ const routes: RoutesType = {
   home: '/',
   login: '/login',
   register: '/register',
+  verifyEmail: '/verify-email',
   forgotPassword: '/forgot-password',
   notFound: '*',
   dashboard: '/dashboard',

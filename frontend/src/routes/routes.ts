@@ -5,6 +5,7 @@ import config from '~/config'
 const HomePage = React.lazy(() => import('~/container/Home/pages/MainHome'))
 const LoginPage = React.lazy(() => import('~/container/Auth/pages/Login'))
 const RegisterPage = React.lazy(() => import('~/container/Auth/pages/Register'))
+const VerifyEmailPage = React.lazy(() => import('~/container/Auth/pages/VerifyEmail'))
 const ForgotPasswordPage = React.lazy(() => import('~/container/Auth/pages/ForgotPassword'))
 const NotFoundPage = React.lazy(() => import('~/components/NotFound'))
 const DashboardPage = React.lazy(() => import('~/container/Dashboard/pages/MainDashboard'))
@@ -16,6 +17,7 @@ const publicRoute: RouteObject[] = [
   { path: config.routes.home, Component: HomePage },
   { path: config.routes.login, Component: LoginPage },
   { path: config.routes.register, Component: RegisterPage },
+  { path: config.routes.verifyEmail, Component: VerifyEmailPage },
   { path: config.routes.forgotPassword, Component: ForgotPasswordPage }
 ]
 
