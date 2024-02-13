@@ -46,6 +46,7 @@ export const RESULT_RESPONSE_MESSAGES = {
   LOGIN: {
     EMAIL_NOT_EXIST: 'Email not exist',
     PASSWORD_INCORRECT: 'Password is incorrect',
-    IS_SUCCESS: 'Login successfully'
+    IS_SUCCESS: 'Login successfully',
+    ACCOUNT_UNVERIFIED: 'Account is not verified'
   }
 }

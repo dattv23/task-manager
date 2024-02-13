@@ -10,6 +10,7 @@ import { StatusCodes } from 'http-status-codes'
 import { RESULT_RESPONSE_MESSAGES, VALIDATION_MESSAGES } from '~/constants/messages'
 import tokenServices from './token.services'
 import RefreshToken from '~/models/database/RefreshToken'
+import { UserVerifyStatus } from '~/constants/enums'
 
 class UserServices {
   async register(payload: RegisterBody): Promise<ResultRegisterType> {
@@ -72,6 +73,9 @@ class UserServices {
     }
     if (user.password !== hashText(password)) {
       throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.LOGIN.PASSWORD_INCORRECT })
+    }
+    if (user.verify === UserVerifyStatus.Unverified) {
+      throw new ErrorWithStatus({ statusCode: StatusCodes.UNAUTHORIZED, message: RESULT_RESPONSE_MESSAGES.LOGIN.ACCOUNT_UNVERIFIED })
     }
     const { _id, fullName } = user
     const [accessToken, refreshToken] = await tokenServices.signAccessAndRefreshToken(user._id.toString(), user.role)
