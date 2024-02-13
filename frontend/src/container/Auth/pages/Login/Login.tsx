@@ -43,9 +43,6 @@ const Login: React.FC = () => {
       navigate('/dashboard')
     }
     if ('error' in res) {
-      console.log('====================================')
-      console.log(res.error)
-      console.log('====================================')
       if ('status' in res.error && 'data' in res.error) {
         const status = res.error.status
         if (status === 422 && 'errors' in res.error.data) {
@@ -73,6 +70,14 @@ const Login: React.FC = () => {
             }, 5000)
           }
         }
+      } else {
+        addToast({
+          title: 'Login failed',
+          message: 'Please try again later!',
+          type: 'error',
+          progress: true,
+          timeOut: 5
+        })
       }
     }
   }
