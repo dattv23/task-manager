@@ -27,7 +27,7 @@ export const userController = {
   },
 
   login: async (req: Request<ParamsDictionary, any, LoginBody>, res: Response, next: NextFunction) => {
-    await userServices.login(req.body)
-    return sendResponse.success(res, {}, RESULT_RESPONSE_MESSAGES.LOGIN.IS_SUCCESS)
+    const result = await userServices.login(req.body)
+    return sendResponse.success(res, result, RESULT_RESPONSE_MESSAGES.LOGIN.IS_SUCCESS)
   }
 }

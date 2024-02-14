@@ -10,7 +10,7 @@ import React, { useEffect } from 'react'
 import { cn } from '~/utils'
 import Progressbar from '../Progress'
 
-const toastVariants = cva('w-[400px] p-5 rounded-xl fixed top-5 right-5 border-2 bg-white', {
+const toastVariants = cva('w-[400px] p-5 rounded-xl border-2 bg-white', {
   variants: {
     type: {
       error: 'border-error text-error',
@@ -24,79 +24,90 @@ const toastVariants = cva('w-[400px] p-5 rounded-xl fixed top-5 right-5 border-2
   }
 })
 
-interface ToastProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof toastVariants> {
+export interface ToastProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof toastVariants> {
   title: string
-  description: string
-  open: boolean
-  onClose: () => void
+  message: string
+  handleDismiss: () => void
   progress?: boolean
-  colorProgress?: string
-  time?: number // milliseconds
+  timeOut?: number // milliseconds
 }
 
-const renderIcon = (type: string) => {
-  switch (type) {
-    case 'error':
-      return <CloseCircleOutlined />
-    case 'warning':
-      return <WarningOutlined />
-    case 'success':
-      return <CheckCircleOutlined />
-    default:
-      return <InfoCircleOutlined />
-  }
+const icons = {
+  error: <CloseCircleOutlined />,
+  warning: <WarningOutlined />,
+  info: <InfoCircleOutlined />,
+  success: <CheckCircleOutlined />
+}
+
+const colors = {
+  error: '#FB151A',
+  warning: '#EBA300',
+  info: '#6684FF',
+  success: '#00C271'
 }
 
 const Toast: React.FC<ToastProps> = ({
   type,
   className,
-  open,
-  onClose,
+  handleDismiss = null,
   title,
-  description,
+  message,
   progress,
-  colorProgress,
-  time = 3000,
+  timeOut = 2,
   ...props
 }) => {
   useEffect(() => {
-    let timerId: NodeJS.Timeout
-
-    if (progress) {
-      timerId = setTimeout(() => {
-        onClose()
-      }, time)
+    if (timeOut > 0 && handleDismiss) {
+      const timer = setTimeout(() => {
+        handleDismiss()
+      }, timeOut * 1000)
+      return () => clearTimeout(timer)
     }
+  }, [])
 
-    return () => {
-      // Clear the timer when the component unmounts or when progress is complete
-      clearTimeout(timerId)
-    }
-  }, [open])
-
-  if (!open) {
-    return null // Render nothing if the alert is closed
+  if (!message) {
+    return null
   }
 
   return (
-    <div className={cn(toastVariants({ type, className }), 'animate__animated animate__fadeInRight')} {...props}>
+    <div
+      className={cn(toastVariants({ type, className }), 'animate__animated animate__fadeInRight relative')}
+      {...props}
+    >
       <div className='flex items-start justify-between'>
         <div className='flex h-10 w-10 items-center justify-center rounded-full bg-dark bg-opacity-5 text-xl'>
-          {renderIcon(type!)}
+          {icons[type as keyof typeof icons]}
         </div>
         <div className='w-[250px] break-words'>
           <h4 className='text-lg font-medium first-letter:uppercase'>{title}</h4>
-          <p className='mb-2 text-xs font-light'>{description}</p>
+          <p className='mb-2 text-xs font-light'>{message}</p>
         </div>
-        <button className='w-10 hover:text-dark' onClick={onClose}>
-          <CloseOutlined />
-        </button>
+        {handleDismiss && (
+          <button
+            className='w-10 hover:text-dark'
+            onClick={(e) => {
+              e.preventDefault()
+              handleDismiss()
+            }}
+          >
+            <CloseOutlined />
+          </button>
+        )}
       </div>
-      <div className='absolute bottom-0 left-1 right-0'>
-        {progress && <Progressbar time={time} color={colorProgress} className='rounded-b-[28px] rounded-r-[28px]' />}
+      <div className='absolute bottom-0 left-1 right-0 h-1'>
+        {progress ? (
+          <Progressbar
+            time={timeOut}
+            color={colors[type as keyof typeof colors]}
+            className='rounded-b-[28px] rounded-r-[28px]'
+          />
+        ) : null}
       </div>
     </div>
   )
 }
 
-export default Toast
+const ToastsWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return <div className='fixed right-5 top-5 z-20 flex flex-col gap-1'>{children}</div>
+}
+export { Toast, ToastsWrapper }

@@ -10,6 +10,7 @@ import { StatusCodes } from 'http-status-codes'
 import { RESULT_RESPONSE_MESSAGES, VALIDATION_MESSAGES } from '~/constants/messages'
 import tokenServices from './token.services'
 import RefreshToken from '~/models/database/RefreshToken'
+import { UserVerifyStatus } from '~/constants/enums'
 
 class UserServices {
   async register(payload: RegisterBody): Promise<ResultRegisterType> {
@@ -26,8 +27,8 @@ class UserServices {
       email: email
     })
     await databaseService.otps.insertOne(newOTP)
-    const user_id = userResult.insertedId.toString()
-    const content: ResultRegisterType = { _id: user_id, fullName, email }
+    const userId = userResult.insertedId.toString()
+    const content: ResultRegisterType = { userId, fullName, email }
     return content
   }
 
@@ -38,13 +39,18 @@ class UserServices {
       throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.VERIFY_OTP.IS_EXPIRED })
     }
     if (hashText(code) !== otp?.code) {
-      throw new ErrorWithStatus({ statusCode: StatusCodes.BAD_REQUEST, message: RESULT_RESPONSE_MESSAGES.VERIFY_OTP.IS_INCORRECT })
+      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.VERIFY_OTP.IS_INCORRECT })
     }
+    await databaseService.users.findOneAndUpdate({ email }, { $set: { verify: UserVerifyStatus.Verified } })
     return true
   }
 
   async resendOTP(payload: ResendOTPBody): Promise<boolean> {
     const { email } = payload
+    const user = await databaseService.users.findOne({ email })
+    if (!user) {
+      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.RESEND_OTP.EMAIL_NOT_EXIST })
+    }
     const otp = await sendOTP(email)
     const newOTP = new OTP({
       code: hashText(otp),
@@ -73,6 +79,10 @@ class UserServices {
     if (user.password !== hashText(password)) {
       throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.LOGIN.PASSWORD_INCORRECT })
     }
+    if (user.verify === UserVerifyStatus.Unverified) {
+      throw new ErrorWithStatus({ statusCode: StatusCodes.UNAUTHORIZED, message: RESULT_RESPONSE_MESSAGES.LOGIN.ACCOUNT_UNVERIFIED })
+    }
+    const { _id, fullName } = user
     const [accessToken, refreshToken] = await tokenServices.signAccessAndRefreshToken(user._id.toString(), user.role)
     await databaseService.refreshTokens.insertOne(
       new RefreshToken({
@@ -80,7 +90,7 @@ class UserServices {
         user_id: user._id
       })
     )
-    const content: ResultLoginType = { accessToken, refreshToken }
+    const content: ResultLoginType = { userId: _id.toString(), email, fullName, accessToken, refreshToken }
     return content
   }
 }
