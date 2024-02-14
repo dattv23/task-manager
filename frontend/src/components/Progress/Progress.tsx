@@ -10,7 +10,8 @@ const Progressbar: React.FC<ProgressbarProps> = ({ time, color = '#cccc', classN
   const [filled, setFilled] = useState(0)
   useEffect(() => {
     if (filled <= 100) {
-      setTimeout(() => setFilled((prev) => (prev += 2)), (time * 1000) / 50)
+      const timer = setTimeout(() => setFilled((prev) => (prev += 2)), (time * 1000) / 50)
+      return () => clearTimeout(timer)
     }
   }, [filled])
 

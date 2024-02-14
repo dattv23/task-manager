@@ -39,13 +39,18 @@ class UserServices {
       throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.VERIFY_OTP.IS_EXPIRED })
     }
     if (hashText(code) !== otp?.code) {
-      throw new ErrorWithStatus({ statusCode: StatusCodes.BAD_REQUEST, message: RESULT_RESPONSE_MESSAGES.VERIFY_OTP.IS_INCORRECT })
+      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.VERIFY_OTP.IS_INCORRECT })
     }
+    await databaseService.users.findOneAndUpdate({ email }, { $set: { verify: UserVerifyStatus.Verified } })
     return true
   }
 
   async resendOTP(payload: ResendOTPBody): Promise<boolean> {
     const { email } = payload
+    const user = await databaseService.users.findOne({ email })
+    if (!user) {
+      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.RESEND_OTP.EMAIL_NOT_EXIST })
+    }
     const otp = await sendOTP(email)
     const newOTP = new OTP({
       code: hashText(otp),

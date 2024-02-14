@@ -37,6 +37,7 @@ export const RESULT_RESPONSE_MESSAGES = {
     IS_SUCCESS: 'Verified OTP successfully'
   },
   RESEND_OTP: {
+    EMAIL_NOT_EXIST: 'Email not exist',
     IS_SUCCESS: 'Resend OTP successfully'
   },
   RESET_PASSWORD: {

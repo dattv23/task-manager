@@ -61,16 +61,6 @@ export const resendOTPSchema = z.object({
       invalid_type_error: VALIDATION_MESSAGES.USER.EMAIL_MUST_BE_STRING
     })
     .email({ message: VALIDATION_MESSAGES.USER.EMAIL_INVALID })
-    .refine(
-      async (email) => {
-        const user = await databaseService.users.findOne({ email })
-        if (!user) {
-          throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: VALIDATION_MESSAGES.USER.EMAIL_NOT_EXIST })
-        }
-        return true
-      },
-      { message: VALIDATION_MESSAGES.USER.EMAIL_NOT_EXIST }
-    )
 })
 
 export const resetPasswordSchema = z.object({

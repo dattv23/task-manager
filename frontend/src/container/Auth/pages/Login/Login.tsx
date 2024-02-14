@@ -2,7 +2,7 @@ import { Form } from 'antd'
 import Button from '~/components/Button'
 import FormItem from '~/components/FormItem'
 import { Link, useNavigate } from 'react-router-dom'
-import { useLoginMutation } from '~/apis/api'
+import { useLoginMutation, useResendOTPMutation } from '~/apis/api'
 import { getStore } from '~/utils'
 import { useEffect } from 'react'
 import { useAuth } from '~/hooks/useAuth'
@@ -13,30 +13,23 @@ import { LoginField } from '~/@types/form.type'
 
 const Login: React.FC = () => {
   const [login, { isLoading }] = useLoginMutation()
+  const [resendOTP] = useResendOTPMutation()
   const email = getStore('email')
   const fullName = getStore('fullName')
   const { isAuthenticated, loginUser } = useAuth()
   const navigate = useNavigate()
-  const { addToast, clearToasts } = useToasts()
+  const { addToast } = useToasts()
 
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/dashboard')
     }
-    return () => {
-      clearToasts()
-    }
   }, [])
 
   const onFinish = async (values: LoginField) => {
     const { password } = values
-    let res
-    if (email) {
-      res = await login({ email, password })
-    } else {
-      const { email } = values
-      res = await login({ email, password })
-    }
+    const emailUser = email ? email : values.email
+    const res = await login({ email: emailUser, password })
     if ('data' in res) {
       const data = res.data.data as LoginResult
       loginUser(data)
@@ -62,12 +55,20 @@ const Login: React.FC = () => {
             message: res.error.data.message,
             type: 'error',
             progress: true,
-            timeOut: 5
+            timeOut: 3
           })
           if (status === 401) {
-            setTimeout(() => {
-              navigate('/verify-email')
-            }, 5000)
+            const res = await resendOTP({ email: emailUser })
+            if ('data' in res) {
+              addToast({
+                title: 'Resend OTP',
+                message: `OTP has been send to address ${emailUser}!`,
+                type: 'success',
+                progress: true,
+                timeOut: 5
+              })
+              navigate('/verify-email', { state: { email: emailUser } })
+            }
           }
         }
       } else {

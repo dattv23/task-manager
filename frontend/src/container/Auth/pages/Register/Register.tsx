@@ -20,7 +20,7 @@ const Register: React.FC = () => {
       const { email, fullName } = res.data.data as RegisterResult
       setStore('email', email)
       setStore('fullName', fullName)
-      navigate('/verify-email')
+      navigate('/verify-email', { state: { email: email } })
     }
     if ('error' in res) {
       if ('status' in res.error && 'data' in res.error) {
