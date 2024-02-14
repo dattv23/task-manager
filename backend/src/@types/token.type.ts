@@ -21,3 +21,8 @@ export type SignTokenType = {
   privateKey: string
   options: SignOptions
 }
+
+export type VerifyTokenType = {
+  token: string
+  privateKey: string
+}

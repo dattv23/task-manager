@@ -1,6 +1,6 @@
-import { ResultLoginType, ResultRegisterType } from '~/@types/response.types'
+import { ResultLoginType, ResultNewTokenType, ResultRegisterType } from '~/@types/response.types'
 import User from '~/models/database/User'
-import { LoginBody, RegisterBody, ResendOTPBody, ResetPasswordBody, VerifyOTPBody } from '~/models/requests/user.requests'
+import { LoginBody, NewTokenBody, RegisterBody, ResendOTPBody, ResetPasswordBody, VerifyOTPBody } from '~/models/requests/user.requests'
 import { databaseService } from './database.services'
 import { hashText } from '~/utils/crypto'
 import OTP from '~/models/database/OTP'
@@ -11,6 +11,9 @@ import { RESULT_RESPONSE_MESSAGES, VALIDATION_MESSAGES } from '~/constants/messa
 import tokenServices from './token.services'
 import RefreshToken from '~/models/database/RefreshToken'
 import { UserVerifyStatus } from '~/constants/enums'
+import { verifyToken } from '~/utils/jwt'
+import { env } from '~/config/env.config'
+import { JsonWebTokenError } from 'jsonwebtoken'
 
 class UserServices {
   async register(payload: RegisterBody): Promise<ResultRegisterType> {
@@ -84,6 +87,7 @@ class UserServices {
     }
     const { _id, fullName } = user
     const [accessToken, refreshToken] = await tokenServices.signAccessAndRefreshToken(user._id.toString(), user.role)
+    await databaseService.refreshTokens.deleteOne({ user_id: user._id })
     await databaseService.refreshTokens.insertOne(
       new RefreshToken({
         token: refreshToken,
@@ -91,6 +95,23 @@ class UserServices {
       })
     )
     const content: ResultLoginType = { userId: _id.toString(), email, fullName, accessToken, refreshToken }
+    return content
+  }
+
+  async newToken(payload: NewTokenBody): Promise<ResultNewTokenType> {
+    const { refreshToken } = payload
+    const { refreshTokenKey } = env.jwt
+    const { userID, role } = await verifyToken({ token: refreshToken, privateKey: refreshTokenKey! })
+    const token = await databaseService.refreshTokens.findOneAndDelete({ token: refreshToken })
+    if (!token) {
+      throw new ErrorWithStatus({
+        statusCode: StatusCodes.UNAUTHORIZED,
+        message: RESULT_RESPONSE_MESSAGES.NEW_TOKEN.REFRESH_TOKEN_EXPIRED
+      })
+    }
+    const [newAccessToken, newRefreshToken] = await tokenServices.signAccessAndRefreshToken(userID, role)
+    await databaseService.refreshTokens.insertOne(new RefreshToken({ token: newRefreshToken, user_id: userID }))
+    const content: ResultNewTokenType = { accessToken: newAccessToken, refreshToken: newRefreshToken }
     return content
   }
 }

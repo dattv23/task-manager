@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { sendResponse } from '~/config/response.config'
 import { RESULT_RESPONSE_MESSAGES } from '~/constants/messages'
-import { LoginBody, RegisterBody, ResendOTPBody, ResetPasswordBody, VerifyOTPBody } from '~/models/requests/user.requests'
+import { LoginBody, NewTokenBody, RegisterBody, ResendOTPBody, ResetPasswordBody, VerifyOTPBody } from '~/models/requests/user.requests'
 import userServices from '~/services/user.services'
 
 export const userController = {
@@ -29,5 +29,10 @@ export const userController = {
   login: async (req: Request<ParamsDictionary, any, LoginBody>, res: Response, next: NextFunction) => {
     const result = await userServices.login(req.body)
     return sendResponse.success(res, result, RESULT_RESPONSE_MESSAGES.LOGIN.IS_SUCCESS)
+  },
+
+  newToken: async (req: Request<ParamsDictionary, any, NewTokenBody>, res: Response, next: NextFunction) => {
+    const result = await userServices.newToken(req.body)
+    return sendResponse.success(res, result, RESULT_RESPONSE_MESSAGES.NEW_TOKEN.IS_SUCCESS)
   }
 }

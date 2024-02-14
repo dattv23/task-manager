@@ -16,6 +16,7 @@ export const VALIDATION_MESSAGES = {
     PASSWORD_IS_REQUIRED: 'Password is required',
     PASSWORD_MUST_BE_STRING: 'Password must be string',
     PASSWORD_INVALID: 'Password must be 8-16 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 symbol',
+    REFRESH_TOKEN_IS_REQUIRED: 'Refresh token is required',
 
     OTP: {
       IS_REQUIRED: 'Code OTP is required',
@@ -49,5 +50,10 @@ export const RESULT_RESPONSE_MESSAGES = {
     PASSWORD_INCORRECT: 'Password is incorrect',
     IS_SUCCESS: 'Login successfully',
     ACCOUNT_UNVERIFIED: 'Account is not verified'
+  },
+  NEW_TOKEN: {
+    USER_NOT_EXIST: 'User not exist',
+    REFRESH_TOKEN_EXPIRED: 'Refresh token is expired',
+    IS_SUCCESS: 'Create new token successfully'
   }
 }

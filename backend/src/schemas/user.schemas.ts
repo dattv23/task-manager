@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { VALIDATION_MESSAGES } from '~/constants/messages'
 import { ErrorWithStatus } from '~/models/Error'
 import { databaseService } from '~/services/database.services'
-import { regexOTP } from '~/utils/helpers'
+import { regexOTP, regexPassword } from '~/utils/helpers'
 
 export const userRegistrationSchema = z.object({
   fullName: z.string({
@@ -29,7 +29,7 @@ export const userRegistrationSchema = z.object({
       required_error: VALIDATION_MESSAGES.USER.PASSWORD_IS_REQUIRED,
       invalid_type_error: VALIDATION_MESSAGES.USER.PASSWORD_MUST_BE_STRING
     })
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,15}$/, { message: VALIDATION_MESSAGES.USER.PASSWORD_INVALID })
+    .regex(regexPassword, { message: VALIDATION_MESSAGES.USER.PASSWORD_INVALID })
 })
 
 export const verifyOTPSchema = z.object({
@@ -75,7 +75,7 @@ export const resetPasswordSchema = z.object({
       required_error: VALIDATION_MESSAGES.USER.PASSWORD_IS_REQUIRED,
       invalid_type_error: VALIDATION_MESSAGES.USER.PASSWORD_MUST_BE_STRING
     })
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,15}$/, { message: VALIDATION_MESSAGES.USER.PASSWORD_INVALID })
+    .regex(regexPassword, { message: VALIDATION_MESSAGES.USER.PASSWORD_INVALID })
 })
 
 export const loginSchema = z.object({
@@ -90,5 +90,9 @@ export const loginSchema = z.object({
       required_error: VALIDATION_MESSAGES.USER.PASSWORD_IS_REQUIRED,
       invalid_type_error: VALIDATION_MESSAGES.USER.PASSWORD_MUST_BE_STRING
     })
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,15}$/, { message: VALIDATION_MESSAGES.USER.PASSWORD_INVALID })
+    .regex(regexPassword, { message: VALIDATION_MESSAGES.USER.PASSWORD_INVALID })
+})
+
+export const newTokenSchema = z.object({
+  refreshToken: z.string({ required_error: VALIDATION_MESSAGES.USER.REFRESH_TOKEN_IS_REQUIRED })
 })

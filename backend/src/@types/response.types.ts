@@ -11,3 +11,8 @@ export type ResultLoginType = {
   accessToken: string
   refreshToken: string
 }
+
+export type ResultNewTokenType = {
+  accessToken: string
+  refreshToken: string
+}

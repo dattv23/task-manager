@@ -5,6 +5,7 @@ import { ErrorWithStatus } from '~/models/Error'
 import { ZodError } from 'zod'
 import { sendResponse } from '~/config/response.config'
 import { VALIDATION_MESSAGES } from '~/constants/messages'
+import { JsonWebTokenError } from 'jsonwebtoken'
 
 export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
   try {
@@ -17,6 +18,9 @@ export const errorHandler = (err: any, req: Request, res: Response, next: NextFu
         message: issue.message
       }))
       return sendResponse.validation(res, errorMessages, VALIDATION_MESSAGES.TITLE)
+    }
+    if (err instanceof JsonWebTokenError) {
+      return sendResponse.unauthorized(res, {}, err.message)
     }
     // Print out stacktrace to find bug easier
     console.error(err)
