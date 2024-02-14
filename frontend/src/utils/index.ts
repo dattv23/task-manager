@@ -32,3 +32,9 @@ export const config = {
 }
 
 export const { getStore, setStore, setStoreJson, getStoreJson, clearStore } = config
+
+export const mergeValues = (values: object): string => {
+  return Object.entries(values)
+    .map((entry) => entry[1]) // Extracting values
+    .join('')
+}

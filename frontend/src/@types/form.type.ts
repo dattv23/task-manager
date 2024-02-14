@@ -26,3 +26,8 @@ export type VerifyOTPField = {
 export type ResendOTPField = {
   email: string
 }
+
+export type NewPasswordField = {
+  email: string
+  password: string
+}

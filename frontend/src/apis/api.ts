@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import type { BaseQueryFn } from '@reduxjs/toolkit/query/react'
 import axios from 'axios'
 import type { AxiosRequestConfig, AxiosError } from 'axios'
-import { LoginField, RegisterField, ResendOTPField, VerifyOTPField } from '~/@types/form.type'
+import { LoginField, NewPasswordField, RegisterField, ResendOTPField, VerifyOTPField } from '~/@types/form.type'
 import { getStore } from '~/utils'
 
 type AxiosBaseQueryResult = {
@@ -65,9 +65,18 @@ export const api = createApi({
       }),
       resendOTP: build.mutation({
         query: (data: ResendOTPField) => ({ url: '/users/resend-otp', method: 'post', data: data })
+      }),
+      resetPassword: build.mutation({
+        query: (data: NewPasswordField) => ({ url: '/users/reset-password', method: 'post', data: data })
       })
     }
   }
 })
 
-export const { useLoginMutation, useRegisterMutation, useVerifyOTPMutation, useResendOTPMutation } = api
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useVerifyOTPMutation,
+  useResendOTPMutation,
+  useResetPasswordMutation
+} = api
