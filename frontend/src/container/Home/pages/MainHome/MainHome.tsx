@@ -42,7 +42,7 @@ const MainHome: React.FC = () => {
             <p className='text-lg text-zinc-500'>
               This productive tool is designed to help you better manage your task project-wise conveniently!
             </p>
-            <Button className='mt-20 w-full'>
+            <Button className='mt-20 w-full' onClick={() => navigate('/dashboard')}>
               Let’s Start{' '}
               <span>
                 <i className='icon ion-md-arrow-round-forward ml-1'></i>

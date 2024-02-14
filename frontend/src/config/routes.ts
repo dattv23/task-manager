@@ -9,7 +9,8 @@ const routes: RoutesType = {
   notFound: '*',
   dashboard: '/dashboard',
   tasks: '/tasks',
-  settings: '/settings'
+  settings: '/settings',
+  workspace: '/workspace'
 } as const
 
 export default routes
