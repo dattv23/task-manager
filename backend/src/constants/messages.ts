@@ -5,7 +5,7 @@ export const DATABASE_MESSAGE = {
 
 export const VALIDATION_MESSAGES = {
   TITLE: 'Validation data',
-  USER: {
+  AUTH: {
     FULL_NAME_IS_REQUIRED: 'Full name is required',
     FULL_NAME_MUST_BE_STRING: 'Full name must be string',
     EMAIL_IS_REQUIRED: 'Email is required',
@@ -26,34 +26,36 @@ export const VALIDATION_MESSAGES = {
 }
 
 export const RESULT_RESPONSE_MESSAGES = {
-  REGISTER: {
-    IS_SUCCESS: 'Created account successfully!'
-  },
   MAIL: {
     SEND_OTP_FAILED: 'Failed to send otp. Please try again!'
   },
-  VERIFY_OTP: {
-    IS_EXPIRED: 'Code OTP is expired',
-    IS_INCORRECT: 'Code OTP is incorrect',
-    IS_SUCCESS: 'Verified OTP successfully'
-  },
-  RESEND_OTP: {
-    EMAIL_NOT_EXIST: 'Email not exist',
-    IS_SUCCESS: 'Resend OTP successfully'
-  },
-  RESET_PASSWORD: {
-    EMAIL_NOT_EXIST: 'Email not exist',
-    IS_SUCCESS: 'Reset password successfully'
-  },
-  LOGIN: {
-    EMAIL_NOT_EXIST: 'Email not exist',
-    PASSWORD_INCORRECT: 'Password is incorrect',
-    IS_SUCCESS: 'Login successfully',
-    ACCOUNT_UNVERIFIED: 'Account is not verified'
-  },
-  NEW_TOKEN: {
-    USER_NOT_EXIST: 'User not exist',
-    REFRESH_TOKEN_EXPIRED: 'Refresh token is expired',
-    IS_SUCCESS: 'Create new token successfully'
+  AUTH: {
+    REGISTER: {
+      IS_SUCCESS: 'Created account successfully!'
+    },
+    VERIFY_OTP: {
+      IS_EXPIRED: 'Code OTP is expired',
+      IS_INCORRECT: 'Code OTP is incorrect',
+      IS_SUCCESS: 'Verified OTP successfully'
+    },
+    RESEND_OTP: {
+      EMAIL_NOT_EXIST: 'Email not exist',
+      IS_SUCCESS: 'Resend OTP successfully'
+    },
+    RESET_PASSWORD: {
+      EMAIL_NOT_EXIST: 'Email not exist',
+      IS_SUCCESS: 'Reset password successfully'
+    },
+    LOGIN: {
+      EMAIL_NOT_EXIST: 'Email not exist',
+      PASSWORD_INCORRECT: 'Password is incorrect',
+      IS_SUCCESS: 'Login successfully',
+      ACCOUNT_UNVERIFIED: 'Account is not verified'
+    },
+    NEW_TOKEN: {
+      USER_NOT_EXIST: 'User not exist',
+      REFRESH_TOKEN_EXPIRED: 'Refresh token is expired',
+      IS_SUCCESS: 'Create new token successfully'
+    }
   }
 }

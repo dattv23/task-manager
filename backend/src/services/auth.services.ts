@@ -1,6 +1,6 @@
 import { ResultLoginType, ResultNewTokenType, ResultRegisterType } from '~/@types/response.types'
 import User from '~/models/database/User'
-import { LoginBody, NewTokenBody, RegisterBody, ResendOTPBody, ResetPasswordBody, VerifyOTPBody } from '~/models/requests/user.requests'
+import { LoginBody, NewTokenBody, RegisterBody, ResendOTPBody, ResetPasswordBody, VerifyOTPBody } from '~/models/requests/auth.requests'
 import { databaseService } from './database.services'
 import { hashText } from '~/utils/crypto'
 import OTP from '~/models/database/OTP'
@@ -15,7 +15,7 @@ import { verifyToken } from '~/utils/jwt'
 import { env } from '~/config/env.config'
 import { JsonWebTokenError } from 'jsonwebtoken'
 
-class UserServices {
+class AuthServices {
   async register(payload: RegisterBody): Promise<ResultRegisterType> {
     const { fullName, email, password } = payload
     const hashedPassword = hashText(password)
@@ -39,10 +39,10 @@ class UserServices {
     const { email, code } = payload
     const otp = await databaseService.otps.findOne({ email })
     if (!email) {
-      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.VERIFY_OTP.IS_EXPIRED })
+      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.AUTH.VERIFY_OTP.IS_EXPIRED })
     }
     if (hashText(code) !== otp?.code) {
-      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.VERIFY_OTP.IS_INCORRECT })
+      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.AUTH.VERIFY_OTP.IS_INCORRECT })
     }
     await databaseService.users.findOneAndUpdate({ email }, { $set: { verify: UserVerifyStatus.Verified } })
     return true
@@ -52,7 +52,7 @@ class UserServices {
     const { email } = payload
     const user = await databaseService.users.findOne({ email })
     if (!user) {
-      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.RESEND_OTP.EMAIL_NOT_EXIST })
+      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.AUTH.RESEND_OTP.EMAIL_NOT_EXIST })
     }
     const otp = await sendOTP(email)
     const newOTP = new OTP({
@@ -68,7 +68,7 @@ class UserServices {
     const { email, password } = payload
     const user = await databaseService.users.findOneAndUpdate({ email }, { $set: { password: hashText(password) } })
     if (!user) {
-      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.RESET_PASSWORD.EMAIL_NOT_EXIST })
+      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.AUTH.RESET_PASSWORD.EMAIL_NOT_EXIST })
     }
     return true
   }
@@ -77,13 +77,13 @@ class UserServices {
     const { email, password } = payload
     const user = await databaseService.users.findOne({ email })
     if (!user) {
-      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.LOGIN.EMAIL_NOT_EXIST })
+      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.AUTH.LOGIN.EMAIL_NOT_EXIST })
     }
     if (user.password !== hashText(password)) {
-      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.LOGIN.PASSWORD_INCORRECT })
+      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.AUTH.LOGIN.PASSWORD_INCORRECT })
     }
     if (user.verify === UserVerifyStatus.Unverified) {
-      throw new ErrorWithStatus({ statusCode: StatusCodes.UNAUTHORIZED, message: RESULT_RESPONSE_MESSAGES.LOGIN.ACCOUNT_UNVERIFIED })
+      throw new ErrorWithStatus({ statusCode: StatusCodes.UNAUTHORIZED, message: RESULT_RESPONSE_MESSAGES.AUTH.LOGIN.ACCOUNT_UNVERIFIED })
     }
     const { _id, fullName } = user
     const [accessToken, refreshToken] = await tokenServices.signAccessAndRefreshToken(user._id.toString(), user.role)
@@ -106,7 +106,7 @@ class UserServices {
     if (!token) {
       throw new ErrorWithStatus({
         statusCode: StatusCodes.UNAUTHORIZED,
-        message: RESULT_RESPONSE_MESSAGES.NEW_TOKEN.REFRESH_TOKEN_EXPIRED
+        message: RESULT_RESPONSE_MESSAGES.AUTH.NEW_TOKEN.REFRESH_TOKEN_EXPIRED
       })
     }
     const [newAccessToken, newRefreshToken] = await tokenServices.signAccessAndRefreshToken(userID, role)
@@ -116,5 +116,5 @@ class UserServices {
   }
 }
 
-const userServices = new UserServices()
-export default userServices
+const authServices = new AuthServices()
+export default authServices
