@@ -1,7 +1,7 @@
 import { Algorithm, SignOptions } from 'jsonwebtoken'
 import { env } from '~/config/env.config'
 import { TokenType, UserRole } from '~/constants/enums'
-import { AccessTokenPayload, RefreshTokenPayload } from '~/models/requests/user.requests'
+import { AccessTokenPayload, RefreshTokenPayload } from '~/models/requests/auth.requests'
 import { signToken } from '~/utils/jwt'
 
 class TokenServices {
