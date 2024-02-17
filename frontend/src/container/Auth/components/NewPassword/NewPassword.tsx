@@ -5,7 +5,7 @@ import { NewPasswordField } from '~/@types/form.type'
 import { useResetPasswordMutation } from '~/apis/api'
 import { Button, FormItem } from '~/components'
 import { useToasts } from '~/hooks/useToasts'
-import { verifyAction } from '~/redux/reducers/user.reducers'
+import { verifyAction } from '~/redux/reducers/auth.reducers'
 import { passwordRegex } from '~/utils/regex'
 
 type NewPasswordProps = {

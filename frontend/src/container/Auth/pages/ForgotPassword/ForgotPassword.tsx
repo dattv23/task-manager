@@ -3,11 +3,11 @@ import { NewPassword, SendOTP, Verification } from '../../components'
 import { Button } from '~/components'
 import { useDispatch, useSelector } from 'react-redux'
 import { DispatchType, RootState } from '~/redux/config'
-import { updateEmailAction, verifyAction } from '~/redux/reducers/user.reducers'
+import { updateEmailAction, verifyAction } from '~/redux/reducers/auth.reducers'
 
 const ForgotPassword: React.FC = () => {
   const navigate = useNavigate()
-  const { stepVerify, email } = useSelector((state: RootState) => state.user)
+  const { stepVerify, email } = useSelector((state: RootState) => state.auth)
   const dispatch: DispatchType = useDispatch()
 
   const saveMail = (email: string) => {

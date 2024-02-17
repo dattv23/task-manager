@@ -55,19 +55,19 @@ export const api = createApi({
   endpoints(build) {
     return {
       login: build.mutation({
-        query: (data: LoginField) => ({ url: '/users/login', method: 'post', data: data })
+        query: (data: LoginField) => ({ url: '/auth/login', method: 'post', data: data })
       }),
       register: build.mutation({
-        query: (data: RegisterField) => ({ url: '/users/register', method: 'post', data: data })
+        query: (data: RegisterField) => ({ url: '/auth/register', method: 'post', data: data })
       }),
       verifyOTP: build.mutation({
-        query: (data: VerifyOTPField) => ({ url: '/users/verify-otp', method: 'post', data: data })
+        query: (data: VerifyOTPField) => ({ url: '/auth/verify-otp', method: 'post', data: data })
       }),
       resendOTP: build.mutation({
-        query: (data: ResendOTPField) => ({ url: '/users/resend-otp', method: 'post', data: data })
+        query: (data: ResendOTPField) => ({ url: '/auth/resend-otp', method: 'post', data: data })
       }),
       resetPassword: build.mutation({
-        query: (data: NewPasswordField) => ({ url: '/users/reset-password', method: 'post', data: data })
+        query: (data: NewPasswordField) => ({ url: '/auth/reset-password', method: 'post', data: data })
       })
     }
   }

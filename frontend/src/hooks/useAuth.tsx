@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { LoginResult } from '~/@types/api.type'
 import { AuthContextType } from '~/@types/hook.type'
 import { RootState } from '~/redux/config'
-import { authAction } from '~/redux/reducers/user.reducers'
+import { authAction } from '~/redux/reducers/auth.reducers'
 import { clearStore, setStore } from '~/utils'
 import { useToasts } from './useToasts'
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated)
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated)
   const dispatch = useDispatch()
   const { addToast, clearToasts } = useToasts()
 

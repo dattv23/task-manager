@@ -2,10 +2,10 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import storage from 'redux-persist/lib/storage'
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
 import { api } from '~/apis/api'
-import { userReducer } from './reducers'
+import { authReducer } from './reducers'
 
 const reducers = combineReducers({
-  user: userReducer,
+  auth: authReducer,
   [api.reducerPath]: api.reducer
 })
 
@@ -13,7 +13,7 @@ const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  blacklist: ['api']
+  blacklist: ['api', 'auth']
 }
 
 const persistedReducer = persistReducer(persistConfig, reducers)
