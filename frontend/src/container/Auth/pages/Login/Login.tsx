@@ -2,11 +2,11 @@ import { Form } from 'antd'
 import Button from '~/components/Button'
 import FormItem from '~/components/FormItem'
 import { Link, useNavigate } from 'react-router-dom'
-import { useLoginMutation, useResendOTPMutation } from '~/apis/api'
+import { APIErrorResult, useLoginMutation, useResendOTPMutation } from '~/apis/api'
 import { getStore } from '~/utils'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuth } from '~/hooks/useAuth'
-import { ErrorValidation, LoginResult } from '~/@types/api.type'
+import { LoginResult } from '~/@types/api.type'
 import { emailRegex, passwordRegex } from '~/utils/regex'
 import { useToasts } from '~/hooks/useToasts'
 import { LoginField } from '~/@types/form.type'
@@ -14,11 +14,12 @@ import { LoginField } from '~/@types/form.type'
 const Login: React.FC = () => {
   const [login, { isLoading }] = useLoginMutation()
   const [resendOTP] = useResendOTPMutation()
-  const email = getStore('email')
   const fullName = getStore('fullName')
+  const email = getStore('email')
   const { isAuthenticated, loginUser } = useAuth()
   const navigate = useNavigate()
   const { addToast } = useToasts()
+  const [isOtherAccount, setIsOtherAccount] = useState<boolean>(false)
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -28,50 +29,16 @@ const Login: React.FC = () => {
 
   const onFinish = async (values: LoginField) => {
     const { password } = values
-    const emailUser = email ? email : values.email
+    const emailUser = values.email ? values.email : email!
     const res = await login({ email: emailUser, password })
     if ('data' in res) {
-      const data = res.data.data as LoginResult
+      const data = res.data as LoginResult
       loginUser(data)
       navigate('/dashboard')
     }
     if ('error' in res) {
-      if ('status' in res.error && 'data' in res.error) {
-        const status = res.error.status
-        if (status === 422 && 'errors' in res.error.data) {
-          const errors = res.error.data.errors as ErrorValidation[]
-          errors.map((err) =>
-            addToast({
-              title: 'Login failed',
-              message: err.message,
-              type: 'error',
-              progress: true,
-              timeOut: 5
-            })
-          )
-        } else {
-          addToast({
-            title: 'Login failed',
-            message: res.error.data.message,
-            type: 'error',
-            progress: true,
-            timeOut: 3
-          })
-          if (status === 401) {
-            const res = await resendOTP({ email: emailUser })
-            if ('data' in res) {
-              addToast({
-                title: 'Resend OTP',
-                message: `OTP has been send to address ${emailUser}!`,
-                type: 'success',
-                progress: true,
-                timeOut: 5
-              })
-              navigate('/verify-email', { state: { email: emailUser } })
-            }
-          }
-        }
-      } else {
+      const { status, data } = res.error as APIErrorResult
+      if (!status) {
         addToast({
           title: 'Login failed',
           message: 'Please try again later!',
@@ -79,6 +46,38 @@ const Login: React.FC = () => {
           progress: true,
           timeOut: 5
         })
+        return
+      }
+      if (typeof data === 'string') {
+        alert('string')
+        addToast({
+          title: 'Login failed',
+          message: data,
+          type: 'error',
+          progress: true,
+          timeOut: 5
+        })
+      } else {
+        addToast({
+          title: 'Login failed',
+          message: data.message,
+          type: 'error',
+          progress: true,
+          timeOut: 5
+        })
+      }
+      if (status === 401) {
+        const res = await resendOTP({ email: emailUser })
+        if ('data' in res) {
+          addToast({
+            title: 'Resend OTP',
+            message: `OTP has been send to address ${emailUser}!`,
+            type: 'success',
+            progress: true,
+            timeOut: 5
+          })
+          navigate('/verify-email', { state: { email: emailUser } })
+        }
       }
     }
   }
@@ -88,7 +87,7 @@ const Login: React.FC = () => {
       <div className='flex h-screen p-5'>
         <div className='z-10 flex h-full w-full flex-col items-center justify-center bg-white  xl:w-1/2'>
           <div className='w-full lg:px-8 xl:px-40'>
-            {!email || isAuthenticated ? (
+            {!email || isOtherAccount ? (
               <h3 className='mb-8 text-left text-[32px] font-bold text-black'>Welcome Back.</h3>
             ) : (
               <div>
@@ -97,7 +96,7 @@ const Login: React.FC = () => {
               </div>
             )}
             <Form name='basic' onFinish={onFinish}>
-              {!email || isAuthenticated ? (
+              {!email || isOtherAccount ? (
                 <FormItem
                   name='email'
                   label='Email Address'
@@ -128,12 +127,22 @@ const Login: React.FC = () => {
                 </Button>
               </Form.Item>
             </Form>
-            <Link
-              to='/forgot-password'
-              className='w-full text-left text-lg font-semibold text-blue-700 hover:opacity-80'
-            >
-              Forgot Password?
-            </Link>
+            <div className='flex w-full items-center justify-between'>
+              <Link
+                to='/forgot-password'
+                className='flex w-[200px] items-center text-left text-lg font-semibold text-blue-700 hover:opacity-80'
+              >
+                Forgot Password?
+              </Link>
+              <div className='h-8 border-[2px] border-l'></div>
+              <Button
+                variant={'tertiary'}
+                className='w-[200px] text-left text-lg text-secondary'
+                onClick={() => setIsOtherAccount(true)}
+              >
+                Other Account?
+              </Button>
+            </div>
           </div>
         </div>
         <div className='relative hidden flex-col items-center justify-center rounded-[32px] bg-primary px-[100px] lg:flex xl:w-1/2'>
