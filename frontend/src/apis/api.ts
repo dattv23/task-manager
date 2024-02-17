@@ -1,16 +1,17 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import type { BaseQueryFn } from '@reduxjs/toolkit/query/react'
-import axios from 'axios'
 import type { AxiosRequestConfig, AxiosError } from 'axios'
 import { LoginField, NewPasswordField, RegisterField, ResendOTPField, VerifyOTPField } from '~/@types/form.type'
-import { getStore } from '~/utils'
+import axiosInstance from './axiosInstance'
+
+export type APIErrorResult = {
+  status: number
+  data: string | AxiosError
+}
 
 type AxiosBaseQueryResult = {
   data?: any
-  error?: {
-    status: number
-    data: string | AxiosError
-  }
+  error?: APIErrorResult
 }
 
 const axiosBaseQuery =
@@ -28,14 +29,13 @@ const axiosBaseQuery =
     AxiosBaseQueryResult
   > =>
   async ({ url, method, data, params, headers }) => {
-    const token = getStore('accessToken')
     try {
-      const result = await axios({
+      const result = await axiosInstance({
         url: baseUrl + url,
         method,
         data,
         params,
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', ...headers }
+        headers
       })
       return { data: result.data }
     } catch (axiosError) {
