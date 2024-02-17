@@ -1,13 +1,13 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { Suspense } from 'react'
-import { Spin } from 'antd'
 import { Root, ErrorBoundary } from '~/components'
+import Loader from './components/Loader/Loader'
 
 const router = createBrowserRouter([{ path: '*', Component: Root, errorElement: <ErrorBoundary /> }])
 
 const App = () => {
   return (
-    <Suspense fallback={<Spin size='large' />}>
+    <Suspense fallback={<Loader />}>
       <RouterProvider router={router} />
     </Suspense>
   )

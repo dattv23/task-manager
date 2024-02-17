@@ -8,4 +8,5 @@ export type RoutesType = {
   tasks: string
   settings: string
   verifyEmail: string
+  workspace: string
 }

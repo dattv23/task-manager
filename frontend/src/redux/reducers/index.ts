@@ -1,1 +1,1 @@
-export { default as userReducer } from './user.reducers'
+export { default as authReducer } from './auth.reducers'

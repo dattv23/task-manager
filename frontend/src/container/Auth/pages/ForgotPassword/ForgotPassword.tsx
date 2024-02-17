@@ -1,19 +1,21 @@
 import { useNavigate } from 'react-router-dom'
 import { NewPassword, SendOTP, Verification } from '../../components'
 import { Button } from '~/components'
-import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { DispatchType, RootState } from '~/redux/config'
+import { updateEmailAction, verifyAction } from '~/redux/reducers/auth.reducers'
 
 const ForgotPassword: React.FC = () => {
   const navigate = useNavigate()
-  const [current, setCurrent] = useState(0)
-  const [email, setEmail] = useState('')
+  const { stepVerify, email } = useSelector((state: RootState) => state.auth)
+  const dispatch: DispatchType = useDispatch()
 
   const saveMail = (email: string) => {
-    setEmail(email)
+    dispatch(updateEmailAction(email))
   }
 
   const next = () => {
-    setCurrent(current + 1)
+    dispatch(verifyAction(stepVerify + 1))
   }
 
   const steps = [
@@ -37,7 +39,7 @@ const ForgotPassword: React.FC = () => {
         Create Account
       </Button>
       <div className='w-96'>
-        <div>{steps[current].content}</div>
+        <div>{steps[stepVerify].content}</div>
       </div>
     </div>
   )

@@ -1,16 +1,17 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import type { BaseQueryFn } from '@reduxjs/toolkit/query/react'
-import axios from 'axios'
 import type { AxiosRequestConfig, AxiosError } from 'axios'
 import { LoginField, NewPasswordField, RegisterField, ResendOTPField, VerifyOTPField } from '~/@types/form.type'
-import { getStore } from '~/utils'
+import axiosInstance from './axiosInstance'
+
+export type APIErrorResult = {
+  status: number
+  data: string | AxiosError
+}
 
 type AxiosBaseQueryResult = {
   data?: any
-  error?: {
-    status: number
-    data: string | AxiosError
-  }
+  error?: APIErrorResult
 }
 
 const axiosBaseQuery =
@@ -28,14 +29,13 @@ const axiosBaseQuery =
     AxiosBaseQueryResult
   > =>
   async ({ url, method, data, params, headers }) => {
-    const token = getStore('accessToken')
     try {
-      const result = await axios({
+      const result = await axiosInstance({
         url: baseUrl + url,
         method,
         data,
         params,
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', ...headers }
+        headers
       })
       return { data: result.data }
     } catch (axiosError) {
@@ -55,19 +55,19 @@ export const api = createApi({
   endpoints(build) {
     return {
       login: build.mutation({
-        query: (data: LoginField) => ({ url: '/users/login', method: 'post', data: data })
+        query: (data: LoginField) => ({ url: '/auth/login', method: 'post', data: data })
       }),
       register: build.mutation({
-        query: (data: RegisterField) => ({ url: '/users/register', method: 'post', data: data })
+        query: (data: RegisterField) => ({ url: '/auth/register', method: 'post', data: data })
       }),
       verifyOTP: build.mutation({
-        query: (data: VerifyOTPField) => ({ url: '/users/verify-otp', method: 'post', data: data })
+        query: (data: VerifyOTPField) => ({ url: '/auth/verify-otp', method: 'post', data: data })
       }),
       resendOTP: build.mutation({
-        query: (data: ResendOTPField) => ({ url: '/users/resend-otp', method: 'post', data: data })
+        query: (data: ResendOTPField) => ({ url: '/auth/resend-otp', method: 'post', data: data })
       }),
       resetPassword: build.mutation({
-        query: (data: NewPasswordField) => ({ url: '/users/reset-password', method: 'post', data: data })
+        query: (data: NewPasswordField) => ({ url: '/auth/reset-password', method: 'post', data: data })
       })
     }
   }

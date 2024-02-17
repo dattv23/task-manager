@@ -1,6 +1,7 @@
 import React from 'react'
-import { RouteObject } from 'react-router-dom'
+import { NonIndexRouteObject, RouteObject } from 'react-router-dom'
 import config from '~/config'
+import DashboardLayout from '~/layout/Dashboard/DashboardLayout'
 
 const HomePage = React.lazy(() => import('~/container/Home/pages/MainHome'))
 const LoginPage = React.lazy(() => import('~/container/Auth/pages/Login'))
@@ -11,6 +12,7 @@ const NotFoundPage = React.lazy(() => import('~/components/NotFound'))
 const DashboardPage = React.lazy(() => import('~/container/Dashboard/pages/MainDashboard'))
 const TasksPage = React.lazy(() => import('~/container/Dashboard/pages/Tasks'))
 const SettingsPage = React.lazy(() => import('~/container/Dashboard/pages/Settings'))
+const WorkspacePage = React.lazy(() => import('~/container/Home/pages/Workspace'))
 
 const publicRoute: RouteObject[] = [
   { path: config.routes.notFound, Component: NotFoundPage },
@@ -21,10 +23,15 @@ const publicRoute: RouteObject[] = [
   { path: config.routes.forgotPassword, Component: ForgotPasswordPage }
 ]
 
-const privateRoute: RouteObject[] = [
-  { path: config.routes.dashboard, Component: DashboardPage },
-  { path: config.routes.tasks, Component: TasksPage },
-  { path: config.routes.settings, Component: SettingsPage }
+interface PrivateRoute extends NonIndexRouteObject {
+  Layout?: React.FC
+}
+
+const privateRoute: PrivateRoute[] = [
+  { path: config.routes.dashboard, Component: DashboardPage, Layout: DashboardLayout },
+  { path: config.routes.tasks, Component: TasksPage, Layout: DashboardLayout },
+  { path: config.routes.settings, Component: SettingsPage, Layout: DashboardLayout },
+  { path: config.routes.workspace, Component: WorkspacePage }
 ]
 
 export { publicRoute, privateRoute }

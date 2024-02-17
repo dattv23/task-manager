@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { useRouteError } from 'react-router-dom'
+import { useNavigate, useRouteError } from 'react-router-dom'
 import './style.scss'
 import Button from '../Button'
 
@@ -7,6 +7,7 @@ const ErrorBoundary: React.FC = () => {
   const error = useRouteError()
   const eyeLeftRef = useRef<HTMLDivElement>(null)
   const eyeRightRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
@@ -52,7 +53,11 @@ const ErrorBoundary: React.FC = () => {
       <p className='mt-4 text-xl'>
         Oh eyeballs! Something went wrong. We're <i>looking</i> to see what happened.
       </p>
-      <Button variant={'tertiary'} className='mt-12 text-xl font-bold uppercase text-white'>
+      <Button
+        variant={'tertiary'}
+        className='mt-12 text-xl font-bold uppercase text-white'
+        onClick={() => navigate('/')}
+      >
         Go Back
       </Button>
     </div>

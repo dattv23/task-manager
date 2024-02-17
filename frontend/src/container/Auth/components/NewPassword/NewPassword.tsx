@@ -1,9 +1,11 @@
 import { Form } from 'antd'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { NewPasswordField } from '~/@types/form.type'
 import { useResetPasswordMutation } from '~/apis/api'
 import { Button, FormItem } from '~/components'
 import { useToasts } from '~/hooks/useToasts'
+import { verifyAction } from '~/redux/reducers/auth.reducers'
 import { passwordRegex } from '~/utils/regex'
 
 type NewPasswordProps = {
@@ -14,6 +16,7 @@ const NewPassword: React.FC<NewPasswordProps> = ({ email }) => {
   const navigate = useNavigate()
   const [resetPassword] = useResetPasswordMutation()
   const { addToast } = useToasts()
+  const dispatch = useDispatch()
 
   const handleSubmit = async (values: NewPasswordField) => {
     const { password } = values
@@ -26,6 +29,7 @@ const NewPassword: React.FC<NewPasswordProps> = ({ email }) => {
         progress: true,
         timeOut: 5
       })
+      dispatch(verifyAction(0))
       navigate('/login')
     }
     if ('error' in res) {
