@@ -13,7 +13,6 @@ import RefreshToken from '~/models/database/RefreshToken'
 import { UserVerifyStatus } from '~/constants/enums'
 import { verifyToken } from '~/utils/jwt'
 import { env } from '~/config/env.config'
-import { JsonWebTokenError } from 'jsonwebtoken'
 
 class AuthServices {
   async register(payload: RegisterBody): Promise<ResultRegisterType> {

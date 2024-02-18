@@ -33,6 +33,6 @@ export const authController = {
 
   refreshToken: async (req: Request<ParamsDictionary, any, NewTokenBody>, res: Response, next: NextFunction) => {
     const result = await authServices.newToken(req.body)
-    return sendResponse.success(res, result, RESULT_RESPONSE_MESSAGES.AUTH.NEW_TOKEN.IS_SUCCESS)
+    return sendResponse.created(res, result, RESULT_RESPONSE_MESSAGES.AUTH.NEW_TOKEN.IS_SUCCESS)
   }
 }

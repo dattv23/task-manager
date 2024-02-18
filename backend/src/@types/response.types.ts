@@ -16,3 +16,12 @@ export type ResultNewTokenType = {
   accessToken: string
   refreshToken: string
 }
+
+export type ResultGetProfileType = {
+  userId: string
+  fullName: string
+  email: string
+  dateOfBirth?: Date
+  avatar: string
+  bio: string
+}

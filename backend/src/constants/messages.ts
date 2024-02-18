@@ -57,5 +57,11 @@ export const RESULT_RESPONSE_MESSAGES = {
       REFRESH_TOKEN_EXPIRED: 'Refresh token is expired',
       IS_SUCCESS: 'Create new token successfully'
     }
+  },
+  USERS: {
+    USER_NOT_EXIST: 'User not exist',
+    GET_PROFILE: {
+      IS_SUCCESS: 'Get profile successfully'
+    }
   }
 }
