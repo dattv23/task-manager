@@ -6,7 +6,7 @@ const SidebarRight: React.FC = () => {
   return (
     <>
       <div className='h-screen bg-neutral-300 py-4'>
-        <div className='mr-5 h-full w-80 rounded-lg bg-white py-24'>
+        <div className='mr-5 h-full w-80 rounded-lg bg-white py-20'>
           <Profile />
           <div className='m-5 rounded-lg bg-neutral-300 p-4'>
             <div className='flex justify-center rounded-lg '>

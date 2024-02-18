@@ -42,22 +42,20 @@ const Calendar: React.FC = () => {
 
   return (
     <div className='mt-3'>
-      <div className='flex items-center'>
-        <h2 className='flex-auto font-semibold text-gray-900'>{format(firstDayCurrentMonth, 'MMMM yyyy')}</h2>
+      <div className='flex items-center justify-between'>
         <button
           type='button'
           onClick={previousMonth}
           className='-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500'
         >
-          <span className='sr-only'>Previous month</span>
           <ArrowLeftOutlined className='h-5 w-5' aria-hidden='true' />
         </button>
+        <h2 className='text-md flex-auto text-center font-bold text-primary'>{format(firstDayCurrentMonth, 'MMMM')}</h2>
         <button
           onClick={nextMonth}
           type='button'
           className='-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500'
         >
-          <span className='sr-only'>Next month</span>
           <ArrowRightOutlined className='h-5 w-5' aria-hidden='true' />
         </button>
       </div>
@@ -72,7 +70,7 @@ const Calendar: React.FC = () => {
       </div>
       <div className='mt-2 grid grid-cols-7 text-sm'>
         {days.map((day, dayIdx) => (
-          <div key={day.toString()} className={classNames(dayIdx === 0 && colStartClasses[getDay(day)], 'py-1.5')}>
+          <div key={day.toString()} className={classNames(dayIdx === 0 && colStartClasses[getDay(day)], 'py-1')}>
             <button
               type='button'
               onClick={() => setSelectedDay(day)}
