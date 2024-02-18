@@ -7,7 +7,7 @@ import OTP from '~/models/database/OTP'
 import { sendOTP } from '~/utils/email'
 import { ErrorWithStatus } from '~/models/Error'
 import { StatusCodes } from 'http-status-codes'
-import { RESULT_RESPONSE_MESSAGES, VALIDATION_MESSAGES } from '~/constants/messages'
+import { RESULT_RESPONSE_MESSAGES } from '~/constants/messages'
 import tokenServices from './token.services'
 import RefreshToken from '~/models/database/RefreshToken'
 import { UserVerifyStatus } from '~/constants/enums'
@@ -79,10 +79,10 @@ class AuthServices {
       throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.AUTH.LOGIN.EMAIL_NOT_EXIST })
     }
     if (user.password !== hashText(password)) {
-      throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.AUTH.LOGIN.PASSWORD_INCORRECT })
+      throw new ErrorWithStatus({ statusCode: StatusCodes.BAD_REQUEST, message: RESULT_RESPONSE_MESSAGES.AUTH.LOGIN.PASSWORD_INCORRECT })
     }
     if (user.verify === UserVerifyStatus.Unverified) {
-      throw new ErrorWithStatus({ statusCode: StatusCodes.UNAUTHORIZED, message: RESULT_RESPONSE_MESSAGES.AUTH.LOGIN.ACCOUNT_UNVERIFIED })
+      throw new ErrorWithStatus({ statusCode: StatusCodes.FORBIDDEN, message: RESULT_RESPONSE_MESSAGES.AUTH.LOGIN.ACCOUNT_UNVERIFIED })
     }
     const { _id, fullName } = user
     const [accessToken, refreshToken] = await tokenServices.signAccessAndRefreshToken(user._id.toString(), user.role)
