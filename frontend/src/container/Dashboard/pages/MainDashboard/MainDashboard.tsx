@@ -1,5 +1,5 @@
 import { CloseOutlined } from '@ant-design/icons'
-import React, { useState } from 'react'
+import React from 'react'
 import { ICONS } from '~/assets/icons'
 import { IMAGES } from '~/assets/images'
 import { Button } from '~/components'
