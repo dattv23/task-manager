@@ -16,6 +16,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cloudinary": "^2.0.1",
+    "cloudinary-build-url": "^0.2.4",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -28,10 +30,13 @@
     "moment": "^2.30.1",
     "mongodb": "^6.3.0",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.9",
+    "streamifier": "^0.1.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@cld-apis/types": "^0.1.6",
     "@types/async-exit-hook": "^2.0.2",
     "@types/compression": "^1.7.5",
     "@types/cookie-parser": "^1.4.6",
@@ -40,8 +45,10 @@
     "@types/jsonwebtoken": "^9.0.5",
     "@types/lodash": "^4.14.202",
     "@types/morgan": "^1.9.9",
+    "@types/multer": "^1.4.11",
     "@types/node": "^20.11.7",
     "@types/nodemailer": "^6.4.14",
+    "@types/streamifier": "^0.1.2",
     "@typescript-eslint/eslint-plugin": "^6.20.0",
     "@typescript-eslint/parser": "^6.20.0",
     "async-exit-hook": "^2.0.1",

@@ -7,7 +7,7 @@ export default class User {
   fullName: string
   email: string
   password: string
-  date_of_birth: Date
+  dateOfBirth?: Date
   avatar: string
   bio: string
   isOnline: boolean
@@ -22,7 +22,7 @@ export default class User {
     this.fullName = user.fullName
     this.email = user.email
     this.password = user.password
-    this.date_of_birth = user.date_of_birth || new Date()
+    this.dateOfBirth = user.dateOfBirth || undefined
     this.avatar = user.avatar || ''
     this.bio = user.bio || ''
     this.isOnline = user.isOnline || false

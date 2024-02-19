@@ -22,6 +22,13 @@ export const VALIDATION_MESSAGES = {
       IS_REQUIRED: 'Code OTP is required',
       IS_INVALID: 'Code OTP is invalid'
     }
+  },
+  UPLOAD: {
+    FILE_REQUIRED: 'Please choose a file to upload',
+
+    IMAGE: {
+      FAILED: 'Uploading image failed!'
+    }
   }
 }
 
@@ -56,6 +63,16 @@ export const RESULT_RESPONSE_MESSAGES = {
       USER_NOT_EXIST: 'User not exist',
       REFRESH_TOKEN_EXPIRED: 'Refresh token is expired',
       IS_SUCCESS: 'Create new token successfully'
+    }
+  },
+  USERS: {
+    USER_NOT_EXIST: 'User not exist',
+    GET_PROFILE: {
+      IS_SUCCESS: 'Get profile successfully'
+    },
+    UPLOAD_AVATAR: {
+      IS_SUCCESS: 'Upload avatar successfully',
+      IS_FAILED: 'Upload avatar failed'
     }
   }
 }
