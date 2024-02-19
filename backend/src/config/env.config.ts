@@ -23,5 +23,11 @@ export const env = {
   email: {
     address: process.env.EMAIL,
     password: process.env.PASS_EMAIL
+  },
+  cloudinary: {
+    name: process.env.CLOUDINARY_NAME,
+    apiKey: process.env.CLOUDINARY_API_KEY,
+    apiSecret: process.env.CLOUDINARY_API_SECRET,
+    url: process.env.CLOUDINARY_URL
   }
 }

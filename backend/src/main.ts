@@ -16,6 +16,9 @@ import 'express-async-errors'
 const app = express()
 const httpServer = createServer(app)
 
+// set up middleware
+app.use(express.json())
+
 // enable all CORS requests
 app.use(cors())
 

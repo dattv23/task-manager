@@ -3,8 +3,8 @@ import { RefreshTokenType } from '~/@types/token.type'
 
 export default class RefreshToken {
   _id?: ObjectId
-  user_id?: ObjectId
-  token?: string
+  user_id: ObjectId
+  token: string
   created_at: Date
   updated_at: Date
 

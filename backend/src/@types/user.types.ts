@@ -6,7 +6,7 @@ export type UserType = {
   fullName: string
   email: string
   password: string
-  date_of_birth?: Date
+  dateOfBirth?: Date
   avatar?: string
   bio?: string
   isOnline?: boolean
