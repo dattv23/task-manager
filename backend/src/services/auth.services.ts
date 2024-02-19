@@ -84,13 +84,13 @@ class AuthServices {
     if (user.verify === UserVerifyStatus.Unverified) {
       throw new ErrorWithStatus({ statusCode: StatusCodes.FORBIDDEN, message: RESULT_RESPONSE_MESSAGES.AUTH.LOGIN.ACCOUNT_UNVERIFIED })
     }
-    const { _id, fullName } = user
-    const [accessToken, refreshToken] = await tokenServices.signAccessAndRefreshToken(user._id.toString(), user.role)
-    await databaseService.refreshTokens.deleteOne({ user_id: user._id })
+    const { _id, fullName, role } = user
+    const [accessToken, refreshToken] = await tokenServices.signAccessAndRefreshToken(_id.toString(), role)
+    await databaseService.refreshTokens.deleteOne({ user_id: _id })
     await databaseService.refreshTokens.insertOne(
       new RefreshToken({
         token: refreshToken,
-        user_id: user._id
+        user_id: _id
       })
     )
     const content: ResultLoginType = { userId: _id.toString(), email, fullName, accessToken, refreshToken }
