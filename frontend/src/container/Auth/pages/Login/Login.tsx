@@ -39,7 +39,6 @@ const Login: React.FC = () => {
     }
     if ('error' in res) {
       const { status, data } = res.error as APIErrorResult
-      alert(status)
       if (!status) {
         addToast({
           title: 'Login failed',
@@ -51,7 +50,6 @@ const Login: React.FC = () => {
         return
       }
       if (typeof data === 'string') {
-        alert('string')
         addToast({
           title: 'Login failed',
           message: data,
@@ -69,7 +67,6 @@ const Login: React.FC = () => {
         })
       }
       if (status === 403) {
-        alert('error 403')
         const res = await resendOTP({ email: emailUser })
         if ('data' in res) {
           addToast({

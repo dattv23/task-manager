@@ -35,7 +35,6 @@ const Register: React.FC = () => {
         return
       }
       if (typeof data === 'string') {
-        alert('string')
         addToast({
           title: 'Register failed',
           message: data,
