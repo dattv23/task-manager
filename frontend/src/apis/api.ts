@@ -5,12 +5,12 @@ import { LoginField, NewPasswordField, RegisterField, ResendOTPField, VerifyOTPF
 import axiosInstance from './axiosInstance'
 
 export type APIErrorResult = {
-  status: number
+  status?: number
   data: string | AxiosError
 }
 
 type AxiosBaseQueryResult = {
-  data?: any
+  data: any
   error?: APIErrorResult
 }
 

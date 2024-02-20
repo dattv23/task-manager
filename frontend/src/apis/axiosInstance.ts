@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import Cookies from 'js-cookie'
 import { getStore, setStore } from '~/utils'
 
@@ -33,7 +33,7 @@ axiosInstance.interceptors.response.use(
 
     // If the error status is 401 and there is no originalRequest._retry flag,
     // it means the token has expired and we need to refresh it
-    if ((error.response.status = 401 && !originalRequest._retry)) {
+    if (error.response.status == 401 && !originalRequest._retry) {
       try {
         const refreshToken = Cookies.get('refreshToken')
         if (!refreshToken) {
@@ -51,7 +51,7 @@ axiosInstance.interceptors.response.use(
         window.location.href = '/login'
       }
     }
-    return Promise.reject(error)
+    return Promise.reject(error as AxiosError)
   }
 )
 

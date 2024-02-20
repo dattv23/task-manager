@@ -30,6 +30,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Perform logout logic
     Cookies.remove('refreshToken')
     clearStore('accessToken')
+    clearStore('email')
+    clearStore('fullName')
     dispatch(authAction(false))
   }
 

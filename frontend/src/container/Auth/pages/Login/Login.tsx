@@ -1,4 +1,4 @@
-import { Form } from 'antd'
+import { Form, Spin } from 'antd'
 import Button from '~/components/Button'
 import FormItem from '~/components/FormItem'
 import { Link, useNavigate } from 'react-router-dom'
@@ -31,6 +31,7 @@ const Login: React.FC = () => {
     const { password } = values
     const emailUser = values.email ? values.email : email!
     const res = await login({ email: emailUser, password })
+
     if ('data' in res) {
       const data = res.data as LoginResult
       loginUser(data)
@@ -38,6 +39,7 @@ const Login: React.FC = () => {
     }
     if ('error' in res) {
       const { status, data } = res.error as APIErrorResult
+      alert(status)
       if (!status) {
         addToast({
           title: 'Login failed',
@@ -66,7 +68,8 @@ const Login: React.FC = () => {
           timeOut: 5
         })
       }
-      if (status === 401) {
+      if (status === 403) {
+        alert('error 403')
         const res = await resendOTP({ email: emailUser })
         if ('data' in res) {
           addToast({
@@ -78,6 +81,7 @@ const Login: React.FC = () => {
           })
           navigate('/verify-email', { state: { email: emailUser } })
         }
+        return
       }
     }
   }
@@ -122,8 +126,8 @@ const Login: React.FC = () => {
               />
 
               <Form.Item>
-                <Button type='submit' className='my-3 w-full lg:w-[204px]'>
-                  {isLoading ? 'Loading...' : 'Log In'}
+                <Button type='submit' className='my-3 w-full lg:w-[204px]' onSubmit={(e) => e.preventDefault()}>
+                  {isLoading ? <Spin size='large' /> : 'Log In'}
                 </Button>
               </Form.Item>
             </Form>

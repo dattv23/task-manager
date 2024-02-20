@@ -4,9 +4,9 @@ import FormItem from '~/components/FormItem'
 import { useNavigate } from 'react-router-dom'
 import { emailRegex, passwordRegex } from '~/utils/regex'
 import { RegisterField } from '~/@types/form.type'
-import { useRegisterMutation } from '~/apis/api'
+import { APIErrorResult, useRegisterMutation } from '~/apis/api'
 import { useToasts } from '~/hooks/useToasts'
-import { ErrorValidation, RegisterResult } from '~/@types/api.type'
+import { RegisterResult } from '~/@types/api.type'
 import { setStore } from '~/utils'
 
 const Register: React.FC = () => {
@@ -17,38 +17,36 @@ const Register: React.FC = () => {
   const onFinish = async (values: RegisterField) => {
     const res = await register(values)
     if ('data' in res) {
-      const { email, fullName } = res.data.data as RegisterResult
+      const { email, fullName } = res.data as RegisterResult
       setStore('email', email)
       setStore('fullName', fullName)
       navigate('/verify-email', { state: { email: email } })
     }
     if ('error' in res) {
-      if ('status' in res.error && 'data' in res.error) {
-        const status = res.error.status
-        if (status === 422 && 'errors' in res.error.data) {
-          const errors = res.error.data.errors as ErrorValidation[]
-          errors.map((err) =>
-            addToast({
-              title: 'Register failed',
-              message: err.message,
-              type: 'error',
-              progress: true,
-              timeOut: 5
-            })
-          )
-        } else {
-          addToast({
-            title: 'Register failed',
-            message: res.error.data.message,
-            type: 'error',
-            progress: true,
-            timeOut: 5
-          })
-        }
-      } else {
+      const { status, data } = res.error as APIErrorResult
+      if (!status) {
         addToast({
           title: 'Register failed',
           message: 'Please try again later!',
+          type: 'error',
+          progress: true,
+          timeOut: 5
+        })
+        return
+      }
+      if (typeof data === 'string') {
+        alert('string')
+        addToast({
+          title: 'Register failed',
+          message: data,
+          type: 'error',
+          progress: true,
+          timeOut: 5
+        })
+      } else {
+        addToast({
+          title: 'Register failed',
+          message: data.message,
           type: 'error',
           progress: true,
           timeOut: 5
@@ -120,7 +118,7 @@ const Register: React.FC = () => {
 
               <Form.Item>
                 <Button type='submit' className='mt-6 w-full lg:mt-12'>
-                  {isLoading ? 'Creating' : 'Create'} Account
+                  {isLoading ? 'Creating...' : 'Create Account'}
                 </Button>
               </Form.Item>
             </Form>
