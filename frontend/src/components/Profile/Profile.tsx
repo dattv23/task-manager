@@ -1,75 +1,100 @@
-import { Avatar, GetProp, Modal, Upload, UploadProps, message } from 'antd'
-import React, { useState } from 'react'
+import { Avatar, Modal } from 'antd'
+import React, { ChangeEvent, useState } from 'react'
 import { IMAGES } from '~/assets/images'
-import { getStore } from '~/utils'
+import { cn } from '~/utils'
 import Button from '../Button'
 import './style.scss'
-
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
-
-const getBase64 = (img: FileType, callback: (url: string) => void) => {
-  const reader = new FileReader()
-  reader.addEventListener('load', () => callback(reader.result as string))
-  reader.readAsDataURL(img)
-}
-
-const beforeUpload = (file: FileType) => {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
-  if (!isJpgOrPng) {
-    message.error('You can only upload JPG/PNG file!')
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!')
-  }
-  return isJpgOrPng && isLt2M
-}
+import { APIErrorResult, usePostAvatarMutation } from '~/apis/api'
+import { useToasts } from '~/hooks/useToasts'
+import { PostAvatarResult } from '~/@types/api.type'
+import { useProfile } from '~/hooks/useProfile'
+import { ProfileType } from '~/@types/response.type'
 
 const Profile: React.FC = () => {
-  const fullName = getStore('fullName')
-  const email = getStore('email')
   const [open, setOpen] = useState<boolean>(false)
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false)
-  const [imageUrl, setImageUrl] = useState<string>()
+  const [file, setFile] = useState<File>()
+  const { addToast } = useToasts()
+  const [postAvatar] = usePostAvatarMutation()
+  const { profile, updateProfile } = useProfile()
 
   const showModal = () => {
     setOpen(true)
   }
 
-  const handleOk = () => {
+  const handleOk = async () => {
+    if (!file) {
+      return addToast({ title: 'Warning', message: 'Please select file image to upload!', type: 'warning' })
+    }
     setConfirmLoading(true)
-    setTimeout(() => {
-      setOpen(false)
-      setConfirmLoading(false)
-    }, 2000)
+
+    const formData = new FormData()
+    formData.append('image', file)
+
+    const res = await postAvatar(formData)
+
+    if ('data' in res) {
+      const { url } = res.data as PostAvatarResult
+      const newProfile: ProfileType = { ...profile, avatar: url }
+      updateProfile(newProfile)
+      addToast({
+        title: 'Success',
+        message: 'Upload avatar successfully',
+        type: 'success',
+        progress: true,
+        timeOut: 5
+      })
+    }
+    if ('error' in res) {
+      addToast({
+        title: 'Upload avatar failed',
+        message: 'Please try again later!',
+        type: 'error',
+        progress: true,
+        timeOut: 5
+      })
+      return
+    }
+    setConfirmLoading(false)
   }
 
   const handleCancel = () => {
     setOpen(false)
   }
 
-  const handleChange: UploadProps['onChange'] = (info) => {
-    if (info.file.status === 'uploading') {
-      setConfirmLoading(true)
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files) return
+
+    const selectedFile = event.target.files[0]
+
+    // Checking if the file type is allowed or not
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg']
+    if (!allowedTypes.includes(selectedFile?.type)) {
+      addToast({
+        title: 'File type not allowed!',
+        message: 'Only JPEG, PNG, and GIF images are allowed.',
+        type: 'warning',
+        progress: true,
+        timeOut: 5
+      })
       return
     }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj as FileType, (url) => {
-        setConfirmLoading(false)
-        setImageUrl(url)
-      })
-    }
+
+    setFile(selectedFile)
   }
 
   return (
     <>
       <div className='flex flex-col items-center'>
         <button onClick={showModal}>
-          <Avatar src={IMAGES.avatar} shape='square' size={90} />
+          {profile?.avatar ? (
+            <Avatar src={profile.avatar} shape='square' size={90} key={profile.avatar} />
+          ) : (
+            <Avatar src={IMAGES.profile} shape='square' size={90} className='bg-black' />
+          )}
         </button>
-        <h3 className='mt-6 text-xl font-bold text-blue-950'>{fullName}</h3>
-        <p className='mb-5 text-sm font-normal text-stone-500'>{email}</p>
+        <h3 className='mt-6 text-xl font-bold text-blue-950'>{profile.fullName}</h3>
+        <p className='mb-5 text-sm font-normal text-stone-500'>{profile.email}</p>
         <Button>My Profile</Button>
       </div>
       <Modal
@@ -81,29 +106,41 @@ const Profile: React.FC = () => {
         width={460}
         styles={{ header: { marginTop: '12px' } }}
         footer={
-          <Button className='w-full' onClick={handleOk}>
-            {!confirmLoading ? 'Upload file' : 'Uploading'}
+          <Button
+            className={cn('w-full', confirmLoading && 'opacity-20 hover:opacity-20')}
+            onClick={handleOk}
+            disabled={confirmLoading}
+          >
+            {!confirmLoading ? 'Upload file' : 'Uploading...'}
           </Button>
         }
       >
         <div className='relative h-[380px]'>
-          {imageUrl ? (
-            <img src={imageUrl} alt='avatar' className='h-[380px] w-full rounded-2xl' />
+          {profile?.avatar ? (
+            <img
+              src={profile.avatar}
+              alt='avatar'
+              className='h-full w-full rounded-2xl object-fill'
+              key={profile.avatar}
+            />
           ) : (
             <div className='absolute bottom-0 left-0 right-0 top-0 mt-8 flex flex-col items-center justify-center rounded-2xl bg-black'>
               <img src={IMAGES.profile} className='h-[200px]' />
             </div>
           )}
-          <Upload
-            action='https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188'
-            beforeUpload={beforeUpload}
-            onChange={handleChange}
-            name='avatar'
-            className='absolute bottom-6 w-full text-center'
-            showUploadList={false}
-          >
-            <button className='rounded-xl bg-gray-500 p-3  text-base text-white'>Tap to select picture</button>
-          </Upload>
+          <div className='absolute bottom-6 h-11 w-full'>
+            <input
+              type='file'
+              id='image'
+              className='absolute bottom-0 left-1/2 top-0 -translate-x-1/2 opacity-0'
+              onChange={handleFileChange}
+            />
+            <div className='absolute bottom-0 left-1/2 top-0 -translate-x-1/2 cursor-pointer rounded-xl bg-gray-500 p-3 text-base'>
+              <label htmlFor='image' className='cursor-pointer text-white'>
+                Tap to select picture
+              </label>
+            </div>
+          </div>
         </div>
       </Modal>
     </>

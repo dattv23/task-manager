@@ -7,6 +7,6 @@ import { wrapRequestHandler } from '~/utils/handler'
 const usersRouter = Router()
 
 usersRouter.get('/@me/profile', wrapRequestHandler(authMiddleware), wrapRequestHandler(usersController.getProfile))
-usersRouter.post('/@me/avatar', wrapRequestHandler(authMiddleware), wrapRequestHandler(uploadMiddleware.singleImage), wrapRequestHandler(usersController.uploadAvatar))
+usersRouter.put('/@me/avatar', wrapRequestHandler(authMiddleware), wrapRequestHandler(uploadMiddleware.singleImage), wrapRequestHandler(usersController.uploadAvatar))
 
 export default usersRouter

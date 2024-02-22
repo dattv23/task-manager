@@ -24,10 +24,10 @@ class UsersServices {
     if (!user) {
       throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.USERS.USER_NOT_EXIST })
     }
+    const { url } = await cloudinaryService.uploadImage('avatar', file.buffer)
     if (user.avatar) {
       await cloudinaryService.deleteImage(user.avatar)
     }
-    const { url } = await cloudinaryService.uploadImage('avatar', file.buffer)
     await databaseService.users.findOneAndUpdate({ _id: new ObjectId(userID) }, { $set: { avatar: url } })
     return { url: url }
   }

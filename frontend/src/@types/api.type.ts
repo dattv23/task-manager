@@ -16,3 +16,7 @@ export type RegisterResult = {
   email: string
   fullName: string
 }
+
+export type PostAvatarResult = {
+  url: string
+}

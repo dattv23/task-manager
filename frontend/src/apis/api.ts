@@ -1,8 +1,9 @@
+import axiosInstance from './axiosInstance'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import type { BaseQueryFn } from '@reduxjs/toolkit/query/react'
 import type { AxiosRequestConfig, AxiosError } from 'axios'
 import { LoginField, NewPasswordField, RegisterField, ResendOTPField, VerifyOTPField } from '~/@types/form.type'
-import axiosInstance from './axiosInstance'
+import { ProfileType } from '~/@types/response.type'
 
 export type APIErrorResult = {
   status?: number
@@ -68,6 +69,19 @@ export const api = createApi({
       }),
       resetPassword: build.mutation({
         query: (data: NewPasswordField) => ({ url: '/auth/reset-password', method: 'post', data: data })
+      }),
+      getProfile: build.query<ProfileType, void>({
+        query: () => ({ url: '/users/@me/profile', method: 'get' })
+      }),
+      postAvatar: build.mutation({
+        query: (data: FormData) => ({
+          url: `/users/@me/avatar`,
+          method: 'PUT',
+          data: data,
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
       })
     }
   }
@@ -78,5 +92,7 @@ export const {
   useRegisterMutation,
   useVerifyOTPMutation,
   useResendOTPMutation,
-  useResetPasswordMutation
+  useResetPasswordMutation,
+  useGetProfileQuery,
+  usePostAvatarMutation
 } = api
