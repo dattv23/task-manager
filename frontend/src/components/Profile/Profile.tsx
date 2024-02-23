@@ -9,6 +9,7 @@ import { useToasts } from '~/hooks/useToasts'
 import { PostAvatarResult } from '~/@types/api.type'
 import { useProfile } from '~/hooks/useProfile'
 import { ProfileType } from '~/@types/response.type'
+import { useOnlineStatus } from '~/hooks/useOnlineStatus'
 
 /**
  * Profile component
@@ -20,6 +21,7 @@ const Profile: React.FC = () => {
   const { addToast } = useToasts()
   const [postAvatar] = usePostAvatarMutation()
   const { profile, updateProfile } = useProfile()
+  const isOnline = useOnlineStatus()
 
   /**
    * Function for showing modal
@@ -102,12 +104,15 @@ const Profile: React.FC = () => {
   return (
     <>
       <div className='flex flex-col items-center'>
-        <button onClick={showModal}>
+        <button onClick={showModal} className='relative'>
           {profile?.avatar ? (
             <Avatar src={profile.avatar} shape='square' size={90} key={profile.avatar} />
           ) : (
             <Avatar src={IMAGES.profile} shape='square' size={90} className='bg-black' />
           )}
+          <div
+            className={cn('absolute -right-2 -top-2 h-6 w-6 rounded-full', isOnline ? 'bg-emerald-500' : 'bg-red-500')}
+          ></div>
         </button>
         <h3 className='mt-6 text-xl font-bold text-blue-950'>{profile.fullName}</h3>
         <p className='mb-5 text-sm font-normal text-stone-500'>{profile.email}</p>
