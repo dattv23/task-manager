@@ -1,18 +1,21 @@
-import { LogoutOutlined, PlusOutlined } from '@ant-design/icons'
+import { LogoutOutlined, MenuOutlined, PlusOutlined } from '@ant-design/icons'
 import { Avatar } from 'antd'
 import { IMAGES } from '~/assets/images'
 import Button from '../Button'
 import Navbar from '../Navbar'
 import { useAuth } from '~/hooks/useAuth'
 import { useProfile } from '~/hooks/useProfile'
+import { useState } from 'react'
+import { cn } from '~/utils'
 
 const SidebarLeft: React.FC = () => {
   const { logoutUser } = useAuth()
   const { profile } = useProfile()
+  const [collapse, setCollapse] = useState<boolean>(false)
 
   return (
-    <>
-      <div className='flex w-20 flex-col justify-between bg-primary px-4 py-24'>
+    <aside className='flex'>
+      <div className='after:1translate-x-1/2 z-50 flex w-20 flex-col justify-between bg-primary px-4 py-24'>
         <div>
           <div className='flex h-12 w-12 items-center justify-center rounded-lg border border-[#FBBE37] text-2xl'>
             {profile?.avatar ? (
@@ -24,17 +27,28 @@ const SidebarLeft: React.FC = () => {
           <Button className='mt-4 h-[38px] w-[38px] rounded-md bg-slate-400 text-white '>
             <PlusOutlined className='text-xl' />
           </Button>
+          <Button
+            className={cn('mt-4 h-[38px] w-[38px] rounded-md bg-slate-400 text-white lg:hidden')}
+            onClick={() => setCollapse((prev) => !prev)}
+          >
+            <MenuOutlined />
+          </Button>
         </div>
         <Button variant={'secondary'} onClick={logoutUser}>
           <LogoutOutlined />
         </Button>
       </div>
-      <div className='w-[200px] px-4 py-24'>
+      <nav
+        className={cn(
+          'animate__animated hidden w-[200px] px-4 py-24 lg:block',
+          collapse && 'animate__fadeInLeft fixed bottom-0 left-20 top-0 z-40 block bg-stone-300 text-white'
+        )}
+      >
         <h3 className='text-xl font-bold text-blue-950'>My Space</h3>
         <p className='mb-16 text-sm font-normal text-stone-500'>Workspace Title</p>
         <Navbar />
-      </div>
-    </>
+      </nav>
+    </aside>
   )
 }
 

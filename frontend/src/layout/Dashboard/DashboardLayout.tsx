@@ -1,4 +1,3 @@
-import { Layout } from 'antd'
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import Header from '~/components/Header/Header'
@@ -7,14 +6,16 @@ import SidebarRight from '~/components/Sidebar/SidebarRight'
 
 const DashboardLayout: React.FC = () => {
   return (
-    <Layout className='flex min-h-screen flex-row'>
+    <div className='flex min-h-screen'>
       <SidebarLeft />
-      <Layout className='bg-neutral-300 px-12 '>
+      <section className='w-full overflow-y-auto bg-slate-200 px-2 lg:px-6'>
         <Header />
-        <Outlet />
-      </Layout>
+        <main>
+          <Outlet />
+        </main>
+      </section>
       <SidebarRight />
-    </Layout>
+    </div>
   )
 }
 
