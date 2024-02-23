@@ -4,12 +4,15 @@ import { IMAGES } from '~/assets/images'
 import { cn } from '~/utils'
 import Button from '../Button'
 import './style.scss'
-import { APIErrorResult, usePostAvatarMutation } from '~/apis/api'
+import { usePostAvatarMutation } from '~/apis/api'
 import { useToasts } from '~/hooks/useToasts'
 import { PostAvatarResult } from '~/@types/api.type'
 import { useProfile } from '~/hooks/useProfile'
 import { ProfileType } from '~/@types/response.type'
 
+/**
+ * Profile component
+ */
 const Profile: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false)
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false)
@@ -18,10 +21,23 @@ const Profile: React.FC = () => {
   const [postAvatar] = usePostAvatarMutation()
   const { profile, updateProfile } = useProfile()
 
+  /**
+   * Function for showing modal
+   */
   const showModal = () => {
     setOpen(true)
   }
 
+  /**
+   * Function for handling modal Cancel button click
+   */
+  const handleCancel = () => {
+    setOpen(false)
+  }
+
+  /**
+   * Function for handling modal OK button click
+   */
   const handleOk = async () => {
     if (!file) {
       return addToast({ title: 'Warning', message: 'Please select file image to upload!', type: 'warning' })
@@ -58,10 +74,10 @@ const Profile: React.FC = () => {
     setConfirmLoading(false)
   }
 
-  const handleCancel = () => {
-    setOpen(false)
-  }
-
+  /**
+   * Function for handling file input change
+   * @param event ChangeEvent<HTMLInputElement>
+   */
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return
 
