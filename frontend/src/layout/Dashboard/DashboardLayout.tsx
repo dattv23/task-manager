@@ -8,7 +8,7 @@ const DashboardLayout: React.FC = () => {
   return (
     <div className='flex min-h-screen'>
       <SidebarLeft />
-      <section className='w-full overflow-y-auto bg-slate-200 px-2 lg:px-6'>
+      <section className='w-full overflow-y-auto bg-slate-200 px-4 lg:px-12'>
         <Header />
         <main>
           <Outlet />

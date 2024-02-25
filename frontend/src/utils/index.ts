@@ -38,3 +38,11 @@ export const mergeValues = (values: object): string => {
     .map((entry) => entry[1]) // Extracting values
     .join('')
 }
+
+export const getKeyByValue = (value: string, obj: Record<string, string>) => {
+  const indexOfS = Object.values(obj).indexOf(value)
+
+  const key = Object.keys(obj)[indexOfS]
+
+  return key
+}

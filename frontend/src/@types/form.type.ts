@@ -1,3 +1,5 @@
+import { TaskPriority } from './task.type'
+
 export type RegisterField = {
   fullName: string
   email: string
@@ -30,4 +32,11 @@ export type ResendOTPField = {
 export type NewPasswordField = {
   email: string
   password: string
+}
+
+export type CreateTaskField = {
+  name: string
+  priority: TaskPriority
+  dueDate: Date
+  description: string
 }
