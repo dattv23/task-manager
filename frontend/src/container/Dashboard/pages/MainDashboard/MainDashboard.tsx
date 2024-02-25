@@ -45,7 +45,7 @@ const MainDashboard: React.FC = () => {
           <Button className='max-h-10 text-base'>Get Started</Button>
         </div>
       </div>
-      <div className='mt-4 flex flex-col gap-5'>
+      <div className='my-4 flex flex-col gap-5'>
         <h4 className='text-xl font-bold text-black'>Let’s get you started</h4>
         {cards.map((item, id) => (
           <div

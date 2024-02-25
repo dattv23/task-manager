@@ -5,17 +5,19 @@ import Button from '../Button'
 import Navbar from '../Navbar'
 import { useAuth } from '~/hooks/useAuth'
 import { useProfile } from '~/hooks/useProfile'
-import { useState } from 'react'
 import { cn } from '~/utils'
 
-const SidebarLeft: React.FC = () => {
+type SidebarLeftProps = {
+  collapse: boolean
+  setCollapse: (val: boolean) => void
+}
+const SidebarLeft: React.FC<SidebarLeftProps> = ({ collapse, setCollapse }) => {
   const { logoutUser } = useAuth()
   const { profile } = useProfile()
-  const [collapse, setCollapse] = useState<boolean>(false)
 
   return (
-    <aside className='flex'>
-      <div className='after:1translate-x-1/2 z-50 flex w-20 flex-col justify-between bg-primary px-4 py-24'>
+    <aside className='fixed left-0 top-0 z-50 flex min-h-screen'>
+      <div className='after:1translate-x-1/2 z-50 w-20 bg-primary px-4 py-24'>
         <div>
           <div className='flex h-12 w-12 items-center justify-center rounded-lg border border-[#FBBE37] text-2xl'>
             {profile?.avatar ? (
@@ -29,12 +31,12 @@ const SidebarLeft: React.FC = () => {
           </Button>
           <Button
             className={cn('mt-4 h-[38px] w-[38px] rounded-md bg-slate-400 text-white lg:hidden')}
-            onClick={() => setCollapse((prev) => !prev)}
+            onClick={() => setCollapse(!collapse)}
           >
             <MenuOutlined />
           </Button>
         </div>
-        <Button variant={'secondary'} onClick={logoutUser}>
+        <Button variant={'secondary'} onClick={logoutUser} className='fixed bottom-10 w-[38px]'>
           <LogoutOutlined />
         </Button>
       </div>

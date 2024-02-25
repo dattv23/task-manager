@@ -42,7 +42,7 @@ const ListTask: React.FC<ListTaskProps> = ({ tasks }) => {
               {renderStatus(task.status)}
             </div>
             <p className='my-4 text-base font-medium text-zinc-900'>{task.name}</p>
-            <button className='mt-4 flex w-32 items-center justify-between hover:opacity-70'>
+            <button className='mt-4 flex w-28 items-center justify-between hover:opacity-70'>
               <span className='cursor-pointer text-base font-semibold text-primary'>View Task</span>
               <img src={ICONS.arrowRight} alt='' />
             </button>
