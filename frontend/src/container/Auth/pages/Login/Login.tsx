@@ -2,7 +2,7 @@ import { Form, Spin } from 'antd'
 import Button from '~/components/Button'
 import FormItem from '~/components/FormItem'
 import { Link, useNavigate } from 'react-router-dom'
-import { APIErrorResult, useLoginMutation, useResendOTPMutation } from '~/apis/api'
+import { useLoginMutation, useResendOTPMutation } from '~/apis/api'
 import { getStore } from '~/utils'
 import { useEffect, useState } from 'react'
 import { useAuth } from '~/hooks/useAuth'
@@ -10,6 +10,7 @@ import { LoginResult } from '~/@types/api.type'
 import { emailRegex, passwordRegex } from '~/utils/regex'
 import { useToasts } from '~/hooks/useToasts'
 import { LoginField } from '~/@types/form.type'
+import { handleAPIError } from '~/utils/handleAPIError'
 
 const Login: React.FC = () => {
   const [login, { isLoading }] = useLoginMutation()
@@ -38,37 +39,11 @@ const Login: React.FC = () => {
       navigate('/dashboard')
     }
     if ('error' in res) {
-      const { status, data } = res.error as APIErrorResult
-      if (!status) {
-        addToast({
-          title: 'Login failed',
-          message: 'Please try again later!',
-          type: 'error',
-          progress: true,
-          timeOut: 5
-        })
-        return
-      }
-      if (typeof data === 'string') {
-        addToast({
-          title: 'Login failed',
-          message: data,
-          type: 'error',
-          progress: true,
-          timeOut: 5
-        })
-      } else {
-        addToast({
-          title: 'Login failed',
-          message: data.message,
-          type: 'error',
-          progress: true,
-          timeOut: 5
-        })
-      }
+      const { title, message, status } = handleAPIError(res.error)
+      addToast({ title, message, type: 'error', progress: true, timeOut: 5 })
       if (status === 403) {
-        const res = await resendOTP({ email: emailUser })
-        if ('data' in res) {
+        const response = await resendOTP({ email: emailUser })
+        if ('data' in response) {
           addToast({
             title: 'Resend OTP',
             message: `OTP has been send to address ${emailUser}!`,
