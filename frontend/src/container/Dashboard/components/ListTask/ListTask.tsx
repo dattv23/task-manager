@@ -26,7 +26,7 @@ const ListTask: React.FC<ListTaskProps> = ({ tasks }) => {
     setLoading(true)
     const timer = setTimeout(() => {
       setLoading(false)
-    }, 3000)
+    }, 2000)
     return () => {
       clearTimeout(timer)
     }
@@ -38,7 +38,7 @@ const ListTask: React.FC<ListTaskProps> = ({ tasks }) => {
         {tasks.map((task, index) => (
           <Card key={index} loading={loading} className='w-full lg:w-[248px]'>
             <div className='flex justify-between'>
-              <span className='text-sm font-semibold text-zinc-400'>{`T - ${String(index).padStart(2, '0')}`}</span>
+              <span className='text-sm font-semibold text-zinc-400'>{`T - ${String(index + 1).padStart(2, '0')}`}</span>
               {renderStatus(task.status)}
             </div>
             <p className='my-4 text-base font-medium text-zinc-900'>{task.name}</p>

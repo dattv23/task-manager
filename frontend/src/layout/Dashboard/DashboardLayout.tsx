@@ -13,7 +13,7 @@ const DashboardLayout: React.FC = () => {
       <SidebarLeft collapse={collapse} setCollapse={setCollapse} />
       <section
         className={cn(
-          'fixed left-20 right-0 h-full overflow-y-auto bg-slate-200 px-4 lg:left-[280px] lg:right-[340px] lg:px-12'
+          'scrollbar-none fixed left-20 right-0 h-full overflow-y-auto  bg-slate-200 px-2 lg:left-[280px] lg:right-[340px] lg:px-12'
         )}
       >
         <Header />

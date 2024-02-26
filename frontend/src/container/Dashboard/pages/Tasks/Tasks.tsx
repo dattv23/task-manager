@@ -9,6 +9,7 @@ import { formatDate } from 'date-fns'
 import { useToasts } from '~/hooks/useToasts'
 import ListTask from '../../components/ListTask'
 import { mockTasks } from '~/mocks/tasks'
+import './style.scss'
 
 const Tasks: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>(mockTasks)
@@ -48,32 +49,72 @@ const Tasks: React.FC = () => {
     handleCancel()
   }
 
+  const countTaskWithStatus = (tasks: Task[], status: string) => {
+    if (status === 'All') {
+      return tasks.length
+    }
+    return tasks.reduce((acc, task) => {
+      if (task.status === status) {
+        return acc + 1
+      }
+      return acc
+    }, 0)
+  }
+
   const items: TabsProps['items'] = [
     {
       key: '1',
-      label: 'All',
+      label: (
+        <p>
+          All Task
+          <span className='ml-3 inline-block h-6 w-6 rounded-full bg-slate-100 text-center'>
+            {countTaskWithStatus(tasks, 'All')}
+          </span>
+        </p>
+      ),
       children: <ListTask tasks={tasks} />
     },
     {
       key: '2',
-      label: 'Pending',
+      label: (
+        <p>
+          Pending
+          <span className='ml-3 inline-block h-6 w-6 rounded-full bg-slate-100 text-center'>
+            {countTaskWithStatus(tasks, TaskStatus.PENDING)}
+          </span>
+        </p>
+      ),
       children: <ListTask tasks={tasks.filter((item) => item.status === TaskStatus.PENDING)} />
     },
     {
       key: '3',
-      label: 'In Progress',
+      label: (
+        <p>
+          In Progress
+          <span className='ml-3 inline-block h-6 w-6 rounded-full bg-slate-100 text-center'>
+            {countTaskWithStatus(tasks, TaskStatus.IN_PROGRESS)}
+          </span>
+        </p>
+      ),
       children: <ListTask tasks={tasks.filter((item) => item.status === TaskStatus.IN_PROGRESS)} />
     },
     {
       key: '4',
-      label: 'Completed',
+      label: (
+        <p>
+          Completed
+          <span className='ml-3 inline-block h-6 w-6 rounded-full bg-slate-100 text-center'>
+            {countTaskWithStatus(tasks, TaskStatus.COMPLETED)}
+          </span>
+        </p>
+      ),
       children: <ListTask tasks={tasks.filter((item) => item.status === TaskStatus.COMPLETED)} />
     }
   ]
 
   return (
     <>
-      <div className='flex w-full flex-col justify-between gap-2 lg:flex-row'>
+      <div className='flex w-full flex-col justify-between gap-2 lg:flex-row '>
         <div>
           <h2 className='text-[32px] font-semibold text-blue-950 '>Task</h2>
           <p className='text-xl font-normal text-zinc-600'>Your tasks in your space</p>
