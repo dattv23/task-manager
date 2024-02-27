@@ -26,7 +26,7 @@ const ListTask: React.FC<ListTaskProps> = ({ tasks }) => {
     setLoading(true)
     const timer = setTimeout(() => {
       setLoading(false)
-    }, 2000)
+    }, 1000)
     return () => {
       clearTimeout(timer)
     }

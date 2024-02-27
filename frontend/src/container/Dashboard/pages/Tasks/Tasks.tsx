@@ -1,21 +1,28 @@
-import { DatePicker, Form, Input, Modal, Select, Tabs, TabsProps } from 'antd'
+import { DatePicker, Form, Input, Modal, Select, Tabs } from 'antd'
 import FormItem from 'antd/es/form/FormItem'
 import React, { useState } from 'react'
 import { CreateTaskField } from '~/@types/form.type'
 import { Task, TaskPriority, TaskStatus } from '~/@types/task.type'
 import { ICONS } from '~/assets/icons'
-import { Button } from '~/components'
+import { Button, DraggableTab } from '~/components'
 import { formatDate } from 'date-fns'
 import { useToasts } from '~/hooks/useToasts'
 import ListTask from '../../components/ListTask'
 import { mockTasks } from '~/mocks/tasks'
 import './style.scss'
 
+import type { DragEndEvent } from '@dnd-kit/core'
+import { DndContext, PointerSensor, useSensor } from '@dnd-kit/core'
+import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
+
 const Tasks: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>(mockTasks)
   const [open, setOpen] = useState<boolean>(false)
-  const [confirmLoading, setConfirmLoading] = useState<boolean>(false)
   const { addToast } = useToasts()
+
+  const sensor = useSensor(PointerSensor, {
+    activationConstraint: { distance: 10 }
+  })
 
   /**
    * Function for showing modal
@@ -61,7 +68,7 @@ const Tasks: React.FC = () => {
     }, 0)
   }
 
-  const items: TabsProps['items'] = [
+  const [items, setItems] = useState([
     {
       key: '1',
       label: (
@@ -110,7 +117,17 @@ const Tasks: React.FC = () => {
       ),
       children: <ListTask tasks={tasks.filter((item) => item.status === TaskStatus.COMPLETED)} />
     }
-  ]
+  ])
+
+  const onDragEnd = ({ active, over }: DragEndEvent) => {
+    if (active.id !== over?.id) {
+      setItems((prev) => {
+        const activeIndex = prev.findIndex((i) => i.key === active.id)
+        const overIndex = prev.findIndex((i) => i.key === over?.id)
+        return arrayMove(prev, activeIndex, overIndex)
+      })
+    }
+  }
 
   return (
     <>
@@ -133,14 +150,29 @@ const Tasks: React.FC = () => {
             <Button onClick={showModal}>Create a Task</Button>
           </div>
         ) : (
-          <Tabs defaultActiveKey='1' items={items} />
+          <Tabs
+            defaultActiveKey='1'
+            items={items}
+            renderTabBar={(tabBarProps, DefaultTabBar) => (
+              <DndContext sensors={[sensor]} onDragEnd={onDragEnd}>
+                <SortableContext items={items.map((i) => i.key)} strategy={horizontalListSortingStrategy}>
+                  <DefaultTabBar {...tabBarProps}>
+                    {(node) => (
+                      <DraggableTab {...node.props} key={node.key}>
+                        {node}
+                      </DraggableTab>
+                    )}
+                  </DefaultTabBar>
+                </SortableContext>
+              </DndContext>
+            )}
+          />
         )}
       </div>
       <Modal
         title='Create Task'
         centered
         open={open}
-        confirmLoading={confirmLoading}
         onCancel={handleCancel}
         width={460}
         styles={{ header: { marginTop: '12px' } }}
