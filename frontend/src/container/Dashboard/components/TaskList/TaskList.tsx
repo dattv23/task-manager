@@ -3,8 +3,9 @@ import { Card } from 'antd'
 import { Task, TaskStatus } from '~/@types/task.type'
 import { Badges } from '~/components'
 import { ICONS } from '~/assets/icons'
+import { useNavigate } from 'react-router-dom'
 
-type ListTaskProps = {
+type TaskListProps = {
   tasks: Task[]
 }
 
@@ -19,8 +20,9 @@ export const renderStatus = (status: string) => {
   }
 }
 
-const ListTask: React.FC<ListTaskProps> = ({ tasks }) => {
+const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
   const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     setLoading(true)
@@ -42,7 +44,10 @@ const ListTask: React.FC<ListTaskProps> = ({ tasks }) => {
               {renderStatus(task.status)}
             </div>
             <p className='my-4 text-base font-medium text-zinc-900'>{task.name}</p>
-            <button className='mt-4 flex w-28 items-center justify-between hover:opacity-70'>
+            <button
+              className='mt-4 flex w-28 items-center justify-between hover:opacity-70'
+              onClick={() => navigate(`/tasks/${task._id}`)}
+            >
               <span className='cursor-pointer text-base font-semibold text-primary'>View Task</span>
               <img src={ICONS.arrowRight} alt='' />
             </button>
@@ -53,4 +58,4 @@ const ListTask: React.FC<ListTaskProps> = ({ tasks }) => {
   )
 }
 
-export default ListTask
+export default TaskList
