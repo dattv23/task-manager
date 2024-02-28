@@ -24,7 +24,7 @@ const Navbar: React.FC = () => {
           <p
             className={cn(
               'font-popins text-base text-stone-500 hover:text-primary',
-              item.path === location.pathname && 'font-bold text-primary'
+              location.pathname.includes(item.path) && 'font-bold text-primary'
             )}
           >
             {item.title}
