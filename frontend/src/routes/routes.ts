@@ -11,6 +11,7 @@ const ForgotPasswordPage = React.lazy(() => import('~/container/Auth/pages/Forgo
 const NotFoundPage = React.lazy(() => import('~/components/NotFound'))
 const DashboardPage = React.lazy(() => import('~/container/Dashboard/pages/MainDashboard'))
 const TasksPage = React.lazy(() => import('~/container/Dashboard/pages/Tasks'))
+const TaskDetailPage = React.lazy(() => import('~/container/Dashboard/components/TaskDetail'))
 const SettingsPage = React.lazy(() => import('~/container/Dashboard/pages/Settings'))
 const WorkspacePage = React.lazy(() => import('~/container/Home/pages/Workspace'))
 
@@ -30,6 +31,7 @@ interface PrivateRoute extends NonIndexRouteObject {
 const privateRoute: PrivateRoute[] = [
   { path: config.routes.dashboard, Component: DashboardPage, Layout: DashboardLayout },
   { path: config.routes.tasks, Component: TasksPage, Layout: DashboardLayout },
+  { path: config.routes.taskDetail, Component: TaskDetailPage, Layout: DashboardLayout },
   { path: config.routes.settings, Component: SettingsPage, Layout: DashboardLayout },
   { path: config.routes.workspace, Component: WorkspacePage }
 ]

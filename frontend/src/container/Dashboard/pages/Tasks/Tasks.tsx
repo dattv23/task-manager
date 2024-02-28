@@ -7,7 +7,7 @@ import { ICONS } from '~/assets/icons'
 import { Button, DraggableTab } from '~/components'
 import { formatDate } from 'date-fns'
 import { useToasts } from '~/hooks/useToasts'
-import ListTask from '../../components/ListTask'
+import ListTask from '../../components/TaskList'
 import { mockTasks } from '~/mocks/tasks'
 import './style.scss'
 
