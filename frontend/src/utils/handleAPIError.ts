@@ -1,15 +1,8 @@
-import { APIErrorResult } from '~/apis/api'
-
-export const handleAPIError = (error: unknown) => {
-  const { status, data } = error as APIErrorResult
-
-  if (!status) {
-    return { title: 'Error', message: 'Please try again later!', status: status }
+export const handleAPIError = (error: { status?: number; data: any }) => {
+  const { status, data } = error
+  const { message, errors } = data as { message: string; errors?: [{ path: string; message: string }] }
+  if (status == 422 && errors) {
+    return { title: 'Error', message: errors[0].message, status }
   }
-
-  if (typeof data === 'string') {
-    return { title: 'Error', message: data, status: status }
-  } else {
-    return { title: 'Error', message: data.message, status: status }
-  }
+  return { title: 'Error', message, status }
 }

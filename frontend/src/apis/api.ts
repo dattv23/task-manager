@@ -5,14 +5,12 @@ import type { AxiosRequestConfig, AxiosError } from 'axios'
 import { LoginField, NewPasswordField, RegisterField, ResendOTPField, VerifyOTPField } from '~/@types/form.type'
 import { ProfileType } from '~/@types/response.type'
 
-export type APIErrorResult = {
-  status?: number
-  data: string | AxiosError
-}
-
 type AxiosBaseQueryResult = {
   data: any
-  error?: APIErrorResult
+  error?: {
+    status?: number
+    data: any
+  }
 }
 
 const axiosBaseQuery =
