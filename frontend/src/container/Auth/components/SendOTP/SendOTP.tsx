@@ -3,6 +3,7 @@ import { ResendOTPField } from '~/@types/form.type'
 import { useResendOTPMutation } from '~/apis/api'
 import { Button, FormItem } from '~/components'
 import { useToasts } from '~/hooks/useToasts'
+import { handleAPIError } from '~/utils/handleAPIError'
 import { emailRegex } from '~/utils/regex'
 
 type SendOTPProps = {
@@ -22,21 +23,8 @@ const SendOTP: React.FC<SendOTPProps> = ({ saveMail, next }) => {
       next()
     }
     if ('error' in res) {
-      if ('status' in res.error) {
-        if (res.error.status === 404 && 'data' in res.error) {
-          addToast({
-            title: 'Warning',
-            message: res.error.data.message,
-            type: 'warning'
-          })
-        }
-      } else {
-        addToast({
-          title: 'Error',
-          message: 'Please try again later!',
-          type: 'error'
-        })
-      }
+      const { message } = handleAPIError(res.error)
+      addToast({ title: 'Send OTP failed', message, type: 'error', progress: true, timeOut: 5 })
     }
   }
 
@@ -47,14 +35,7 @@ const SendOTP: React.FC<SendOTPProps> = ({ saveMail, next }) => {
         We are sorry to hear that happen. Don’t be sad we could help you get back to productivity in no time.
       </p>
       <Form name='basic' onFinish={handleSubmit}>
-        <FormItem
-          label='Email Address'
-          name='email'
-          rules={[
-            { required: true, message: 'Please input your email address!' },
-            { pattern: emailRegex, message: 'Email not valid!' }
-          ]}
-        />
+        <FormItem label='Email Address' name='email' rules={[{ pattern: emailRegex, message: 'Email not valid!' }]} />
         <Form.Item>
           <Button type='submit' className='my-3 w-[204px]'>
             {isLoading ? 'Loading...' : 'Next'}
