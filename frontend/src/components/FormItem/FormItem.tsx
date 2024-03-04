@@ -3,7 +3,7 @@ import { FormItemProps } from 'antd/es/form'
 
 export interface InputProps extends FormItemProps {
   name: string
-  label: string
+  label?: string
   placeholder?: string
   required?: boolean
 }
@@ -28,7 +28,7 @@ const FormItem: React.FC<InputProps> = ({
             message: (
               <Alert
                 className='bg-transparent text-base text-red-700'
-                message={`Please input your ${label.toLocaleLowerCase()}!`}
+                message={`Please input your ${label?.toLocaleLowerCase()}!`}
                 banner
                 type='error'
               />
