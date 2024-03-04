@@ -5,27 +5,44 @@ import { useDispatch, useSelector } from 'react-redux'
 import { DispatchType, RootState } from '~/redux/config'
 import { updateEmailAction, verifyAction } from '~/redux/reducers/auth.reducers'
 
+/**
+ * ForgotPassword Component
+ * This component handles the Forgot Password flow.
+ */
 const ForgotPassword: React.FC = () => {
-  const navigate = useNavigate()
-  const { stepVerify, email } = useSelector((state: RootState) => state.auth)
-  const dispatch: DispatchType = useDispatch()
+  const navigate = useNavigate() // Initialize useNavigate hook
+  const { stepVerify, email } = useSelector((state: RootState) => state.auth) // Initialize state from Redux
+  const dispatch: DispatchType = useDispatch() // Initialize useDispatch hook
 
-  const saveMail = (email: string) => {
+  /**
+   * handleEmailChange Function
+   * This function dispatches the updateEmailAction to update the email in the state.
+   * @param email {string} - The user's email address.
+   */
+  const handleEmailChange = (email: string) => {
     dispatch(updateEmailAction(email))
   }
 
-  const next = () => {
+  /**
+   * handleNext Function
+   * This function dispatches the verifyAction to move to the next step in the Forgot Password flow.
+   */
+  const handleNext = () => {
     dispatch(verifyAction(stepVerify + 1))
   }
 
+  /**
+   * steps Array
+   * This array contains objects with title and content properties that define the steps in the Forgot Password flow.
+   */
   const steps = [
     {
       title: 'Send OTP',
-      content: <SendOTP saveMail={saveMail} next={next} />
+      content: <SendOTP saveMail={handleEmailChange} next={handleNext} />
     },
     {
       title: 'Verification',
-      content: <Verification email={email} next={next} />
+      content: <Verification email={email} next={handleNext} />
     },
     {
       title: 'New Password',
@@ -38,7 +55,7 @@ const ForgotPassword: React.FC = () => {
       <Button onClick={() => navigate('/register')} variant={'secondary'} className='fixed right-8 top-14'>
         Create Account
       </Button>
-      <div className='w-96'>
+      <div className=''>
         <div>{steps[stepVerify].content}</div>
       </div>
     </div>
