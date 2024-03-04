@@ -1,4 +1,4 @@
-import { Form } from 'antd'
+import { Alert, Form, Input } from 'antd'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { NewPasswordField } from '~/@types/form.type'
@@ -6,6 +6,7 @@ import { useResetPasswordMutation } from '~/apis/api'
 import { Button, FormItem } from '~/components'
 import { useToasts } from '~/hooks/useToasts'
 import { verifyAction } from '~/redux/reducers/auth.reducers'
+import { handleAPIError } from '~/utils/handleAPIError'
 import { passwordRegex } from '~/utils/regex'
 
 type NewPasswordProps = {
@@ -18,6 +19,7 @@ const NewPassword: React.FC<NewPasswordProps> = ({ email }) => {
   const { addToast } = useToasts()
   const dispatch = useDispatch()
 
+  // Function to handle form submission
   const handleSubmit = async (values: NewPasswordField) => {
     const { password } = values
     const res = await resetPassword({ email, password })
@@ -33,10 +35,13 @@ const NewPassword: React.FC<NewPasswordProps> = ({ email }) => {
       navigate('/login')
     }
     if ('error' in res) {
+      const { message } = handleAPIError(res.error)
       addToast({
-        title: 'Error',
-        message: 'Please try again later!',
-        type: 'error'
+        title: 'Create new password failed!',
+        message: message,
+        type: 'error',
+        progress: true,
+        timeOut: 5
       })
     }
   }
@@ -51,13 +56,25 @@ const NewPassword: React.FC<NewPasswordProps> = ({ email }) => {
           label='Password'
           name='password'
           rules={[
-            { required: true, message: 'Please input your password!' },
             {
               pattern: passwordRegex,
-              message: 'Over 8 characters and under 16 characters with an Uppercase, symbol and number!'
+              message: (
+                <Alert
+                  className='bg-transparent text-base text-red-700'
+                  message='Over 8 characters and under 36 characters with an Uppercase, symbol and number!'
+                  banner
+                  type='error'
+                />
+              )
             }
           ]}
-          type='password'
+          children={
+            <Input.Password
+              placeholder='johnDoe@123'
+              className='h-12 w-full border-[2px] border-primary border-opacity-80 py-2 text-base font-normal focus:border-opacity-100'
+              classNames={{ input: 'text-md font-normal font-popins' }}
+            />
+          }
         />
         <Form.Item>
           <Button type='submit' className='my-3 w-[204px]'>
