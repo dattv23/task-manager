@@ -1,8 +1,7 @@
 import { Collection, Db, MongoClient, ServerApiVersion } from 'mongodb'
 import { env } from '~/config/env.config'
 import { DATABASE_MESSAGE } from '~/constants/messages'
-import { OTP, User } from '~/models/database'
-import RefreshToken from '~/models/database/RefreshToken'
+import { OTP, RefreshToken, User } from '~/models/database'
 
 class DatabaseService {
   private client: MongoClient

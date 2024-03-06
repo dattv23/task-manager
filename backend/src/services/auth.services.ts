@@ -9,10 +9,10 @@ import { ErrorWithStatus } from '~/models/Error'
 import { StatusCodes } from 'http-status-codes'
 import { RESULT_RESPONSE_MESSAGES } from '~/constants/messages'
 import tokenServices from './token.services'
-import RefreshToken from '~/models/database/RefreshToken'
 import { UserVerifyStatus } from '~/constants/enums'
 import { verifyToken } from '~/utils/jwt'
 import { env } from '~/config/env.config'
+import { RefreshToken } from '~/models/database'
 
 class AuthServices {
   async register(payload: RegisterBody): Promise<ResultRegisterType> {
@@ -37,7 +37,7 @@ class AuthServices {
   async verifyOTP(payload: VerifyOTPBody): Promise<boolean> {
     const { email, code } = payload
     const otp = await databaseService.otps.findOne({ email })
-    if (!email) {
+    if (!otp) {
       throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.AUTH.VERIFY_OTP.IS_EXPIRED })
     }
     if (hashText(code) !== otp?.code) {
