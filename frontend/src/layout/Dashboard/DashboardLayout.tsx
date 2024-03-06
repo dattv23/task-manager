@@ -1,20 +1,28 @@
-import { Layout } from 'antd'
-import React from 'react'
+import React, { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import Header from '~/components/Header/Header'
 import SidebarLeft from '~/components/Sidebar/SidebarLeft'
 import SidebarRight from '~/components/Sidebar/SidebarRight'
+import { cn } from '~/utils'
 
 const DashboardLayout: React.FC = () => {
+  const [collapse, setCollapse] = useState<boolean>(false)
+
   return (
-    <Layout className='flex min-h-screen flex-row'>
-      <SidebarLeft />
-      <Layout className='bg-neutral-300 px-12 '>
+    <div className='fixed bottom-0 left-0 right-0 top-0 flex min-h-screen'>
+      <SidebarLeft collapse={collapse} setCollapse={setCollapse} />
+      <section
+        className={cn(
+          'scrollba fixed left-20 right-0 h-full overflow-y-auto bg-slate-200 px-2 scrollbar-none scrollbar-track-slate-100 scrollbar-thumb-slate-400 hover:scrollbar-thin lg:left-[280px] lg:right-[340px] lg:px-12'
+        )}
+      >
         <Header />
-        <Outlet />
-      </Layout>
+        <main className='overflow-y-auto'>
+          <Outlet />
+        </main>
+      </section>
       <SidebarRight />
-    </Layout>
+    </div>
   )
 }
 

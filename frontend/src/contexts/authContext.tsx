@@ -1,16 +1,16 @@
 import Cookies from 'js-cookie'
-import React, { createContext, useContext, useEffect } from 'react'
+import React, { createContext, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { LoginResult } from '~/@types/api.type'
 import { AuthContextType } from '~/@types/hook.type'
+import { useToasts } from '~/hooks/useToasts'
 import { RootState } from '~/redux/config'
 import { authAction } from '~/redux/reducers/auth.reducers'
 import { clearStore, setStore } from '~/utils'
-import { useToasts } from './useToasts'
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated)
   const dispatch = useDispatch()
   const { addToast, clearToasts } = useToasts()
@@ -42,10 +42,4 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   return <AuthContext.Provider value={{ isAuthenticated, loginUser, logoutUser }}>{children}</AuthContext.Provider>
 }
 
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext)
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider')
-  }
-  return context
-}
+export default AuthProvider

@@ -4,9 +4,9 @@ import { SearchOutlined } from '@ant-design/icons'
 
 const Search: React.FC = () => {
   return (
-    <Form className='flex h-12 w-[350px] rounded-lg bg-white'>
+    <Form className='flex h-10 w-[350px] rounded-lg border border-gray-400 bg-none'>
       <Input
-        className='h-full border-none text-lg placeholder:text-gray-500 focus:border-none'
+        className='text-md h-full border-none bg-inherit placeholder:text-gray-500 hover:bg-inherit focus:border-gray-400 focus:bg-inherit focus:shadow-inherit'
         placeholder='Search your Tasks here...'
       />
       <button className='w-10 text-xl hover:text-slate-500'>

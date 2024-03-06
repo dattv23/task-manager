@@ -9,6 +9,7 @@ const routes: RoutesType = {
   notFound: '*',
   dashboard: '/dashboard',
   tasks: '/tasks',
+  taskDetail: 'tasks/:id',
   settings: '/settings',
   workspace: '/workspace'
 } as const

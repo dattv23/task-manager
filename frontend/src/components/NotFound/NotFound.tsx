@@ -2,21 +2,21 @@ const NotFound = () => {
   return (
     <div className='flex h-screen w-full flex-col items-center justify-center space-x-8 space-y-16 lg:flex-row lg:space-y-0 2xl:space-x-0'>
       <div className='flex w-full flex-col items-center justify-center text-center lg:w-1/2 lg:px-2 xl:px-0'>
-        <p className='text-gray-300 text-7xl font-bold tracking-wider md:text-8xl lg:text-9xl'>404</p>
-        <p className='text-gray-300 mt-2 text-4xl font-bold tracking-wider md:text-5xl lg:text-6xl'>Page Not Found</p>
-        <p className='text-gray-500 my-12 text-lg md:text-xl lg:text-2xl'>
+        <p className='text-7xl font-bold tracking-wider text-gray-300 md:text-8xl lg:text-9xl'>404</p>
+        <p className='mt-2 text-4xl font-bold tracking-wider text-gray-300 md:text-5xl lg:text-6xl'>Page Not Found</p>
+        <p className='my-12 text-lg text-gray-500 md:text-xl lg:text-2xl'>
           Sorry, the page you are looking for could not be found.
         </p>
         <a
           href='/'
-          className='bg-blue-600 hover:bg-blue-700 text-gray-100 flex items-center space-x-2 rounded px-4 py-2 transition duration-150'
+          className='flex items-center space-x-2 rounded bg-blue-600 px-4 py-2 text-gray-100 transition duration-150 hover:bg-blue-700'
           title='Return Home'
         >
           <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5' viewBox='0 0 20 20' fill='currentColor'>
             <path
-              fill-rule='evenodd'
+              fillRule='evenodd'
               d='M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z'
-              clip-rule='evenodd'
+              clipRule='evenodd'
             ></path>
           </svg>
           <span>Return Home</span>
@@ -24,7 +24,7 @@ const NotFound = () => {
       </div>
       <div className='flex w-1/2 justify-center p-4 lg:h-full lg:items-end'>
         <svg
-          className='text-blue-600 w-full'
+          className='w-full text-blue-600'
           xmlns='http://www.w3.org/2000/svg'
           data-name='Layer 1'
           viewBox='0 0 1120.59226 777.91584'

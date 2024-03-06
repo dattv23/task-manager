@@ -1,38 +1,51 @@
-import { Form, Input } from 'antd'
-import { Rule } from 'antd/es/form'
-import { ReactNode } from 'react'
+import { Alert, Form, Input } from 'antd'
+import { FormItemProps } from 'antd/es/form'
 
-interface FormItemProps {
-  name?: string
+export interface InputProps extends FormItemProps {
+  name: string
   label?: string
   placeholder?: string
-  rules?: Rule[]
-  type?: 'text' | 'password'
-  children?: ReactNode
+  required?: boolean
 }
 
-const FormItem: React.FC<FormItemProps> = ({
-  name = '',
-  label = '',
-  placeholder = '',
-  rules,
-  type = 'text',
-  children
+const FormItem: React.FC<InputProps> = ({
+  name,
+  label,
+  placeholder,
+  required = true,
+  rules = [],
+  children,
+  ...props
 }) => {
   return (
     <>
       <p className='mb-3 text-base font-semibold text-gray-800'>{label}</p>
-      <Form.Item name={name} rules={rules}>
+      <Form.Item
+        name={name}
+        rules={[
+          {
+            required: required,
+            message: (
+              <Alert
+                className='bg-transparent text-base text-red-700'
+                message={`Please input your ${label?.toLocaleLowerCase()}!`}
+                banner
+                type='error'
+              />
+            )
+          },
+          ...rules
+        ]}
+        {...props}
+      >
         {children ? (
           children
-        ) : type === 'text' ? (
+        ) : (
           <Input
             className='h-12 w-full border-[2px] border-primary border-opacity-80 py-2 text-base font-normal focus:border-opacity-100'
             classNames={{ input: 'text-md font-normal font-popins' }}
             placeholder={placeholder}
           />
-        ) : (
-          <Input.Password className='h-12 w-full border-[2px] border-primary border-opacity-80 py-2 text-base font-normal focus:border-opacity-100' />
         )}
       </Form.Item>
     </>

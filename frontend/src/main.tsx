@@ -7,8 +7,8 @@ import { Provider } from 'react-redux'
 import { persistor, store } from './redux/config.ts'
 import { PersistGate } from 'redux-persist/integration/react'
 import { Spin } from 'antd'
-import ToastsProvider from './hooks/useToasts.tsx'
-import { AuthProvider } from './hooks/useAuth.tsx'
+import ToastsProvider from './contexts/toastsContext.tsx'
+import AuthProvider from './contexts/authContext.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

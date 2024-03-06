@@ -1,8 +1,7 @@
-import { Form } from 'antd'
+import { Alert, Form, Input, Spin } from 'antd'
 import Button from '~/components/Button'
-import FormItem from '~/components/FormItem'
 import { Link, useNavigate } from 'react-router-dom'
-import { APIErrorResult, useLoginMutation, useResendOTPMutation } from '~/apis/api'
+import { useLoginMutation, useResendOTPMutation } from '~/apis/api'
 import { getStore } from '~/utils'
 import { useEffect, useState } from 'react'
 import { useAuth } from '~/hooks/useAuth'
@@ -10,6 +9,8 @@ import { LoginResult } from '~/@types/api.type'
 import { emailRegex, passwordRegex } from '~/utils/regex'
 import { useToasts } from '~/hooks/useToasts'
 import { LoginField } from '~/@types/form.type'
+import { handleAPIError } from '~/utils/handleAPIError'
+import { FormItem } from '~/components'
 
 const Login: React.FC = () => {
   const [login, { isLoading }] = useLoginMutation()
@@ -31,44 +32,18 @@ const Login: React.FC = () => {
     const { password } = values
     const emailUser = values.email ? values.email : email!
     const res = await login({ email: emailUser, password })
+
     if ('data' in res) {
       const data = res.data as LoginResult
       loginUser(data)
       navigate('/dashboard')
     }
     if ('error' in res) {
-      const { status, data } = res.error as APIErrorResult
-      if (!status) {
-        addToast({
-          title: 'Login failed',
-          message: 'Please try again later!',
-          type: 'error',
-          progress: true,
-          timeOut: 5
-        })
-        return
-      }
-      if (typeof data === 'string') {
-        alert('string')
-        addToast({
-          title: 'Login failed',
-          message: data,
-          type: 'error',
-          progress: true,
-          timeOut: 5
-        })
-      } else {
-        addToast({
-          title: 'Login failed',
-          message: data.message,
-          type: 'error',
-          progress: true,
-          timeOut: 5
-        })
-      }
-      if (status === 401) {
-        const res = await resendOTP({ email: emailUser })
-        if ('data' in res) {
+      const { message, status } = handleAPIError(res.error)
+      addToast({ title: 'Login failed', message, type: 'error', progress: true, timeOut: 5 })
+      if (status === 403) {
+        const response = await resendOTP({ email: emailUser })
+        if ('data' in response) {
           addToast({
             title: 'Resend OTP',
             message: `OTP has been send to address ${emailUser}!`,
@@ -78,6 +53,7 @@ const Login: React.FC = () => {
           })
           navigate('/verify-email', { state: { email: emailUser } })
         }
+        return
       }
     }
   }
@@ -102,28 +78,46 @@ const Login: React.FC = () => {
                   label='Email Address'
                   placeholder='johndoe@gmail.com'
                   rules={[
-                    { required: true, message: 'Please input your email address!' },
-                    { pattern: emailRegex, message: 'Email not valid!' }
+                    {
+                      pattern: emailRegex,
+                      message: (
+                        <Alert
+                          className='bg-transparent text-base text-red-700'
+                          message='Email not valid!'
+                          banner
+                          type='error'
+                        />
+                      )
+                    }
                   ]}
                 />
               ) : null}
-
               <FormItem
                 name='password'
                 label='Enter Your Password'
                 rules={[
-                  { required: true, message: 'Please input your password!' },
                   {
                     pattern: passwordRegex,
-                    message: 'Over 8 characters and under 16 characters with an Uppercase, symbol and number!'
+                    message: (
+                      <Alert
+                        className='bg-transparent text-base text-red-700'
+                        message='Over 8 characters and under 36 characters with an Uppercase, symbol and number!'
+                        banner
+                        type='error'
+                      />
+                    )
                   }
                 ]}
-                type='password'
-              />
-
+              >
+                <Input.Password
+                  placeholder='johnDoe@123'
+                  className='h-12 w-full border-[2px] border-primary border-opacity-80 py-2 text-base font-normal focus:border-opacity-100'
+                  classNames={{ input: 'text-md font-normal font-popins' }}
+                />
+              </FormItem>
               <Form.Item>
-                <Button type='submit' className='my-3 w-full lg:w-[204px]'>
-                  {isLoading ? 'Loading...' : 'Log In'}
+                <Button type='submit' className='my-3 w-full lg:w-[204px]' onSubmit={(e) => e.preventDefault()}>
+                  {isLoading ? <Spin size='large' /> : 'Log In'}
                 </Button>
               </Form.Item>
             </Form>
