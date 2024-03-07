@@ -7,13 +7,13 @@ export interface RegisterBody {
 }
 
 export interface AccessTokenPayload {
-  userID: string
+  userId: string
   role: UserRole
   tokenType: TokenType.AccessToken
 }
 
 export interface RefreshTokenPayload {
-  userID: string
+  userId: string
   role: UserRole
   tokenType: TokenType.RefreshToken
 }
