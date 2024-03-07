@@ -7,7 +7,7 @@ import { ACCESS_TOKEN, EMAIL, FULL_NAME, REFRESH_TOKEN } from '~/constants'
 import { useToasts } from '~/hooks/useToasts'
 import { RootState } from '~/redux/config'
 import { authAction } from '~/redux/reducers/auth.reducers'
-import { clearStore, setStore } from '~/utils'
+import { clearStore, getStore, setStore } from '~/utils'
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
@@ -35,6 +35,10 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   }
 
   useEffect(() => {
+    const token = Cookies.get(REFRESH_TOKEN)
+    if (!token) {
+      dispatch(authAction(false))
+    }
     return () => {
       clearToasts()
     }
