@@ -86,7 +86,7 @@ class AuthServices {
     }
     const { _id, fullName, role } = user
     const [accessToken, refreshToken] = await tokenServices.signAccessAndRefreshToken(_id.toString(), role)
-    await databaseService.refreshTokens.deleteOne({ user_id: _id })
+    await databaseService.refreshTokens.deleteOne({ userId: _id })
     await databaseService.refreshTokens.insertOne(
       new RefreshToken({
         token: refreshToken,
