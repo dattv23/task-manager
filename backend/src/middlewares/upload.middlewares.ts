@@ -6,7 +6,7 @@ import { uploadImage } from '~/utils/file'
 
 export const uploadMiddleware = {
   singleImage: (req: Request, res: Response, next: NextFunction) => {
-    const id = req.body.userID
+    const id = req.body.userId
     uploadImage.single('image')(req, res, (err) => {
       if (err instanceof multer.MulterError) {
         next(
@@ -26,7 +26,7 @@ export const uploadMiddleware = {
         )
       }
 
-      req.body.userID = id
+      req.body.userId = id
       next()
     })
   }

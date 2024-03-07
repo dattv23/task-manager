@@ -9,8 +9,8 @@ import cloudinaryService from './cloudiary.services'
 
 class UsersServices {
   async getProfile(payload: GetProfileBody): Promise<ResultGetProfileType> {
-    const { userID } = payload
-    const userResult = await databaseService.users.findOne({ _id: new ObjectId(userID) })
+    const { userId } = payload
+    const userResult = await databaseService.users.findOne({ _id: new ObjectId(userId) })
     if (!userResult) {
       throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.USERS.USER_NOT_EXIST })
     }
@@ -19,8 +19,8 @@ class UsersServices {
     return content
   }
   async uploadAvatar(payload: UploadAvatarBody, file: Express.Multer.File) {
-    const { userID } = payload
-    const user = await databaseService.users.findOne({ _id: new ObjectId(userID) })
+    const { userId } = payload
+    const user = await databaseService.users.findOne({ _id: new ObjectId(userId) })
     if (!user) {
       throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.USERS.USER_NOT_EXIST })
     }
@@ -28,7 +28,7 @@ class UsersServices {
     if (user.avatar) {
       await cloudinaryService.deleteImage(user.avatar)
     }
-    await databaseService.users.findOneAndUpdate({ _id: new ObjectId(userID) }, { $set: { avatar: url } })
+    await databaseService.users.findOneAndUpdate({ _id: new ObjectId(userId) }, { $set: { avatar: url } })
     return { url: url }
   }
 }

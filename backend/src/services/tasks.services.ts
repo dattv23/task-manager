@@ -6,17 +6,17 @@ import { TaskType } from '~/@types/task.type'
 
 class TasksServices {
   async getTask(payload: GetTasksPayload): Promise<TaskType[]> {
-    const { userID } = payload
-    const result = await databaseService.tasks.find({ userId: new ObjectId(userID) })
+    const { userId } = payload
+    const result = await databaseService.tasks.find({ userId: new ObjectId(userId) })
     const content = result.toArray()
     return content
   }
 
   async createTask(payload: CreateTaskPayload): Promise<TaskType> {
-    const { userID, name, description, priority, dueDate } = payload
-    const newTask = new Task({ userId: new ObjectId(userID), name, description, priority, dueDate })
+    const { userId, name, description, priority, dueDate } = payload
+    const newTask = new Task({ userId: new ObjectId(userId), name, description, priority, dueDate })
     const result = await databaseService.tasks.insertOne(newTask)
-    const content: TaskType = { _id: result.insertedId, userId: new ObjectId(userID), name, description, priority, dueDate }
+    const content: TaskType = { _id: result.insertedId, userId: new ObjectId(userId), name, description, priority, dueDate }
     return content
   }
 }

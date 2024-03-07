@@ -1,7 +1,7 @@
 export interface GetProfileBody {
-  userID: string
+  userId: string
 }
 
 export interface UploadAvatarBody {
-  userID: string
+  userId: string
 }

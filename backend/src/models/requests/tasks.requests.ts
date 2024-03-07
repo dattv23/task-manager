@@ -1,11 +1,11 @@
 import { TaskPriority } from '~/constants/enums'
 
 export interface GetTasksPayload {
-  userID: string
+  userId: string
 }
 
 export interface CreateTaskPayload {
-  userID: string
+  userId: string
   name: string
   description: string
   priority: TaskPriority
