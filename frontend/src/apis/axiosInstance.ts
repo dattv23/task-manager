@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios'
 import Cookies from 'js-cookie'
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '~/constants'
 import { getStore, setStore } from '~/utils' // Assuming this is a utility module for managing local storage
 
 // Create a new Axios instance with a base URL and default headers
@@ -36,19 +37,19 @@ axiosInstance.interceptors.response.use(
     // it means the token has expired and we need to refresh it
     if (error.response.status === 401 && !originalRequest._retry) {
       try {
-        const refreshToken = Cookies.get('refreshToken')
+        const refreshToken = Cookies.get(REFRESH_TOKEN)
         if (!refreshToken) {
           // Redirect to the login page if no refresh token is present
           window.location.href = '/login'
         }
 
         // Refresh the token using a separate API endpoint
-        const response = await axios.post('/auth/refresh-token', { refreshToken })
+        const response = await axios.post('/auth/refresh-token', { refreshToken: refreshToken })
         const { access_token, refresh_token } = response.data
 
         // Set the new tokens in local storage and cookies
-        setStore('accessToken', access_token)
-        Cookies.set('refreshToken', refresh_token)
+        setStore(ACCESS_TOKEN, access_token)
+        Cookies.set(REFRESH_TOKEN, refresh_token)
 
         // Retry the original request with the new token
         originalRequest.headers.Authorization = `Bearer ${access_token}`
