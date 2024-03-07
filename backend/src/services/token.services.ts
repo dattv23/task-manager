@@ -5,10 +5,10 @@ import { AccessTokenPayload, RefreshTokenPayload } from '~/models/requests/auth.
 import { signToken } from '~/utils/jwt'
 
 class TokenServices {
-  signAccessToken(userID: string, role: UserRole): Promise<string> {
+  signAccessToken(userId: string, role: UserRole): Promise<string> {
     const { accessTokenKey, accessTokenEXP, jwtAlgorithm } = env.jwt
     const payload: AccessTokenPayload = {
-      userID,
+      userId,
       role,
       tokenType: TokenType.AccessToken
     }
@@ -19,10 +19,10 @@ class TokenServices {
     return signToken({ payload, privateKey: accessTokenKey as string, options })
   }
 
-  signRefreshToken(userID: string, role: UserRole): Promise<string> {
+  signRefreshToken(userId: string, role: UserRole): Promise<string> {
     const { refreshTokenKey, refreshTokenEXP, jwtAlgorithm } = env.jwt
     const payload: RefreshTokenPayload = {
-      userID,
+      userId,
       role,
       tokenType: TokenType.RefreshToken
     }
@@ -33,8 +33,8 @@ class TokenServices {
     return signToken({ payload, privateKey: refreshTokenKey as string, options })
   }
 
-  signAccessAndRefreshToken(userID: string, role: UserRole): Promise<[string, string]> {
-    return Promise.all([this.signAccessToken(userID, role), this.signRefreshToken(userID, role)])
+  signAccessAndRefreshToken(userId: string, role: UserRole): Promise<[string, string]> {
+    return Promise.all([this.signAccessToken(userId, role), this.signRefreshToken(userId, role)])
   }
 }
 

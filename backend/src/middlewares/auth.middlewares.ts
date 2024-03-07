@@ -10,7 +10,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
   if (!token) {
     throw new ErrorWithStatus({ statusCode: StatusCodes.UNAUTHORIZED, message: 'Please try login again!' })
   }
-  const { userID } = (await verifyToken({ token: token, privateKey: env.jwt.accessTokenKey! })) as TokenPayloadType
-  req.body.userID = userID
+  const { userId } = (await verifyToken({ token: token, privateKey: env.jwt.accessTokenKey! })) as TokenPayloadType
+  req.body.userId = userId
   return next()
 }

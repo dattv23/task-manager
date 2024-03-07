@@ -4,14 +4,14 @@ import { TokenType, UserRole } from '~/constants/enums'
 
 export type RefreshTokenType = {
   _id?: ObjectId
-  user_id: ObjectId
+  userId: ObjectId
   token: string
   created_at?: Date
   updated_at?: Date
 }
 
 export type TokenPayloadType = {
-  userID: string
+  userId: string
   role: UserRole
   tokenType: TokenType
 }

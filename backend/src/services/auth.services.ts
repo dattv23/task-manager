@@ -9,10 +9,10 @@ import { ErrorWithStatus } from '~/models/Error'
 import { StatusCodes } from 'http-status-codes'
 import { RESULT_RESPONSE_MESSAGES } from '~/constants/messages'
 import tokenServices from './token.services'
-import RefreshToken from '~/models/database/RefreshToken'
 import { UserVerifyStatus } from '~/constants/enums'
 import { verifyToken } from '~/utils/jwt'
 import { env } from '~/config/env.config'
+import { RefreshToken } from '~/models/database'
 
 class AuthServices {
   async register(payload: RegisterBody): Promise<ResultRegisterType> {
@@ -37,7 +37,7 @@ class AuthServices {
   async verifyOTP(payload: VerifyOTPBody): Promise<boolean> {
     const { email, code } = payload
     const otp = await databaseService.otps.findOne({ email })
-    if (!email) {
+    if (!otp) {
       throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.AUTH.VERIFY_OTP.IS_EXPIRED })
     }
     if (hashText(code) !== otp?.code) {
@@ -90,7 +90,7 @@ class AuthServices {
     await databaseService.refreshTokens.insertOne(
       new RefreshToken({
         token: refreshToken,
-        user_id: _id
+        userId: _id
       })
     )
     const content: ResultLoginType = { userId: _id.toString(), email, fullName, accessToken, refreshToken }
@@ -100,7 +100,7 @@ class AuthServices {
   async newToken(payload: NewTokenBody): Promise<ResultNewTokenType> {
     const { refreshToken } = payload
     const { refreshTokenKey } = env.jwt
-    const { userID, role } = await verifyToken({ token: refreshToken, privateKey: refreshTokenKey! })
+    const { userId, role } = await verifyToken({ token: refreshToken, privateKey: refreshTokenKey! })
     const token = await databaseService.refreshTokens.findOneAndDelete({ token: refreshToken })
     if (!token) {
       throw new ErrorWithStatus({
@@ -108,8 +108,8 @@ class AuthServices {
         message: RESULT_RESPONSE_MESSAGES.AUTH.NEW_TOKEN.REFRESH_TOKEN_EXPIRED
       })
     }
-    const [newAccessToken, newRefreshToken] = await tokenServices.signAccessAndRefreshToken(userID, role)
-    await databaseService.refreshTokens.insertOne(new RefreshToken({ token: newRefreshToken, user_id: userID }))
+    const [newAccessToken, newRefreshToken] = await tokenServices.signAccessAndRefreshToken(userId, role)
+    await databaseService.refreshTokens.insertOne(new RefreshToken({ token: newRefreshToken, userId }))
     const content: ResultNewTokenType = { accessToken: newAccessToken, refreshToken: newRefreshToken }
     return content
   }
