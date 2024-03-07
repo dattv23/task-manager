@@ -1,0 +1,25 @@
+import { databaseService } from './database.services'
+import { ObjectId } from 'mongodb'
+import { CreateTaskPayload, GetTasksPayload } from '~/models/requests/tasks.requests'
+import { Task } from '~/models/database'
+import { TaskType } from '~/@types/task.type'
+
+class TasksServices {
+  async getTask(payload: GetTasksPayload): Promise<TaskType[]> {
+    const { userID } = payload
+    const result = await databaseService.tasks.find({ userId: new ObjectId(userID) })
+    const content = result.toArray()
+    return content
+  }
+
+  async createTask(payload: CreateTaskPayload): Promise<TaskType> {
+    const { userID, name, description, priority, dueDate } = payload
+    const newTask = new Task({ userId: new ObjectId(userID), name, description, priority, dueDate })
+    const result = await databaseService.tasks.insertOne(newTask)
+    const content: TaskType = { _id: result.insertedId, userId: new ObjectId(userID), name, description, priority, dueDate }
+    return content
+  }
+}
+
+const tasksServices = new TasksServices()
+export default tasksServices

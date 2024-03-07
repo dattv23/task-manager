@@ -14,3 +14,9 @@ export enum TokenType {
   RefreshToken = 'RefreshToken',
   OTP = 'OTPToken'
 }
+
+export enum TaskPriority {
+  LESS_IMPORTANT = 'Less Important',
+  IMPORTANT = 'Important',
+  VERY_IMPORTANT = 'Very Important'
+}

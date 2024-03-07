@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongodb'
+
 export type ResultRegisterType = {
   userId: string
   fullName: string

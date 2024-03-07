@@ -29,6 +29,15 @@ export const VALIDATION_MESSAGES = {
     IMAGE: {
       FAILED: 'Uploading image failed!'
     }
+  },
+  TASK: {
+    NAME_REQUIRED: 'A task name is required.',
+    NAME_LENGTH_ERROR: 'The task name must be between 5 and 125 characters long.',
+    DESCRIPTION_LENGTH_ERROR: 'The task description must be between 5 and 255 characters long.',
+    PRIORITY_REQUIRED: 'A task priority is required.',
+    DUE_DATE_REQUIRED: 'A due date for the task is required.',
+    INVALID_DATE: 'The due date must be a valid date in the format YYYY-MM-DDTHH:MM:SSZ.',
+    INVALID_PRIORITY: 'Invalid task priority. Please select a valid priority level (LESS_IMPORTANT, IMPORTANT, VERY_IMPORTANT).'
   }
 }
 
@@ -73,6 +82,14 @@ export const RESULT_RESPONSE_MESSAGES = {
     UPLOAD_AVATAR: {
       IS_SUCCESS: 'Upload avatar successfully',
       IS_FAILED: 'Upload avatar failed'
+    }
+  },
+  TASKS: {
+    GET_TASKS: {
+      IS_SUCCESS: 'Get tasks successfully'
+    },
+    CREATE_TASK: {
+      IS_SUCCESS: 'Create new task successfully'
     }
   }
 }
