@@ -104,7 +104,7 @@ class AuthServices {
     const token = await databaseService.refreshTokens.findOneAndDelete({ token: refreshToken })
     if (!token) {
       throw new ErrorWithStatus({
-        statusCode: StatusCodes.UNAUTHORIZED,
+        statusCode: StatusCodes.NOT_FOUND,
         message: RESULT_RESPONSE_MESSAGES.AUTH.NEW_TOKEN.REFRESH_TOKEN_EXPIRED
       })
     }
