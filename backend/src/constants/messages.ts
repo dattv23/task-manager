@@ -91,6 +91,20 @@ export const RESULT_RESPONSE_MESSAGES = {
     },
     CREATE_TASK: {
       IS_SUCCESS: 'Create new task successfully'
+    },
+    GET_TASK_BY_ID: {
+      NOT_FOUND: 'Task ID not found',
+      IS_SUCCESS: 'Get task by id successfully'
+    },
+    EDIT_TASK: {
+      NOT_FOUND: 'Task ID not found',
+      IS_SUCCESS: 'Edit task successfully',
+      IS_FAILED: 'Edit task failed'
+    },
+    DELETE_TASK: {
+      IS_DELETED: 'The task you are trying to delete no longer exists.',
+      IS_SUCCESS: 'Delete task successfully',
+      NOT_FOUND: 'Task ID not found'
     }
   }
 }

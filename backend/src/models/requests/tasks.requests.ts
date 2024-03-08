@@ -12,3 +12,13 @@ export interface CreateTaskPayload {
   dueDate: Date
   status: TaskStatus
 }
+
+export interface EditTaskPayload {
+  userId: string
+  name?: string
+  description?: string
+  priority?: TaskPriority
+  startDate?: Date
+  dueDate?: Date
+  status?: TaskStatus
+}
