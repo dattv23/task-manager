@@ -1,4 +1,4 @@
-import { TaskPriority } from '~/constants/enums'
+import { TaskPriority, TaskStatus } from '~/constants/enums'
 
 export interface GetTasksPayload {
   userId: string
@@ -10,4 +10,5 @@ export interface CreateTaskPayload {
   description: string
   priority: TaskPriority
   dueDate: Date
+  status: TaskStatus
 }

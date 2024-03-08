@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { TaskPriority } from '~/constants/enums'
+import { TaskPriority, TaskStatus } from '~/constants/enums'
 
 export type TaskType = {
   _id?: ObjectId
@@ -8,6 +8,7 @@ export type TaskType = {
   description?: string
   priority: TaskPriority
   dueDate: Date
+  status?: TaskStatus
   startDate?: Date
   created_at?: Date
   updated_at?: Date

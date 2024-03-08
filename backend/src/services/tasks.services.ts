@@ -13,10 +13,10 @@ class TasksServices {
   }
 
   async createTask(payload: CreateTaskPayload): Promise<TaskType> {
-    const { userId, name, description, priority, dueDate } = payload
-    const newTask = new Task({ userId: new ObjectId(userId), name, description, priority, dueDate })
+    const { userId, name, description, priority, dueDate, status } = payload
+    const newTask = new Task({ userId: new ObjectId(userId), name, description, priority, dueDate, status })
     const result = await databaseService.tasks.insertOne(newTask)
-    const content: TaskType = { _id: result.insertedId, userId: new ObjectId(userId), name, description, priority, dueDate }
+    const content: TaskType = { _id: result.insertedId, userId: new ObjectId(userId), name, description, priority, dueDate, status }
     return content
   }
 }

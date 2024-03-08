@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 import { TaskType } from '~/@types/task.type'
-import { TaskPriority } from '~/constants/enums'
+import { TaskPriority, TaskStatus } from '~/constants/enums'
 
 export default class Task {
   _id?: ObjectId
@@ -9,6 +9,7 @@ export default class Task {
   description: string
   priority: TaskPriority
   dueDate: Date
+  status?: TaskStatus
   startDate?: Date
   created_at?: Date
   updated_at?: Date
@@ -22,6 +23,7 @@ export default class Task {
     this.priority = task.priority
     this.startDate = task.startDate || new Date()
     this.dueDate = task.dueDate
+    this.status = task.status || TaskStatus.PENDING
     this.created_at = task.created_at || new Date()
     this.updated_at = task.updated_at || new Date()
     this._destroy = task._destroy || false
