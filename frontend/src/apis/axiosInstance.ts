@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios'
 import Cookies from 'js-cookie'
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '~/constants'
 import { getStore, setStore } from '~/utils' // Assuming this is a utility module for managing local storage
 
 // Create a new Axios instance with a base URL and default headers
@@ -14,7 +15,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     // You can modify the request config here, e.g., add authentication headers
-    const token = getStore('accessToken')
+    const token = getStore(ACCESS_TOKEN)
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
@@ -36,22 +37,22 @@ axiosInstance.interceptors.response.use(
     // it means the token has expired and we need to refresh it
     if (error.response.status === 401 && !originalRequest._retry) {
       try {
-        const refreshToken = Cookies.get('refreshToken')
-        if (!refreshToken) {
+        const refresh_token = await Cookies.get(REFRESH_TOKEN)
+        if (!refresh_token) {
           // Redirect to the login page if no refresh token is present
           window.location.href = '/login'
         }
 
         // Refresh the token using a separate API endpoint
-        const response = await axios.post('/auth/refresh-token', { refreshToken })
-        const { access_token, refresh_token } = response.data
+        const response = await axiosInstance.post('/auth/refresh-token', { refreshToken: refresh_token })
+        const { accessToken, refreshToken } = response.data
 
         // Set the new tokens in local storage and cookies
-        setStore('accessToken', access_token)
-        Cookies.set('refreshToken', refresh_token)
+        setStore(ACCESS_TOKEN, accessToken)
+        Cookies.set(REFRESH_TOKEN, refreshToken)
 
         // Retry the original request with the new token
-        originalRequest.headers.Authorization = `Bearer ${access_token}`
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`
         return axios(originalRequest)
       } catch (error) {
         // If token refresh fails, redirect to the login page

@@ -3,7 +3,7 @@ import Button from '~/components/Button'
 import { Link, useNavigate } from 'react-router-dom'
 import { useLoginMutation, useResendOTPMutation } from '~/apis/api'
 import { getStore } from '~/utils'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useAuth } from '~/hooks/useAuth'
 import { LoginResult } from '~/@types/api.type'
 import { emailRegex, passwordRegex } from '~/utils/regex'
@@ -11,22 +11,17 @@ import { useToasts } from '~/hooks/useToasts'
 import { LoginField } from '~/@types/form.type'
 import { handleAPIError } from '~/utils/handleAPIError'
 import { FormItem } from '~/components'
+import { EMAIL, FULL_NAME } from '~/constants'
 
 const Login: React.FC = () => {
   const [login, { isLoading }] = useLoginMutation()
   const [resendOTP] = useResendOTPMutation()
-  const fullName = getStore('fullName')
-  const email = getStore('email')
-  const { isAuthenticated, loginUser } = useAuth()
+  const fullName = getStore(FULL_NAME)
+  const email = getStore(EMAIL)
+  const { loginUser } = useAuth()
   const navigate = useNavigate()
   const { addToast } = useToasts()
   const [isOtherAccount, setIsOtherAccount] = useState<boolean>(false)
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/dashboard')
-    }
-  }, [])
 
   const onFinish = async (values: LoginField) => {
     const { password } = values
