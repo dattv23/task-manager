@@ -11,7 +11,7 @@ export const useProfile = () => {
     fullName: '',
     bio: ''
   })
-  const { data } = useGetProfileQuery()
+  const { data, isFetching } = useGetProfileQuery()
 
   const updateProfile = (profile: ProfileType) => {
     setProfile(profile)
@@ -21,7 +21,7 @@ export const useProfile = () => {
     if (data) {
       setProfile(data)
     }
-  }, [data])
+  }, [data, isFetching])
 
   return { profile, updateProfile }
 }
