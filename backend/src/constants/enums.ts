@@ -20,3 +20,9 @@ export enum TaskPriority {
   IMPORTANT = 'Important',
   VERY_IMPORTANT = 'Very Important'
 }
+
+export enum TaskStatus {
+  PENDING = 'Pending',
+  IN_PROGRESS = 'In Progress',
+  COMPLETED = 'Completed'
+}

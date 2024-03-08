@@ -13,6 +13,8 @@ import { UserVerifyStatus } from '~/constants/enums'
 import { verifyToken } from '~/utils/jwt'
 import { env } from '~/config/env.config'
 import { RefreshToken } from '~/models/database'
+import { ObjectId } from 'mongodb'
+import { TokenPayloadType } from '~/@types/token.type'
 
 class AuthServices {
   async register(payload: RegisterBody): Promise<ResultRegisterType> {
@@ -100,8 +102,8 @@ class AuthServices {
   async newToken(payload: NewTokenBody): Promise<ResultNewTokenType> {
     const { refreshToken } = payload
     const { refreshTokenKey } = env.jwt
-    const { userId, role } = await verifyToken({ token: refreshToken, privateKey: refreshTokenKey! })
-    const token = await databaseService.refreshTokens.findOneAndDelete({ token: refreshToken })
+    const { userId, role } = (await verifyToken({ token: refreshToken, privateKey: refreshTokenKey! })) as TokenPayloadType
+    const token = await databaseService.refreshTokens.deleteOne({ token: refreshToken })
     if (!token) {
       throw new ErrorWithStatus({
         statusCode: StatusCodes.NOT_FOUND,
@@ -109,7 +111,7 @@ class AuthServices {
       })
     }
     const [newAccessToken, newRefreshToken] = await tokenServices.signAccessAndRefreshToken(userId, role)
-    await databaseService.refreshTokens.insertOne(new RefreshToken({ token: newRefreshToken, userId }))
+    await databaseService.refreshTokens.insertOne(new RefreshToken({ token: newRefreshToken, userId: new ObjectId(userId) }))
     const content: ResultNewTokenType = { accessToken: newAccessToken, refreshToken: newRefreshToken }
     return content
   }

@@ -37,7 +37,8 @@ export const VALIDATION_MESSAGES = {
     PRIORITY_REQUIRED: 'A task priority is required.',
     DUE_DATE_REQUIRED: 'A due date for the task is required.',
     INVALID_DATE: 'The due date must be a valid date in the format YYYY-MM-DDTHH:MM:SSZ.',
-    INVALID_PRIORITY: 'Invalid task priority. Please select a valid priority level (LESS_IMPORTANT, IMPORTANT, VERY_IMPORTANT).'
+    INVALID_PRIORITY: 'Invalid task priority. Please select a valid priority level (LESS_IMPORTANT, IMPORTANT, VERY_IMPORTANT).',
+    INVALID_STATUS: 'Invalid task status. Please select a valid priority level (PENDING, IN_PROGRESS, COMPLETED).'
   }
 }
 
@@ -90,6 +91,20 @@ export const RESULT_RESPONSE_MESSAGES = {
     },
     CREATE_TASK: {
       IS_SUCCESS: 'Create new task successfully'
+    },
+    GET_TASK_BY_ID: {
+      NOT_FOUND: 'Task ID not found',
+      IS_SUCCESS: 'Get task by id successfully'
+    },
+    EDIT_TASK: {
+      NOT_FOUND: 'Task ID not found',
+      IS_SUCCESS: 'Edit task successfully',
+      IS_FAILED: 'Edit task failed'
+    },
+    DELETE_TASK: {
+      IS_DELETED: 'The task you are trying to delete no longer exists.',
+      IS_SUCCESS: 'Delete task successfully',
+      NOT_FOUND: 'Task ID not found'
     }
   }
 }
