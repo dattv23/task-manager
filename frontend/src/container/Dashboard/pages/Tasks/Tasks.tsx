@@ -1,6 +1,6 @@
 import { DatePicker, Form, Input, Modal, Select, Tabs } from 'antd'
 import FormItem from 'antd/es/form/FormItem'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CreateTaskField } from '~/@types/form.type'
 import { Task, TaskPriority, TaskStatus } from '~/@types/task.type'
 import { ICONS } from '~/assets/icons'
@@ -14,11 +14,89 @@ import './style.scss'
 import type { DragEndEvent } from '@dnd-kit/core'
 import { DndContext, PointerSensor, useSensor } from '@dnd-kit/core'
 import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
+import { useGetAllTasksQuery } from '~/apis/api'
+
+type TabItemType = {
+  key: string
+  label: JSX.Element
+  children: JSX.Element
+}
 
 const Tasks: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>(mockTasks)
   const [open, setOpen] = useState<boolean>(false)
   const { addToast } = useToasts()
+  const { data, isFetching, isLoading } = useGetAllTasksQuery()
+
+  const countTaskWithStatus = (tasks: Task[], status: string) => {
+    if (status === 'All') {
+      return tasks.length
+    }
+    return tasks.reduce((acc, task) => {
+      if (task.status === status) {
+        return acc + 1
+      }
+      return acc
+    }, 0)
+  }
+
+  const [items, setItems] = useState<TabItemType[]>([])
+
+  useEffect(() => {
+    if (data) {
+      setTasks(data)
+      setItems([
+        {
+          key: '1',
+          label: (
+            <p>
+              All Task
+              <span className='ml-3 inline-block h-6 w-6 rounded-full bg-slate-100 text-center'>
+                {countTaskWithStatus(tasks, 'All')}
+              </span>
+            </p>
+          ),
+          children: <ListTask tasks={tasks} />
+        },
+        {
+          key: '2',
+          label: (
+            <p>
+              Pending
+              <span className='ml-3 inline-block h-6 w-6 rounded-full bg-slate-100 text-center'>
+                {countTaskWithStatus(tasks, TaskStatus.PENDING)}
+              </span>
+            </p>
+          ),
+          children: <ListTask tasks={tasks.filter((item) => item.status === TaskStatus.PENDING)} />
+        },
+        {
+          key: '3',
+          label: (
+            <p>
+              In Progress
+              <span className='ml-3 inline-block h-6 w-6 rounded-full bg-slate-100 text-center'>
+                {countTaskWithStatus(tasks, TaskStatus.IN_PROGRESS)}
+              </span>
+            </p>
+          ),
+          children: <ListTask tasks={tasks.filter((item) => item.status === TaskStatus.IN_PROGRESS)} />
+        },
+        {
+          key: '4',
+          label: (
+            <p>
+              Completed
+              <span className='ml-3 inline-block h-6 w-6 rounded-full bg-slate-100 text-center'>
+                {countTaskWithStatus(tasks, TaskStatus.COMPLETED)}
+              </span>
+            </p>
+          ),
+          children: <ListTask tasks={tasks.filter((item) => item.status === TaskStatus.COMPLETED)} />
+        }
+      ])
+    }
+  }, [tasks, isFetching])
 
   const sensor = useSensor(PointerSensor, {
     activationConstraint: { distance: 10 }
@@ -48,76 +126,13 @@ const Tasks: React.FC = () => {
         description,
         priority,
         dueDate,
-        createdAt: formatDate(new Date(), 'dd-mm-yyyy'),
+        startDate: formatDate(new Date(), 'dd-mm-yyyy'),
         status: TaskStatus.PENDING
       }
     ])
     addToast({ title: 'Success', message: 'Add task successfully!', progress: true, timeOut: 3000, type: 'success' })
     handleCancel()
   }
-
-  const countTaskWithStatus = (tasks: Task[], status: string) => {
-    if (status === 'All') {
-      return tasks.length
-    }
-    return tasks.reduce((acc, task) => {
-      if (task.status === status) {
-        return acc + 1
-      }
-      return acc
-    }, 0)
-  }
-
-  const [items, setItems] = useState([
-    {
-      key: '1',
-      label: (
-        <p>
-          All Task
-          <span className='ml-3 inline-block h-6 w-6 rounded-full bg-slate-100 text-center'>
-            {countTaskWithStatus(tasks, 'All')}
-          </span>
-        </p>
-      ),
-      children: <ListTask tasks={tasks} />
-    },
-    {
-      key: '2',
-      label: (
-        <p>
-          Pending
-          <span className='ml-3 inline-block h-6 w-6 rounded-full bg-slate-100 text-center'>
-            {countTaskWithStatus(tasks, TaskStatus.PENDING)}
-          </span>
-        </p>
-      ),
-      children: <ListTask tasks={tasks.filter((item) => item.status === TaskStatus.PENDING)} />
-    },
-    {
-      key: '3',
-      label: (
-        <p>
-          In Progress
-          <span className='ml-3 inline-block h-6 w-6 rounded-full bg-slate-100 text-center'>
-            {countTaskWithStatus(tasks, TaskStatus.IN_PROGRESS)}
-          </span>
-        </p>
-      ),
-      children: <ListTask tasks={tasks.filter((item) => item.status === TaskStatus.IN_PROGRESS)} />
-    },
-    {
-      key: '4',
-      label: (
-        <p>
-          Completed
-          <span className='ml-3 inline-block h-6 w-6 rounded-full bg-slate-100 text-center'>
-            {countTaskWithStatus(tasks, TaskStatus.COMPLETED)}
-          </span>
-        </p>
-      ),
-      children: <ListTask tasks={tasks.filter((item) => item.status === TaskStatus.COMPLETED)} />
-    }
-  ])
 
   const onDragEnd = ({ active, over }: DragEndEvent) => {
     if (active.id !== over?.id) {
@@ -139,34 +154,40 @@ const Tasks: React.FC = () => {
         {tasks.length == 0 ? null : <Button onClick={showModal}>Create a Task</Button>}
       </div>
       <div className='my-10'>
-        {tasks.length == 0 ? (
-          <div className='flex flex-col items-center justify-center py-16 text-center'>
-            <img src={ICONS.tasks} />
-            <h4 className='mt-4 text-[28px] font-semibold text-black opacity-80'>No Tasks Yet</h4>
-            <p className='mt-3 text-base font-normal text-neutral-500'>
-              You have no task created in your workspace yet.
-            </p>
-            <p className='mb-6 text-base font-normal text-neutral-500'>Get productive. Create a Task Now.</p>
-            <Button onClick={showModal}>Create a Task</Button>
-          </div>
+        {isLoading ? (
+          <p>Loading...</p>
         ) : (
-          <Tabs
-            defaultActiveKey='1'
-            items={items}
-            renderTabBar={(tabBarProps, DefaultTabBar) => (
-              <DndContext sensors={[sensor]} onDragEnd={onDragEnd}>
-                <SortableContext items={items.map((i) => i.key)} strategy={horizontalListSortingStrategy}>
-                  <DefaultTabBar {...tabBarProps}>
-                    {(node) => (
-                      <DraggableTab {...node.props} key={node.key}>
-                        {node}
-                      </DraggableTab>
-                    )}
-                  </DefaultTabBar>
-                </SortableContext>
-              </DndContext>
+          <div>
+            {tasks.length == 0 ? (
+              <div className='flex flex-col items-center justify-center py-16 text-center'>
+                <img src={ICONS.tasks} />
+                <h4 className='mt-4 text-[28px] font-semibold text-black opacity-80'>No Tasks Yet</h4>
+                <p className='mt-3 text-base font-normal text-neutral-500'>
+                  You have no task created in your workspace yet.
+                </p>
+                <p className='mb-6 text-base font-normal text-neutral-500'>Get productive. Create a Task Now.</p>
+                <Button onClick={showModal}>Create a Task</Button>
+              </div>
+            ) : (
+              <Tabs
+                defaultActiveKey='1'
+                items={items}
+                renderTabBar={(tabBarProps, DefaultTabBar) => (
+                  <DndContext sensors={[sensor]} onDragEnd={onDragEnd}>
+                    <SortableContext items={items.map((i) => i.key)} strategy={horizontalListSortingStrategy}>
+                      <DefaultTabBar {...tabBarProps}>
+                        {(node) => (
+                          <DraggableTab {...node.props} key={node.key}>
+                            {node}
+                          </DraggableTab>
+                        )}
+                      </DefaultTabBar>
+                    </SortableContext>
+                  </DndContext>
+                )}
+              />
             )}
-          />
+          </div>
         )}
       </div>
       <Modal

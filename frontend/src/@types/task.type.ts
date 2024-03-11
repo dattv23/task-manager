@@ -18,6 +18,6 @@ export type Task = {
   description: string
   priority: TaskPriority
   status: TaskStatus
-  createdAt: Date | string
+  startDate: Date | string
   dueDate: Date | string
 }

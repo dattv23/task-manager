@@ -2,8 +2,16 @@ import axiosInstance from './axiosInstance'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import type { BaseQueryFn } from '@reduxjs/toolkit/query/react'
 import type { AxiosRequestConfig, AxiosError } from 'axios'
-import { LoginField, NewPasswordField, RegisterField, ResendOTPField, VerifyOTPField } from '~/@types/form.type'
+import {
+  CreateTaskField,
+  LoginField,
+  NewPasswordField,
+  RegisterField,
+  ResendOTPField,
+  VerifyOTPField
+} from '~/@types/form.type'
 import { ProfileType } from '~/@types/response.type'
+import { Task } from '~/@types/task.type'
 
 type AxiosBaseQueryResult = {
   data: any
@@ -80,6 +88,15 @@ export const api = createApi({
             'Content-Type': 'multipart/form-data'
           }
         })
+      }),
+      getAllTasks: build.query<Task[], void>({
+        query: () => ({ url: '/tasks', method: 'get' })
+      }),
+      getTaskById: build.query<Task, void>({
+        query: (id) => ({ url: `/tasks/${id}`, method: 'get' })
+      }),
+      addTask: build.mutation({
+        query: (data: CreateTaskField) => ({ url: '/tasks', method: 'post', data: data })
       })
     }
   }
@@ -92,5 +109,8 @@ export const {
   useResendOTPMutation,
   useResetPasswordMutation,
   useGetProfileQuery,
-  usePostAvatarMutation
+  usePostAvatarMutation,
+  useGetAllTasksQuery,
+  useGetTaskByIdQuery,
+  useAddTaskMutation
 } = api
