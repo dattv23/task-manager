@@ -1,4 +1,4 @@
-import { TaskPriority } from './task.type'
+import { TaskPriority, TaskStatus } from './task.type'
 
 export type RegisterField = {
   fullName: string
@@ -28,6 +28,8 @@ export type NewPasswordField = {
 export type CreateTaskField = {
   name: string
   priority: TaskPriority
+  startDate: Date
   dueDate: Date
+  status: TaskStatus
   description: string
 }

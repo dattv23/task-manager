@@ -5,16 +5,15 @@ import { CreateTaskField } from '~/@types/form.type'
 import { Task, TaskPriority, TaskStatus } from '~/@types/task.type'
 import { ICONS } from '~/assets/icons'
 import { Button, DraggableTab } from '~/components'
-import { formatDate } from 'date-fns'
 import { useToasts } from '~/hooks/useToasts'
 import ListTask from '../../components/TaskList'
-import { mockTasks } from '~/mocks/tasks'
 import './style.scss'
 
 import type { DragEndEvent } from '@dnd-kit/core'
 import { DndContext, PointerSensor, useSensor } from '@dnd-kit/core'
 import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
-import { useGetAllTasksQuery } from '~/apis/api'
+import { useAddTaskMutation, useGetAllTasksQuery } from '~/apis/api'
+import { handleAPIError } from '~/utils/handleAPIError'
 
 type TabItemType = {
   key: string
@@ -23,10 +22,11 @@ type TabItemType = {
 }
 
 const Tasks: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>(mockTasks)
-  const [open, setOpen] = useState<boolean>(false)
+  const [tasks, setTasks] = useState<Task[]>([])
+  const [openModalAddTask, setOpenModalAddTask] = useState<boolean>(false)
   const { addToast } = useToasts()
   const { data, isFetching, isLoading } = useGetAllTasksQuery()
+  const [addTask] = useAddTaskMutation()
 
   const countTaskWithStatus = (tasks: Task[], status: string) => {
     if (status === 'All') {
@@ -45,6 +45,11 @@ const Tasks: React.FC = () => {
   useEffect(() => {
     if (data) {
       setTasks(data)
+    }
+  }, [isFetching])
+
+  useEffect(() => {
+    if (tasks) {
       setItems([
         {
           key: '1',
@@ -96,42 +101,27 @@ const Tasks: React.FC = () => {
         }
       ])
     }
-  }, [tasks, isFetching])
+  }, [tasks])
 
   const sensor = useSensor(PointerSensor, {
     activationConstraint: { distance: 10 }
   })
 
-  /**
-   * Function for showing modal
-   */
-  const showModal = () => {
-    setOpen(true)
-  }
-
-  /**
-   * Function for handling modal Cancel button click
-   */
-  const handleCancel = () => {
-    setOpen(false)
-  }
-
-  const handleSubmit = (values: CreateTaskField) => {
+  const handleSubmit = async (values: CreateTaskField) => {
     const { name, description, priority, dueDate } = values
-    setTasks([
-      ...tasks,
-      {
-        _id: crypto.randomUUID(),
-        name,
-        description,
-        priority,
-        dueDate,
-        startDate: formatDate(new Date(), 'dd-mm-yyyy'),
-        status: TaskStatus.PENDING
-      }
-    ])
-    addToast({ title: 'Success', message: 'Add task successfully!', progress: true, timeOut: 3000, type: 'success' })
-    handleCancel()
+    const startDate = new Date()
+    const status = TaskStatus.PENDING
+    const res = await addTask({ name, description, priority, status, startDate, dueDate })
+    if ('data' in res) {
+      const { _id } = res.data as Task
+      addToast({ title: 'Success', message: 'Add task successfully!', progress: true, timeOut: 3, type: 'success' })
+      setTasks([...tasks, { _id, startDate, status, name, description, priority, dueDate }])
+    }
+    if ('error' in res) {
+      const { message } = handleAPIError(res.error)
+      addToast({ title: 'Add Task Failed', message: message, progress: true, timeOut: 3, type: 'error' })
+    }
+    setOpenModalAddTask(false)
   }
 
   const onDragEnd = ({ active, over }: DragEndEvent) => {
@@ -151,7 +141,7 @@ const Tasks: React.FC = () => {
           <h2 className='text-[32px] font-semibold text-blue-950 '>Task</h2>
           <p className='text-xl font-normal text-zinc-600'>Your tasks in your space</p>
         </div>
-        {tasks.length == 0 ? null : <Button onClick={showModal}>Create a Task</Button>}
+        {tasks.length == 0 ? null : <Button onClick={() => setOpenModalAddTask(true)}>Create a Task</Button>}
       </div>
       <div className='my-10'>
         {isLoading ? (
@@ -166,7 +156,7 @@ const Tasks: React.FC = () => {
                   You have no task created in your workspace yet.
                 </p>
                 <p className='mb-6 text-base font-normal text-neutral-500'>Get productive. Create a Task Now.</p>
-                <Button onClick={showModal}>Create a Task</Button>
+                <Button onClick={() => setOpenModalAddTask(true)}>Create a Task</Button>
               </div>
             ) : (
               <Tabs
@@ -193,8 +183,8 @@ const Tasks: React.FC = () => {
       <Modal
         title='Create Task'
         centered
-        open={open}
-        onCancel={handleCancel}
+        open={openModalAddTask}
+        onCancel={() => setOpenModalAddTask(false)}
         width={460}
         styles={{ header: { marginTop: '12px' } }}
         footer={null}
@@ -207,7 +197,7 @@ const Tasks: React.FC = () => {
           <label className='text-gray-800' htmlFor='name'>
             Task Name
           </label>
-          <FormItem name='name'>
+          <FormItem name='name' rules={[{ required: true, message: 'Task name is required!' }]}>
             <Input className='h-12 text-base font-normal' id='name' />
           </FormItem>
           <div className='flex gap-2'>
@@ -227,7 +217,24 @@ const Tasks: React.FC = () => {
               <label className='text-gray-800' htmlFor='dueDate'>
                 Due Date
               </label>
-              <FormItem name='dueDate'>
+              <FormItem
+                name='dueDate'
+                rules={[
+                  {
+                    required: true,
+                    message: 'Due Date is required!'
+                  },
+                  {
+                    validator(_, value) {
+                      if (new Date(value) > new Date()) {
+                        return Promise.resolve()
+                      }
+                      return Promise.reject()
+                    },
+                    message: 'Due Date is not a valid!'
+                  }
+                ]}
+              >
                 <DatePicker
                   className='h-12 w-full text-base font-normal'
                   placeholder='Today'
