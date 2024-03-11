@@ -4,6 +4,7 @@ import type { BaseQueryFn } from '@reduxjs/toolkit/query/react'
 import type { AxiosRequestConfig, AxiosError } from 'axios'
 import {
   CreateTaskField,
+  EditTaskField,
   LoginField,
   NewPasswordField,
   RegisterField,
@@ -92,11 +93,21 @@ export const api = createApi({
       getAllTasks: build.query<Task[], void>({
         query: () => ({ url: '/tasks', method: 'get' })
       }),
-      getTaskById: build.query<Task, void>({
+      getTaskById: build.query<Task, string>({
         query: (id) => ({ url: `/tasks/${id}`, method: 'get' })
       }),
       addTask: build.mutation({
         query: (data: CreateTaskField) => ({ url: '/tasks', method: 'post', data: data })
+      }),
+      editTask: build.mutation({
+        query: ({ data, params }: { data: EditTaskField; params: { id: string } }) => ({
+          url: `/tasks/${params.id}`,
+          method: 'put',
+          data: data
+        })
+      }),
+      deleteTask: build.mutation({
+        query: ({ params }: { params: { id: string } }) => ({ url: `/tasks/${params.id}`, method: 'delete' })
       })
     }
   }
@@ -112,5 +123,7 @@ export const {
   usePostAvatarMutation,
   useGetAllTasksQuery,
   useGetTaskByIdQuery,
-  useAddTaskMutation
+  useAddTaskMutation,
+  useEditTaskMutation,
+  useDeleteTaskMutation
 } = api

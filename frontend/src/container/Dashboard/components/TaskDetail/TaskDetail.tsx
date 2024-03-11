@@ -4,30 +4,63 @@ import { Task, TaskStatus } from '~/@types/task.type'
 import { ICONS } from '~/assets/icons'
 import { renderStatus } from '../TaskList/TaskList'
 import { Button } from '~/components'
-import { useGetTaskByIdQuery } from '~/apis/api'
+import { useDeleteTaskMutation, useEditTaskMutation, useGetTaskByIdQuery } from '~/apis/api'
 import { formatDate } from 'date-fns'
+import { useToasts } from '~/hooks/useToasts'
+import { handleAPIError } from '~/utils/handleAPIError'
+import { Modal } from 'antd'
+const { confirm } = Modal
 
 const TaskDetail: React.FC = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const [task, setTask] = useState<Task>()
-  const { data, isFetching } = useGetTaskByIdQuery(id)
+  const { data, isFetching } = useGetTaskByIdQuery(id!)
+  const [editTask] = useEditTaskMutation()
+  const { addToast } = useToasts()
+  const [deleteTask] = useDeleteTaskMutation()
 
   useEffect(() => {
-    console.log('====================================')
-    console.log(data)
-    console.log('====================================')
     if (data) {
       setTask(data)
     }
-  }, [data, isFetching])
+  }, [isFetching])
+
+  const handleUpdateStatus = async (newStatus: TaskStatus) => {
+    const res = await editTask({ data: { status: newStatus }, params: { id: id! } })
+    if ('data' in res) {
+      const taskUpdate = { ...task, status: newStatus } as Task
+      setTask(taskUpdate)
+      addToast({
+        title: 'Success',
+        message: 'Update status task successfully!',
+        progress: true,
+        timeOut: 3,
+        type: 'success'
+      })
+    }
+    if ('error' in res) {
+      const { message } = handleAPIError(res.error)
+      addToast({
+        title: 'Error',
+        message: message,
+        progress: true,
+        timeOut: 3,
+        type: 'error'
+      })
+    }
+  }
 
   const renderButtonWithStatus = (status: string) => {
     switch (status) {
       case TaskStatus.PENDING:
-        return <Button>Work on it Now</Button>
+        return <Button onClick={() => handleUpdateStatus(TaskStatus.IN_PROGRESS)}>Work on it Now</Button>
       case TaskStatus.IN_PROGRESS:
-        return <Button className='bg-success'>Mark As Done</Button>
+        return (
+          <Button onClick={() => handleUpdateStatus(TaskStatus.COMPLETED)} className='bg-success'>
+            Mark As Done
+          </Button>
+        )
       case TaskStatus.COMPLETED:
         return (
           <Button className='px-0 text-success' variant={'tertiary'} disabled>
@@ -38,15 +71,58 @@ const TaskDetail: React.FC = () => {
     }
   }
 
+  const handleDeleteTask = async () => {
+    confirm({
+      title: 'Confirm',
+      content: 'Are you sure you want to delete this task?',
+      footer: (
+        <div className='mt-2 flex justify-end gap-2'>
+          <Button className='h-8 bg-warning text-xs' onClick={() => Modal.destroyAll()}>
+            Back
+          </Button>
+          <Button
+            className='h-8 text-xs'
+            onClick={async () => {
+              const res = await deleteTask({ params: { id: id! } })
+              if ('data' in res) {
+                addToast({
+                  title: 'Success',
+                  message: 'Delete task successfully!',
+                  progress: true,
+                  timeOut: 3,
+                  type: 'success'
+                })
+                window.location.href = '/tasks'
+              }
+              if ('error' in res) {
+                const { message } = handleAPIError(res.error)
+                addToast({
+                  title: 'Error',
+                  message: message,
+                  progress: true,
+                  timeOut: 3,
+                  type: 'error'
+                })
+              }
+              Modal.destroyAll()
+            }}
+          >
+            Yes
+          </Button>
+        </div>
+      )
+    })
+  }
+
   return (
-    <>
+    <div className='task-detail'>
       <button
         className='flex h-14 w-14 items-center justify-center rounded-xl bg-indigo-50'
         onClick={() => navigate('/tasks')}
       >
         <img src={ICONS.arrowRight} alt='arrow' className='rotate-180' />
       </button>
-      {!task ? (
+      {!task || !id ? (
         <p className='mt-2'>Task not found!</p>
       ) : (
         <div className='mt-4 h-[316px] rounded-3xl bg-white p-8'>
@@ -59,7 +135,10 @@ const TaskDetail: React.FC = () => {
               </div>
               <div className='mt-2 flex w-full gap-3'>
                 <div>{renderButtonWithStatus(task.status)}</div>
-                <button className='inline-flex h-12 w-12 items-center justify-center rounded-xl bg-rose-50 p-3'>
+                <button
+                  className='inline-flex h-12 w-12 items-center justify-center rounded-xl bg-rose-50 p-3'
+                  onClick={handleDeleteTask}
+                >
                   <img src={ICONS.deleteOutlined} alt='' />
                 </button>
                 <button className='inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 p-3'>
@@ -91,7 +170,7 @@ const TaskDetail: React.FC = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   )
 }
 
