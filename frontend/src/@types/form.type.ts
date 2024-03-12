@@ -35,12 +35,12 @@ export type CreateTaskField = {
 }
 
 export type EditTaskField = {
-  name?: string
-  priority?: TaskPriority
-  startDate?: Date
-  dueDate?: Date
-  status?: TaskStatus
-  description?: string
+  name: string
+  priority: TaskPriority
+  startDate: Date
+  dueDate: Date
+  status: TaskStatus
+  description: string
 }
 
 export type EditTaskParams = {
