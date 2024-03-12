@@ -73,15 +73,20 @@ const TaskDetail: React.FC = () => {
 
   const handleDeleteTask = async () => {
     confirm({
-      title: 'Confirm',
-      content: 'Are you sure you want to delete this task?',
+      title: <p className='text-lg font-bold'>Delete Task</p>,
+      content: (
+        <p>
+          Are you sure you want to delete the task <strong>'{task?.name}'</strong>? This task is {task?.status}?
+        </p>
+      ),
+      centered: true,
       footer: (
-        <div className='mt-2 flex justify-end gap-2'>
-          <Button className='h-8 bg-warning text-xs' onClick={() => Modal.destroyAll()}>
-            Back
+        <div className='mt-2 flex justify-start gap-2'>
+          <Button className='h-10' onClick={() => Modal.destroyAll()}>
+            No
           </Button>
           <Button
-            className='h-8 text-xs'
+            className='h-10 bg-rose-50 text-red-600'
             onClick={async () => {
               const res = await deleteTask({ params: { id: id! } })
               if ('data' in res) {
@@ -110,7 +115,8 @@ const TaskDetail: React.FC = () => {
             Yes
           </Button>
         </div>
-      )
+      ),
+      icon: null
     })
   }
 
