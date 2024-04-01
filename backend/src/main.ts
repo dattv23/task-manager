@@ -61,47 +61,11 @@ app.use(
     secret: env.server.secret!,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false, sameSite: 'strict' } // for HTTP; set true for HTTPS
+    cookie: { secure: false, sameSite: 'lax' } // for HTTP; set true for HTTPS
   })
 )
 
 app.use('/api', rootRouter)
-
-// let client: Client
-
-// Initialize OpenID client
-// async function initOpenIDClient() {
-//   const googleIssuer = await Issuer.discover('https://accounts.google.com')
-//   client = new googleIssuer.Client({
-//     client_id: env.auth.client_id!,
-//     client_secret: env.auth.client_secret,
-//     redirect_uris: ['http://localhost:8080/callback'],
-//     response_types: ['code']
-//   })
-// }
-
-// Authentication URL
-// app.get('/auth', (req, res) => {
-//   const code_verifier = generators.codeVerifier()
-//   const code_challenge = generators.codeChallenge(code_verifier)
-//   req.session.code_verifier = code_verifier // Store in session
-
-//   const authUrl = client.authorizationUrl({
-//     scope: 'openid email profile',
-//     code_challenge,
-//     code_challenge_method: 'S256'
-//   })
-//   res.redirect(authUrl)
-// })
-
-// Callback URL
-// app.get('/callback', async (req, res) => {
-//   const params = client.callbackParams(req)
-//   const tokenSet = await client.callback('http://localhost:8080/callback', params, { code_verifier: req.session.code_verifier })
-//   const userinfo = await client.userinfo(tokenSet)
-
-//   res.json({ userinfo })
-// })
 
 app.get('/', (req: Request, res: Response) => {
   sendResponse.success(res, [], 'Hello world')

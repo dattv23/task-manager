@@ -23,7 +23,7 @@ const publicRoute: RouteObject[] = [
   { path: config.routes.register, Component: RegisterPage },
   { path: config.routes.verifyEmail, Component: VerifyEmailPage },
   { path: config.routes.forgotPassword, Component: ForgotPasswordPage },
-  { path: config.routes.oauth, Component: OAuthPage }
+  { path: config.routes.oauth, Component: OAuthPage } // https://localhost:3000/oauth/:token
 ]
 
 interface PrivateRoute extends NonIndexRouteObject {

@@ -44,6 +44,7 @@ export const authController = {
       const client = await OpenIDClientService.getClient()
       const code_verifier = generators.codeVerifier()
       req.session.code_verifier = code_verifier
+      req.session.save
       const code_challenge = generators.codeChallenge(code_verifier)
 
       const authUrl = client.authorizationUrl({
