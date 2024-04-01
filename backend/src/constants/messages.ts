@@ -76,6 +76,7 @@ export const RESULT_RESPONSE_MESSAGES = {
     }
   },
   USERS: {
+    USER_EXIST: 'Users already exist',
     USER_NOT_EXIST: 'User not exist',
     GET_PROFILE: {
       IS_SUCCESS: 'Get profile successfully'

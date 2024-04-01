@@ -1,9 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
+import { generators } from 'openid-client'
 import { sendResponse } from '~/config/response.config'
 import { RESULT_RESPONSE_MESSAGES } from '~/constants/messages'
 import { LoginBody, NewTokenBody, RegisterBody, ResendOTPBody, ResetPasswordBody, VerifyOTPBody } from '~/models/requests/auth.requests'
 import authServices from '~/services/auth.services'
+import OpenIDClientService from '~/services/openidClient.services'
+import usersServices from '~/services/users.services'
 
 export const authController = {
   register: async (req: Request<ParamsDictionary, any, RegisterBody>, res: Response, next: NextFunction) => {
@@ -34,5 +37,47 @@ export const authController = {
   refreshToken: async (req: Request<ParamsDictionary, any, NewTokenBody>, res: Response, next: NextFunction) => {
     const result = await authServices.newToken(req.body)
     return sendResponse.created(res, result, RESULT_RESPONSE_MESSAGES.AUTH.NEW_TOKEN.IS_SUCCESS)
+  },
+
+  auth: async (req: Request, res: Response) => {
+    try {
+      const client = await OpenIDClientService.getClient()
+      const code_verifier = generators.codeVerifier()
+      req.session.code_verifier = code_verifier
+      const code_challenge = generators.codeChallenge(code_verifier)
+
+      const authUrl = client.authorizationUrl({
+        scope: 'openid email profile',
+        code_challenge,
+        code_challenge_method: 'S256'
+      })
+
+      res.redirect(authUrl)
+    } catch (error) {
+      console.error('Error during auth initiation:', error)
+      res.status(500).json({ error: 'Internal server error during auth initiation.' })
+    }
+  },
+
+  callback: async (req: Request, res: Response) => {
+    const client = await OpenIDClientService.getClient()
+    const params = client.callbackParams(req)
+    const { code_verifier } = req.session
+
+    if (!code_verifier) {
+      return res.status(400).json({ error: 'Code verifier missing in request.' })
+    }
+
+    try {
+      const tokenSet = await client.callback('http://localhost:8080/api/auth/callback', params, {
+        code_verifier: code_verifier
+      })
+      const userinfo = await client.userinfo(tokenSet)
+      const { email, birthdate, name, picture } = userinfo
+      const { refreshToken } = await usersServices.createUser({ email: email!, password: email!, dateOfBirth: new Date(birthdate!), fullName: name!, avatar: picture! })
+      res.redirect(`http://localhost:3000/oauth/${refreshToken}`)
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message })
+    }
   }
 }

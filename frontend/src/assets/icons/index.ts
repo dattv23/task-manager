@@ -6,6 +6,8 @@ import calendar from './calendar.svg'
 import checkCircle from './check-circle.svg'
 import editSquare from './edit-square.svg'
 import deleteOutlined from './delete.svg'
+import profile from './profile.svg'
+import email from './email.svg'
 
 export const ICONS = {
   onboarding: onboarding,
@@ -15,5 +17,7 @@ export const ICONS = {
   calendar: calendar,
   checkCircle: checkCircle,
   editSquare: editSquare,
-  deleteOutlined: deleteOutlined
+  deleteOutlined: deleteOutlined,
+  profile: profile,
+  email: email
 }

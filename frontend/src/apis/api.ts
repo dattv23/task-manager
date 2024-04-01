@@ -2,8 +2,17 @@ import axiosInstance from './axiosInstance'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import type { BaseQueryFn } from '@reduxjs/toolkit/query/react'
 import type { AxiosRequestConfig, AxiosError } from 'axios'
-import { LoginField, NewPasswordField, RegisterField, ResendOTPField, VerifyOTPField } from '~/@types/form.type'
+import {
+  CreateTaskField,
+  EditTaskField,
+  LoginField,
+  NewPasswordField,
+  RegisterField,
+  ResendOTPField,
+  VerifyOTPField
+} from '~/@types/form.type'
 import { ProfileType } from '~/@types/response.type'
+import { Task } from '~/@types/task.type'
 
 type AxiosBaseQueryResult = {
   data: any
@@ -80,6 +89,25 @@ export const api = createApi({
             'Content-Type': 'multipart/form-data'
           }
         })
+      }),
+      getAllTasks: build.query<Task[], void>({
+        query: () => ({ url: '/tasks', method: 'get' })
+      }),
+      getTaskById: build.query<Task, string>({
+        query: (id) => ({ url: `/tasks/${id}`, method: 'get' })
+      }),
+      addTask: build.mutation({
+        query: (data: CreateTaskField) => ({ url: '/tasks', method: 'post', data: data })
+      }),
+      editTask: build.mutation({
+        query: ({ data, params }: { data: EditTaskField; params: { id: string } }) => ({
+          url: `/tasks/${params.id}`,
+          method: 'put',
+          data: data
+        })
+      }),
+      deleteTask: build.mutation({
+        query: ({ params }: { params: { id: string } }) => ({ url: `/tasks/${params.id}`, method: 'delete' })
       })
     }
   }
@@ -92,5 +120,10 @@ export const {
   useResendOTPMutation,
   useResetPasswordMutation,
   useGetProfileQuery,
-  usePostAvatarMutation
+  usePostAvatarMutation,
+  useGetAllTasksQuery,
+  useGetTaskByIdQuery,
+  useAddTaskMutation,
+  useEditTaskMutation,
+  useDeleteTaskMutation
 } = api

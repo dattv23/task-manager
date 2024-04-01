@@ -36,7 +36,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
 
   return (
     <>
-      <div className='flex flex-wrap justify-between gap-2'>
+      <div className='flex flex-wrap gap-2'>
         {tasks.map((task, index) => (
           <Card key={index} loading={loading} className='w-full lg:w-[248px]'>
             <div className='flex justify-between'>

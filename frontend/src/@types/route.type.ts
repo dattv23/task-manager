@@ -10,4 +10,5 @@ export type RoutesType = {
   verifyEmail: string
   workspace: string
   taskDetail: string
+  oauth: string
 }

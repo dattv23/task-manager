@@ -19,7 +19,7 @@ class TasksServices {
   async getTaskById(params: ParamsDictionary): Promise<TaskType> {
     const { id } = params
     const task = await databaseService.tasks.findOne({ _id: new ObjectId(id) })
-    if (!task || task._destroy === false) {
+    if (!task || task._destroy === true) {
       throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.TASKS.GET_TASK_BY_ID.NOT_FOUND })
     }
     const content: TaskType = task
@@ -38,7 +38,7 @@ class TasksServices {
     const { id } = params
     const { userId, name, description, priority, startDate, dueDate, status } = payload
     const task = await databaseService.tasks.findOne({ _id: new ObjectId(id) })
-    if (!task || task._destroy === false) {
+    if (!task || task._destroy === true) {
       throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.TASKS.EDIT_TASK.NOT_FOUND })
     }
     const taskUpdated = {
@@ -63,7 +63,7 @@ class TasksServices {
   async deleteTask(params: ParamsDictionary): Promise<boolean> {
     const { id } = params
     const task = await databaseService.tasks.findOne({ _id: new ObjectId(id) })
-    if (!task || task._destroy === false) {
+    if (!task || task._destroy === true) {
       throw new ErrorWithStatus({ statusCode: StatusCodes.NOT_FOUND, message: RESULT_RESPONSE_MESSAGES.TASKS.DELETE_TASK.NOT_FOUND })
     }
     await databaseService.tasks.updateOne({ _id: new ObjectId(id) }, { $set: { _destroy: true } }, { upsert: true })
