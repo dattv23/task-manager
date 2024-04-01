@@ -14,6 +14,7 @@ const TasksPage = React.lazy(() => import('~/container/Dashboard/pages/Tasks'))
 const TaskDetailPage = React.lazy(() => import('~/container/Dashboard/components/TaskDetail'))
 const SettingsPage = React.lazy(() => import('~/container/Dashboard/pages/Settings'))
 const WorkspacePage = React.lazy(() => import('~/container/Home/pages/Workspace'))
+const OAuthPage = React.lazy(() => import('~/container/Auth/pages/OAuth'))
 
 const publicRoute: RouteObject[] = [
   { path: config.routes.notFound, Component: NotFoundPage },
@@ -21,7 +22,8 @@ const publicRoute: RouteObject[] = [
   { path: config.routes.login, Component: LoginPage },
   { path: config.routes.register, Component: RegisterPage },
   { path: config.routes.verifyEmail, Component: VerifyEmailPage },
-  { path: config.routes.forgotPassword, Component: ForgotPasswordPage }
+  { path: config.routes.forgotPassword, Component: ForgotPasswordPage },
+  { path: config.routes.oauth, Component: OAuthPage }
 ]
 
 interface PrivateRoute extends NonIndexRouteObject {

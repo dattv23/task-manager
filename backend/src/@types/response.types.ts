@@ -27,3 +27,10 @@ export type ResultGetProfileType = {
   avatar: string
   bio: string
 }
+
+export type ResultCreateUserType = {
+  email: string
+  fullName: string
+  accessToken: string
+  refreshToken: string
+}

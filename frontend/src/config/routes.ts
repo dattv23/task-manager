@@ -11,7 +11,8 @@ const routes: RoutesType = {
   tasks: '/tasks',
   taskDetail: 'tasks/:id',
   settings: '/settings',
-  workspace: '/workspace'
+  workspace: '/workspace',
+  oauth: '/oauth/:token'
 } as const
 
 export default routes

@@ -12,5 +12,7 @@ authRouter.post('/resend-otp', validateData(resendOTPSchema), wrapRequestHandler
 authRouter.post('/reset-password', validateData(resetPasswordSchema), wrapRequestHandler(authController.resetPassword))
 authRouter.post('/login', validateData(loginSchema), wrapRequestHandler(authController.login))
 authRouter.post('/refresh-token', validateData(refreshTokenSchema), wrapRequestHandler(authController.refreshToken))
+authRouter.get('/google', wrapRequestHandler(authController.auth))
+authRouter.get('/callback', wrapRequestHandler(authController.callback))
 
 export default authRouter

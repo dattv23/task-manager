@@ -12,6 +12,7 @@ import { LoginField } from '~/@types/form.type'
 import { handleAPIError } from '~/utils/handleAPIError'
 import { FormItem } from '~/components'
 import { EMAIL, FULL_NAME } from '~/constants'
+import { GoogleOutlined } from '@ant-design/icons'
 
 const Login: React.FC = () => {
   const [login, { isLoading }] = useLoginMutation()
@@ -23,7 +24,7 @@ const Login: React.FC = () => {
   const { addToast } = useToasts()
   const [isOtherAccount, setIsOtherAccount] = useState<boolean>(false)
 
-  const onFinish = async (values: LoginField) => {
+  const onSubmitLogin = async (values: LoginField) => {
     const { password } = values
     const emailUser = values.email ? values.email : email!
     const res = await login({ email: emailUser, password })
@@ -53,6 +54,21 @@ const Login: React.FC = () => {
     }
   }
 
+  const handleLoginWithGoogle = async () => {
+    try {
+      window.location.href = 'http://localhost:8080/api/auth/google'
+    } catch (error) {
+      console.error('Error during login with Google:', error)
+      addToast({
+        title: 'Login with Google failed',
+        message: 'Could not initiate login with Google. Please try again.',
+        type: 'error',
+        progress: true,
+        timeOut: 5
+      })
+    }
+  }
+
   return (
     <>
       <div className='flex h-screen p-5'>
@@ -66,7 +82,7 @@ const Login: React.FC = () => {
                 <p className='mb-4 text-3xl font-bold text-black'>{fullName}!</p>
               </div>
             )}
-            <Form name='basic' onFinish={onFinish}>
+            <Form name='basic' onFinish={onSubmitLogin}>
               {!email || isOtherAccount ? (
                 <FormItem
                   name='email'
@@ -110,12 +126,24 @@ const Login: React.FC = () => {
                   classNames={{ input: 'text-md font-normal font-popins' }}
                 />
               </FormItem>
-              <Form.Item>
-                <Button type='submit' className='my-3 w-full lg:w-[204px]' onSubmit={(e) => e.preventDefault()}>
+              <Form.Item className='mb-0'>
+                <Button type='submit' className='w-full' onSubmit={(e) => e.preventDefault()}>
                   {isLoading ? <Spin size='large' /> : 'Log In'}
                 </Button>
               </Form.Item>
             </Form>
+            <div className='my-2 flex w-full items-center justify-center'>
+              <hr className='h-2 w-full' />
+              <span className='mx-2'>Or</span>
+              <hr className='h-2 w-full' />
+            </div>
+            <Button
+              variant={'secondary'}
+              className='mb-2 w-full border-orange-500 text-orange-500'
+              onClick={handleLoginWithGoogle}
+            >
+              Login with Google <GoogleOutlined className='mx-2 text-orange-500' />
+            </Button>
             <div className='flex w-full items-center justify-between'>
               <Link
                 to='/forgot-password'
