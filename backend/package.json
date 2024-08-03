@@ -5,7 +5,7 @@
   "main": "./src/main.ts",
   "scripts": {
     "build": "npx tsc",
-    "start": "node dist/index.js",
+    "start": "ts-node -r tsconfig-paths/register src/main.js",
     "dev": "nodemon src/main.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
