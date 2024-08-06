@@ -1,0 +1,27 @@
+services:
+  server:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      SERVER_PROTOCOL: http
+      APP_PORT: 8080
+      APP_HOST: localhost
+      DB_URL: "mongodb+srv://datvan635:7D2cB5iSncO1ZQgS@task-manager.iz9ciy1.mongodb.net/?retryWrites=true&w=majority"
+      DB_NAME: "task-manager"
+      APP_SECRET: "8cf9ffc4e543427615b5d4a9353123e4562e21d8f5a4adae9c0cc1f23ab850b916828b641232d63afc14f520d9e6a3f1ac7d5ff9a04db27f849f7397885c0be2"
+      ACCESS_TOKEN_KEY: "09eb6c4691cf807cfed51a6e6711805557a4357c1761c1e427075afdef6b6bc2e2f72d2de333b9f0b132d4777d804209df473e06dfdbdd80fb574d53b0c8e250"
+      REFRESH_TOKEN_KEY: "3834e90357a73b35ee701bf2af740d7b81dea3f4bc8ac5331fd068c2bdcf378a332af93b17f1a541b4a3eb7e7f0071d27e0607a7dd7131acce3e105f568cc0e2"
+      ACCESS_TOKEN_EXPIRED: 7d
+      REFRESH_TOKEN_EXPIRED: 15d
+      JWT_ALGORITHM: HS256
+      EMAIL: "dattruongvan233@gmail.com"
+      PASS_EMAIL: "hgml ymdw zosi xtnc"
+      CLOUDINARY_NAME: dakhaz39u
+      CLOUDINARY_API_KEY: 353327813232611
+      CLOUDINARY_API_SECRET: cclfnL_NdUw3RKOW7UuGQUZiBGM
+      CLOUDINARY_URL: "cloudinary://353327813232611:cclfnL_NdUw3RKOW7UuGQUZiBGM@dakhaz39u"
+      CLIENT_ID: "33167096439-pp64ev6r6ct50p82i58cdk0ookttbg15.apps.googleusercontent.com"
+      CLIENT_SECRET: "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"
+    ports:
+      - 8080:8080
