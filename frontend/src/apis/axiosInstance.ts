@@ -1,11 +1,11 @@
 import axios, { AxiosError } from 'axios'
 import Cookies from 'js-cookie'
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '~/constants'
+import { ACCESS_TOKEN, DOMAIN_API, REFRESH_TOKEN } from '~/constants'
 import { getStore, setStore } from '~/utils' // Assuming this is a utility module for managing local storage
 
 // Create a new Axios instance with a base URL and default headers
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: `${DOMAIN_API}/api`,
   headers: {
     'Content-Type': 'application/json'
   }

@@ -13,6 +13,7 @@ import {
 } from '~/@types/form.type'
 import { ProfileType } from '~/@types/response.type'
 import { Task } from '~/@types/task.type'
+import { DOMAIN_API } from '~/constants'
 
 type AxiosBaseQueryResult = {
   data: any
@@ -59,7 +60,7 @@ const axiosBaseQuery =
 
 export const api = createApi({
   reducerPath: 'api',
-  baseQuery: axiosBaseQuery({ baseUrl: 'http://localhost:8080/api' }),
+  baseQuery: axiosBaseQuery({ baseUrl: `${DOMAIN_API}/api` }),
   endpoints(build) {
     return {
       login: build.mutation({
