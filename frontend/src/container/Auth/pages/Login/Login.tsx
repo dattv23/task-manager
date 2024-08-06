@@ -11,7 +11,7 @@ import { useToasts } from '~/hooks/useToasts'
 import { LoginField } from '~/@types/form.type'
 import { handleAPIError } from '~/utils/handleAPIError'
 import { FormItem } from '~/components'
-import { EMAIL, FULL_NAME } from '~/constants'
+import { DOMAIN_API, EMAIL, FULL_NAME } from '~/constants'
 import { GoogleOutlined } from '@ant-design/icons'
 
 const Login: React.FC = () => {
@@ -56,7 +56,7 @@ const Login: React.FC = () => {
 
   const handleLoginWithGoogle = async () => {
     try {
-      window.location.href = 'http://localhost:8080/api/auth/google'
+      window.location.href = `${DOMAIN_API}/api/auth/google`
     } catch (error) {
       console.error('Error during login with Google:', error)
       addToast({

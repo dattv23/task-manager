@@ -8,7 +8,8 @@ export const env = {
     protocol: process.env.SERVER_PROTOCOL,
     host: process.env.APP_HOST,
     port: process.env.APP_PORT || 5000,
-    secret: process.env.APP_SECRET
+    secret: process.env.APP_SECRET,
+    domainFE: process.env.DOMAIN_FE
   },
   database: {
     url: process.env.DB_URL,

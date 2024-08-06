@@ -10,7 +10,7 @@ class OpenIDClientService {
       this.client = new googleIssuer.Client({
         client_id: env.auth.client_id!,
         client_secret: env.auth.client_secret,
-        redirect_uris: ['http://localhost:8080/api/auth/callback'],
+        redirect_uris: [`${env.server.host}/api/auth/callback`],
         response_types: ['code']
       })
     }

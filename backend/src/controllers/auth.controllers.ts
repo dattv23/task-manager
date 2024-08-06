@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { generators } from 'openid-client'
+import { env } from '~/config/env.config'
 import { sendResponse } from '~/config/response.config'
 import { RESULT_RESPONSE_MESSAGES } from '~/constants/messages'
 import { LoginBody, NewTokenBody, RegisterBody, ResendOTPBody, ResetPasswordBody, VerifyOTPBody } from '~/models/requests/auth.requests'
@@ -69,13 +70,13 @@ export const authController = {
     }
 
     try {
-      const tokenSet = await client.callback('http://localhost:8080/api/auth/callback', params, {
+      const tokenSet = await client.callback(`${env.server.host}/api/auth/callback`, params, {
         code_verifier: code_verifier
       })
       const userinfo = await client.userinfo(tokenSet)
       const { email, birthdate, name, picture } = userinfo
       const { refreshToken } = await usersServices.createUser({ email: email!, password: email!, dateOfBirth: new Date(birthdate!), fullName: name!, avatar: picture! })
-      res.redirect(`http://localhost:3000/oauth/${refreshToken}`)
+      res.redirect(`${env.server.domainFE}/oauth/${refreshToken}`)
     } catch (error) {
       res.status(500).json({ error: (error as Error).message })
     }
