@@ -1,4 +1,4 @@
-import Search from '../Search'
+import Search from '../../atoms/Search'
 
 const Header: React.FC = () => {
   return (

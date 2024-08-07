@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Button } from '..'
 import { cn } from '~/utils'
+import Button from '~/components/atoms/Button'
 
 const DarkMode: React.FC = () => {
   const [darkMode, setDarkMode] = useState(false)

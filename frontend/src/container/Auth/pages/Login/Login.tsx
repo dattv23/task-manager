@@ -1,5 +1,5 @@
 import { Alert, Form, Input, Spin } from 'antd'
-import Button from '~/components/Button'
+import Button from '~/components/atoms/Button'
 import { Link, useNavigate } from 'react-router-dom'
 import { useLoginMutation, useResendOTPMutation } from '~/apis/api'
 import { getStore } from '~/utils'

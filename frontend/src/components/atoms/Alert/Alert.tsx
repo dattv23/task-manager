@@ -6,7 +6,8 @@ import {
   WarningOutlined
 } from '@ant-design/icons'
 import { VariantProps, cva } from 'class-variance-authority'
-import React from 'react'
+import { memo } from 'react'
+
 import { cn } from '~/utils'
 
 const alertVariants = cva(
@@ -66,4 +67,4 @@ const Alert: React.FC<AlertProps> = ({ content, type, className, open, onClose, 
   )
 }
 
-export default Alert
+export default memo(Alert)

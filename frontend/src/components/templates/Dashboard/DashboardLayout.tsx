@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Outlet } from 'react-router-dom'
-import Header from '~/components/Header/Header'
-import SidebarLeft from '~/components/Sidebar/SidebarLeft'
-import SidebarRight from '~/components/Sidebar/SidebarRight'
+import Header from '~/components/organisms/Header'
+import SidebarLeft from '~/components/organisms/Sidebar/SidebarLeft'
+import SidebarRight from '~/components/organisms/Sidebar/SidebarRight'
 import { cn } from '~/utils'
 
 const DashboardLayout: React.FC = () => {

@@ -1,14 +1,14 @@
 import React from 'react'
 import { NonIndexRouteObject, RouteObject } from 'react-router-dom'
 import config from '~/config'
-import DashboardLayout from '~/layout/Dashboard/DashboardLayout'
+import DashboardLayout from '~/components/templates/Dashboard/DashboardLayout'
 
 const HomePage = React.lazy(() => import('~/container/Home/pages/MainHome'))
 const LoginPage = React.lazy(() => import('~/container/Auth/pages/Login'))
 const RegisterPage = React.lazy(() => import('~/container/Auth/pages/Register'))
 const VerifyEmailPage = React.lazy(() => import('~/container/Auth/pages/VerifyEmail'))
 const ForgotPasswordPage = React.lazy(() => import('~/container/Auth/pages/ForgotPassword'))
-const NotFoundPage = React.lazy(() => import('~/components/NotFound'))
+const NotFoundPage = React.lazy(() => import('~/components/pages/NotFound'))
 const DashboardPage = React.lazy(() => import('~/container/Dashboard/pages/MainDashboard'))
 const TasksPage = React.lazy(() => import('~/container/Dashboard/pages/Tasks'))
 const TaskDetailPage = React.lazy(() => import('~/container/Dashboard/components/TaskDetail'))

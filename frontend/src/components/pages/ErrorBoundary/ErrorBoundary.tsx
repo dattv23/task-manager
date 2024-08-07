@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useNavigate, useRouteError } from 'react-router-dom'
 import './style.scss'
-import Button from '../Button'
+import Button from '../../atoms/Button'
 
 const ErrorBoundary: React.FC = () => {
   const error = useRouteError()

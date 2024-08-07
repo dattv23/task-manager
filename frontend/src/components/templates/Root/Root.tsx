@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 import { privateRoute, publicRoute } from '~/routes'
-import PrivateRoute from '../PrivateRoute'
+import PrivateRoute from '~/components/templates/PrivateRoute'
 
 const Root: React.FC = () => {
   return (
