@@ -1,7 +1,8 @@
-import React, { createContext, useState } from 'react'
-import { ToastType, ToastsContextType, ToastsProviderType } from '~/@types/hook.type'
 import { v4 as uuidv4 } from 'uuid'
+import { createContext, useState } from 'react'
+
 import { Toast, ToastsWrapper } from '~/components'
+import { ToastType, ToastsContextType, ToastsProviderType } from '~/@types/hook.type'
 
 export const ToastsContext = createContext<ToastsContextType | undefined>(undefined)
 

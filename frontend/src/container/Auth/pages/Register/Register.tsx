@@ -1,16 +1,15 @@
 import React from 'react'
 import { Alert, Form, Input } from 'antd'
-import Button from '~/components/Button'
+import Button from '~/components/atoms/Button'
 import { useNavigate } from 'react-router-dom'
 import { passwordRegex } from '~/utils/regex'
-import { RegisterField } from '~/@types/form.type'
+import { InputProps, RegisterField } from '~/@types/form.type'
 import { useRegisterMutation } from '~/apis/api'
 import { useToasts } from '~/hooks/useToasts'
 import { RegisterResult } from '~/@types/api.type'
 import { setStore } from '~/utils'
 import { handleAPIError } from '~/utils/handleAPIError'
 import { FormItem } from '~/components'
-import { InputProps } from '~/components/FormItem'
 
 const Register: React.FC = () => {
   const navigate = useNavigate()

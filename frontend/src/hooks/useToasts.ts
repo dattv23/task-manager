@@ -5,7 +5,13 @@ import { ToastsContext } from '~/contexts/toastsContext'
 export const useToasts = () => {
   const [toastIds, setToastIds] = useState<string[]>([])
   const toastIdsRef = useRef(toastIds)
-  const { addToast, dismissToast } = useContext(ToastsContext)! // Non-null assertion
+  const context = useContext(ToastsContext)
+
+  if (!context) {
+    throw new Error('useToasts must be used within a ToastsProvider')
+  }
+
+  const { addToast, dismissToast } = context
 
   const addToastWithId = (toast: ToastType): void => {
     const id = addToast(toast)
