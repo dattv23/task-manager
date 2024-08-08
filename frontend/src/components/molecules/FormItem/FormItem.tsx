@@ -1,12 +1,6 @@
 import { Alert, Form, Input } from 'antd'
-import { FormItemProps } from 'antd/es/form'
 
-export interface InputProps extends FormItemProps {
-  name: string
-  label?: string
-  placeholder?: string
-  required?: boolean
-}
+import { InputProps } from '~/@types/form.type'
 
 const FormItem: React.FC<InputProps> = ({
   name,
