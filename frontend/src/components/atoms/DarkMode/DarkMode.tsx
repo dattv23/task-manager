@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
+
 import { cn } from '~/utils'
 import Button from '~/components/atoms/Button'
 
-const DarkMode: React.FC = () => {
+const DarkMode = memo(() => {
   const [darkMode, setDarkMode] = useState(false)
   const element = document.documentElement
 
@@ -30,6 +31,6 @@ const DarkMode: React.FC = () => {
       )}
     </Button>
   )
-}
+})
 
 export default DarkMode

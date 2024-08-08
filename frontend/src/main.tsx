@@ -12,14 +12,14 @@ import AuthProvider from './contexts/authContext.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <PersistGate persistor={persistor} loading={<Spin size='large' />}>
-        <ToastsProvider>
+    <ToastsProvider>
+      <Provider store={store}>
+        <PersistGate persistor={persistor} loading={<Spin size='large' />}>
           <AuthProvider>
             <App />
           </AuthProvider>
-        </ToastsProvider>
-      </PersistGate>
-    </Provider>
+        </PersistGate>
+      </Provider>
+    </ToastsProvider>
   </React.StrictMode>
 )

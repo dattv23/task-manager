@@ -1,8 +1,8 @@
-import React from 'react'
+import { memo } from 'react'
 import { Form, Input } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 
-const Search: React.FC = () => {
+const Search: React.FC = memo(() => {
   return (
     <Form className='flex h-10 w-[350px] rounded-lg border border-gray-400 bg-none'>
       <Input
@@ -14,6 +14,6 @@ const Search: React.FC = () => {
       </button>
     </Form>
   )
-}
+})
 
 export default Search

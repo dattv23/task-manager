@@ -5,8 +5,8 @@ import {
   InfoCircleOutlined,
   WarningOutlined
 } from '@ant-design/icons'
-import { VariantProps, cva } from 'class-variance-authority'
 import { memo } from 'react'
+import { VariantProps, cva } from 'class-variance-authority'
 
 import { cn } from '~/utils'
 
@@ -46,18 +46,18 @@ const renderIcon = (type: string) => {
   }
 }
 
-const Alert: React.FC<AlertProps> = ({ content, type, className, open, onClose, ...props }) => {
+const Alert: React.FC<AlertProps> = memo(({ content, type, className, open, onClose, ...props }) => {
   if (!open) {
     return null // Render nothing if the alert is closed
   }
 
   return (
     <div className={cn(alertVariants({ type, className }))} {...props}>
-      <div className='w-10 h-10 bg-dark bg-opacity-5 rounded-full flex justify-center items-center text-xl text-white'>
+      <div className='flex h-10 w-10 items-center justify-center rounded-full bg-dark bg-opacity-5 text-xl text-white'>
         {renderIcon(type!)}
       </div>
       <div className='w-[250px] break-words'>
-        <h4 className='first-letter:uppercase text-lg font-medium'>{type} Message</h4>
+        <h4 className='text-lg font-medium first-letter:uppercase'>{type} Message</h4>
         <p className='text-xs font-light'>{content}</p>
       </div>
       <button className='w-10 hover:text-dark' onClick={onClose}>
@@ -65,6 +65,6 @@ const Alert: React.FC<AlertProps> = ({ content, type, className, open, onClose, 
       </button>
     </div>
   )
-}
+})
 
-export default memo(Alert)
+export default Alert

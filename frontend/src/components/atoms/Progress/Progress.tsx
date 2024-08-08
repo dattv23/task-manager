@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { cn } from '~/utils'
 
 interface ProgressbarProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -6,7 +6,7 @@ interface ProgressbarProps extends React.HTMLAttributes<HTMLDivElement> {
   color?: string // color of progress
 }
 
-const Progressbar: React.FC<ProgressbarProps> = ({ time, color = '#cccc', className, ...props }) => {
+const Progressbar: React.FC<ProgressbarProps> = memo(({ time, color = '#cccc', className, ...props }) => {
   const [filled, setFilled] = useState(0)
   useEffect(() => {
     if (filled <= 100) {
@@ -26,6 +26,6 @@ const Progressbar: React.FC<ProgressbarProps> = ({ time, color = '#cccc', classN
       }}
     ></div>
   )
-}
+})
 
 export default Progressbar

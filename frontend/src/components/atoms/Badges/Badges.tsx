@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { VariantProps, cva } from 'class-variance-authority'
 
 import { cn } from '~/utils'
@@ -20,12 +21,12 @@ const badgeVariants = cva('inline-flex items-center justify-center rounded-xl p-
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof badgeVariants> {}
 
-const Badges: React.FC<BadgeProps> = ({ type, className, children, ...props }) => {
+const Badges: React.FC<BadgeProps> = memo(({ type, className, children, ...props }) => {
   return (
     <div className={cn(badgeVariants({ type, className }))} {...props}>
       {children}
     </div>
   )
-}
+})
 
 export default Badges

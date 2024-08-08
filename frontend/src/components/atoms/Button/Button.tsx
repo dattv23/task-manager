@@ -1,5 +1,6 @@
+import { memo } from 'react'
 import { VariantProps, cva } from 'class-variance-authority'
-import React from 'react'
+
 import { cn } from '~/utils'
 
 const buttonVariants = cva(
@@ -34,12 +35,12 @@ export interface ButtonProps
   href?: string
 }
 
-const Button: React.FC<ButtonProps> = ({ variant, size, className, children, ...props }) => {
+const Button: React.FC<ButtonProps> = memo(({ variant, size, className, children, ...props }) => {
   return (
     <button className={cn(buttonVariants({ variant, size, className }))} {...props}>
       {children}
     </button>
   )
-}
+})
 
 export default Button
