@@ -6,7 +6,7 @@ export type ToastsContextType = {
   dismissToast: (id: string) => void
 }
 
-export type ToastsProviderType = {
+export type ToastProviderType = {
   children: React.ReactNode
 }
 

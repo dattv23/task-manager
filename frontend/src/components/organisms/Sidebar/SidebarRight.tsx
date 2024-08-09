@@ -1,6 +1,5 @@
-import Button from '~/components/atoms/Button'
-import Calendar from '~/components/molecules/Calendar'
-import Profile from '~/components/molecules/Profile'
+import { Button } from "~/components/atoms"
+import { Calendar, Profile } from "~/components/molecules"
 
 const SidebarRight: React.FC = () => {
   return (

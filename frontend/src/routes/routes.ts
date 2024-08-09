@@ -1,29 +1,29 @@
 import React from 'react'
 import { NonIndexRouteObject, RouteObject } from 'react-router-dom'
-import config from '~/config'
-import DashboardLayout from '~/components/templates/Dashboard/DashboardLayout'
+import DashboardTemplate from '~/components/templates'
+import { routes } from '~/configs'
 
-const HomePage = React.lazy(() => import('~/container/Home/pages/MainHome'))
-const LoginPage = React.lazy(() => import('~/container/Auth/pages/Login'))
-const RegisterPage = React.lazy(() => import('~/container/Auth/pages/Register'))
-const VerifyEmailPage = React.lazy(() => import('~/container/Auth/pages/VerifyEmail'))
-const ForgotPasswordPage = React.lazy(() => import('~/container/Auth/pages/ForgotPassword'))
-const NotFoundPage = React.lazy(() => import('~/components/pages/NotFound'))
-const DashboardPage = React.lazy(() => import('~/container/Dashboard/pages/MainDashboard'))
-const TasksPage = React.lazy(() => import('~/container/Dashboard/pages/Tasks'))
-const TaskDetailPage = React.lazy(() => import('~/container/Dashboard/components/TaskDetail'))
-const SettingsPage = React.lazy(() => import('~/container/Dashboard/pages/Settings'))
-const WorkspacePage = React.lazy(() => import('~/container/Home/pages/Workspace'))
-const OAuthPage = React.lazy(() => import('~/container/Auth/pages/OAuth'))
+const HomePage = React.lazy(() => import('~/components/pages/common/HomePage'))
+const LoginPage = React.lazy(() => import('~/components/pages/auth/LoginPage'))
+const RegisterPage = React.lazy(() => import('~/components/pages/auth/RegisterPage'))
+const VerifyEmailPage = React.lazy(() => import('~/components/pages/auth/VerifyEmailPage'))
+const ForgotPasswordPage = React.lazy(() => import('~/components/pages/auth/ForgotPasswordPage'))
+const NotFoundPage = React.lazy(() => import('~/components/pages/common/NotFoundPage'))
+const DashboardPage = React.lazy(() => import('~/components/pages/main/DashboardPage'))
+const TasksPage = React.lazy(() => import('~/components/pages/main/TaskPage'))
+const TaskDetailPage = React.lazy(() => import('~/components/pages/main/TaskDetailPage'))
+const SettingsPage = React.lazy(() => import('~/components/pages/main/SettingPage'))
+const WorkspacePage = React.lazy(() => import('~/components/pages/main/WorkspacePage'))
+const OAuthPage = React.lazy(() => import('~/components/pages/auth/OAuthPage'))
 
 const publicRoute: RouteObject[] = [
-  { path: config.routes.notFound, Component: NotFoundPage },
-  { path: config.routes.home, Component: HomePage },
-  { path: config.routes.login, Component: LoginPage },
-  { path: config.routes.register, Component: RegisterPage },
-  { path: config.routes.verifyEmail, Component: VerifyEmailPage },
-  { path: config.routes.forgotPassword, Component: ForgotPasswordPage },
-  { path: config.routes.oauth, Component: OAuthPage }
+  { path: routes.notFound, Component: NotFoundPage },
+  { path: routes.home, Component: HomePage },
+  { path: routes.login, Component: LoginPage },
+  { path: routes.register, Component: RegisterPage },
+  { path: routes.verifyEmail, Component: VerifyEmailPage },
+  { path: routes.forgotPassword, Component: ForgotPasswordPage },
+  { path: routes.oauth, Component: OAuthPage }
 ]
 
 interface PrivateRoute extends NonIndexRouteObject {
@@ -31,11 +31,11 @@ interface PrivateRoute extends NonIndexRouteObject {
 }
 
 const privateRoute: PrivateRoute[] = [
-  { path: config.routes.dashboard, Component: DashboardPage, Layout: DashboardLayout },
-  { path: config.routes.tasks, Component: TasksPage, Layout: DashboardLayout },
-  { path: config.routes.taskDetail, Component: TaskDetailPage, Layout: DashboardLayout },
-  { path: config.routes.settings, Component: SettingsPage, Layout: DashboardLayout },
-  { path: config.routes.workspace, Component: WorkspacePage }
+  { path: routes.dashboard, Component: DashboardPage, Layout: DashboardTemplate },
+  { path: routes.tasks, Component: TasksPage, Layout: DashboardTemplate },
+  { path: routes.taskDetail, Component: TaskDetailPage, Layout: DashboardTemplate },
+  { path: routes.settings, Component: SettingsPage, Layout: DashboardTemplate },
+  { path: routes.workspace, Component: WorkspacePage }
 ]
 
 export { publicRoute, privateRoute }

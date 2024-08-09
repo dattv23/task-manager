@@ -1,4 +1,4 @@
-import Search from '../../atoms/Search'
+import Search from '~/components/molecules/Search'
 
 const Header: React.FC = () => {
   return (

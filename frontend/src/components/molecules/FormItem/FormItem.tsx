@@ -13,7 +13,7 @@ const FormItem: React.FC<InputProps> = ({
 }) => {
   return (
     <>
-      <p className='mb-3 text-base font-semibold text-gray-800'>{label}</p>
+      <label className='mb-3 text-base font-semibold text-gray-800'>{label}</label>
       <Form.Item
         name={name}
         rules={[

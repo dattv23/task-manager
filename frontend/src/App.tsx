@@ -1,13 +1,13 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { Suspense } from 'react'
-import { Root, ErrorBoundary } from '~/components'
-import Loader from './components/pages/Loader/Loader'
+import Root from '~/routes/Root'
+import { ErrorPage, LoadingPage } from './components/pages'
 
-const router = createBrowserRouter([{ path: '*', Component: Root, errorElement: <ErrorBoundary /> }])
+const router = createBrowserRouter([{ path: '*', Component: Root, errorElement: <ErrorPage /> }])
 
 const App = () => {
   return (
-    <Suspense fallback={<Loader />}>
+    <Suspense fallback={<LoadingPage />}>
       <RouterProvider router={router} />
     </Suspense>
   )
