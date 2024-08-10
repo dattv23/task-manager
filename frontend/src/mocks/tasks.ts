@@ -1,4 +1,5 @@
-import { Task, TaskPriority, TaskStatus } from '~/@types/task.type'
+import { Task } from '~/@types/task.type'
+import { TaskPriority, TaskStatus } from '~/constants/enum'
 
 export const mockTasks: Task[] = [
   {

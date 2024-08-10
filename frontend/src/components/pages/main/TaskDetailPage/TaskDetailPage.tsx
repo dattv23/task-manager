@@ -1,16 +1,17 @@
+import dayjs from 'dayjs'
+import { formatDate } from 'date-fns'
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Task, TaskPriority, TaskStatus } from '~/@types/task.type'
-import { ICONS } from '~/assets/icons'
-import { Badges, Button } from '~/components/atoms'
-import { useDeleteTaskMutation, useEditTaskMutation, useGetTaskByIdQuery } from '~/apis/api'
-import { formatDate } from 'date-fns'
-import { useToasts } from '~/hooks/useToasts'
-import { handleAPIError } from '~/utils/handleAPIError'
 import { Alert, DatePicker, Form, Input, Modal, Select } from 'antd'
-import { EditTaskField } from '~/@types/form.type'
-import dayjs from 'dayjs'
+
+import { ICONS } from '~/assets/icons'
+import { useToasts } from '~/hooks/useToasts'
 import { FormItem } from '~/components/molecules'
+import { Badges, Button } from '~/components/atoms'
+import { handleAPIError } from '~/utils/handleAPIError'
+import { useDeleteTaskMutation, useEditTaskMutation, useGetTaskQuery } from '~/apis'
+import { EditTaskField, Task } from '~/@types'
+import { TaskPriority, TaskStatus } from '~/constants/enum'
 const { confirm } = Modal
 
 const renderStatus = (status: string) => {
@@ -28,7 +29,7 @@ const TaskDetailPage: React.FC = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const [task, setTask] = useState<Task>()
-  const { data, isFetching } = useGetTaskByIdQuery(id!)
+  const { data, isFetching } = useGetTaskQuery(id!)
   const [editTask] = useEditTaskMutation()
   const { addToast } = useToasts()
   const [deleteTask] = useDeleteTaskMutation()
@@ -41,7 +42,7 @@ const TaskDetailPage: React.FC = () => {
   }, [isFetching])
 
   const handleUpdateStatus = async (newStatus: TaskStatus) => {
-    const res = await editTask({ data: { ...task!, status: newStatus }, params: { id: id! } })
+    const res = await editTask({ ...task!, status: newStatus, id: id! })
     if ('data' in res) {
       const taskUpdate = { ...task, status: newStatus } as Task
       setTask(taskUpdate)
@@ -138,7 +139,7 @@ const TaskDetailPage: React.FC = () => {
   }
 
   const handleEditTask = async (values: EditTaskField) => {
-    const res = await editTask({ data: values, params: { id: id! } })
+    const res = await editTask({ ...values, id: id! })
     if ('data' in res) {
       setTask(res.data)
       addToast({

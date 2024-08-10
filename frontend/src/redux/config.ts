@@ -1,19 +1,22 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import storage from 'redux-persist/lib/storage'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
-import { api } from '~/apis/api'
-import { authReducer } from './reducers'
+
+import { authReducer } from '~/redux/reducers'
+import { apiAuth, apiProfile, apiTask } from '~/apis'
 
 const reducers = combineReducers({
   auth: authReducer,
-  [api.reducerPath]: api.reducer
+  [apiAuth.reducerPath]: apiAuth.reducer,
+  [apiProfile.reducerPath]: apiProfile.reducer,
+  [apiTask.reducerPath]: apiTask.reducer
 })
 
 const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  blacklist: ['api']
+  blacklist: ['apiAuth', 'apiProfile', 'apiTask']
 }
 
 const persistedReducer = persistReducer(persistConfig, reducers)
@@ -25,7 +28,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
       }
-    }).concat(api.middleware)
+    }).concat(apiAuth.middleware, apiProfile.middleware, apiTask.middleware)
 })
 
 export type RootState = ReturnType<typeof store.getState>

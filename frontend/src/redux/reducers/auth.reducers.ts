@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { authStateType } from '~/@types/auth.type'
+import { Auth } from '~/@types'
 
-const initialState: authStateType = {
+const initialState: Auth = {
   isAuthenticated: false,
   stepVerify: 0,
   email: ''
@@ -11,13 +11,13 @@ const authReducer = createSlice({
   name: 'authReducer',
   initialState,
   reducers: {
-    authAction: (state: authStateType, action: PayloadAction<boolean>) => {
+    authAction: (state: Auth, action: PayloadAction<boolean>) => {
       state.isAuthenticated = action.payload
     },
-    verifyAction: (state: authStateType, action: PayloadAction<number>) => {
+    verifyAction: (state: Auth, action: PayloadAction<number>) => {
       state.stepVerify = action.payload
     },
-    updateEmailAction: (state: authStateType, action: PayloadAction<string>) => {
+    updateEmailAction: (state: Auth, action: PayloadAction<string>) => {
       state.email = action.payload
     }
   }

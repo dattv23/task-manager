@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react'
 import { DARK_MODE } from '~/constants'
+import { Mode } from '~/constants/enum'
 import { getStore, setStore } from '~/utils'
-
-export enum Mode {
-  LIGHT = 'light',
-  DARK = 'dark'
-}
 
 export const useDarkMode = () => {
   const mode = getStore(DARK_MODE)

@@ -2,7 +2,7 @@ import { DatePicker, Form, Input, Modal, Select, Tabs } from 'antd'
 import FormItem from 'antd/es/form/FormItem'
 import React, { useEffect, useState } from 'react'
 import { CreateTaskField } from '~/@types/form.type'
-import { Task, TaskPriority, TaskStatus } from '~/@types/task.type'
+import { Task } from '~/@types/task.type'
 import { ICONS } from '~/assets/icons'
 import { useToasts } from '~/hooks/useToasts'
 import './style.scss'
@@ -10,10 +10,11 @@ import './style.scss'
 import type { DragEndEvent } from '@dnd-kit/core'
 import { DndContext, PointerSensor, useSensor } from '@dnd-kit/core'
 import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
-import { useAddTaskMutation, useGetAllTasksQuery } from '~/apis/api'
 import { handleAPIError } from '~/utils/handleAPIError'
 import { Button, DraggableTab } from '~/components/atoms'
 import { TaskList } from '~/components/organisms'
+import { useAddTaskMutation, useGetTasksQuery } from '~/apis'
+import { TaskPriority, TaskStatus } from '~/constants/enum'
 
 type TabItemType = {
   key: string
@@ -25,7 +26,7 @@ const TaskPage: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([])
   const [openModalAddTask, setOpenModalAddTask] = useState<boolean>(false)
   const { addToast } = useToasts()
-  const { data, isFetching, isLoading } = useGetAllTasksQuery()
+  const { data, isFetching, isLoading } = useGetTasksQuery()
   const [addTask] = useAddTaskMutation()
 
   const countTaskWithStatus = (tasks: Task[], status: string) => {

@@ -1,15 +1,13 @@
 import { Avatar, Modal } from 'antd'
 import React, { ChangeEvent, useState } from 'react'
-import { IMAGES } from '~/assets/images'
-import { cn } from '~/utils'
-import Button from '../../atoms/Button'
+
 import './style.scss'
-import { usePostAvatarMutation } from '~/apis/api'
-import { useToasts } from '~/hooks/useToasts'
-import { PostAvatarResult } from '~/@types/api.type'
-import { useProfile } from '~/hooks/useProfile'
-import { ProfileType } from '~/@types/response.type'
-import { useOnlineStatus } from '~/hooks/useOnlineStatus'
+import { cn } from '~/utils'
+import { IMAGES } from '~/assets/images'
+import { Button } from '~/components/atoms'
+import { usePostAvatarMutation } from '~/apis'
+import { useToasts, useProfile, useOnlineStatus } from '~/hooks'
+import { PostAvatarResult, Profile as TProfile } from '~/@types'
 
 /**
  * Profile component
@@ -53,7 +51,7 @@ const Profile: React.FC = () => {
 
     if ('data' in res) {
       const { url } = res.data as PostAvatarResult
-      const newProfile: ProfileType = { ...profile, avatar: url }
+      const newProfile: TProfile = { ...profile, avatar: url }
       updateProfile(newProfile)
       addToast({
         title: 'Success',

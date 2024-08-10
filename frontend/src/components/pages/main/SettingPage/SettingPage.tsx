@@ -1,10 +1,11 @@
 import { Switch } from 'antd'
-import React from 'react'
-import { ICONS } from '~/assets/icons'
-import { Button } from '~/components'
-import { EMAIL, FULL_NAME } from '~/constants'
-import { Mode, useDarkMode } from '~/hooks/useDarkMode'
+
 import { getStore } from '~/utils'
+import { ICONS } from '~/assets/icons'
+import { Mode } from '~/constants/enum'
+import { Button } from '~/components/atoms'
+import { EMAIL, FULL_NAME } from '~/constants'
+import { useDarkMode } from '~/hooks/useDarkMode'
 
 const SettingPage: React.FC = () => {
   const email = getStore(EMAIL)

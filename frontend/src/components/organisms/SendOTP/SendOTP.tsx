@@ -1,6 +1,6 @@
 import { Form } from 'antd'
 import { ResendOTPField } from '~/@types/form.type'
-import { useResendOTPMutation } from '~/apis/api'
+import { useResendOTPMutation } from '~/apis/auth.api'
 import { Button, FormItem } from '~/components'
 import { useToasts } from '~/hooks/useToasts'
 import { handleAPIError } from '~/utils/handleAPIError'

@@ -1,4 +1,5 @@
-import axios, { AxiosError } from 'axios'
+import { BaseQueryFn } from '@reduxjs/toolkit/query'
+import axios, { AxiosError, AxiosRequestConfig } from 'axios'
 import Cookies from 'js-cookie'
 import { ACCESS_TOKEN, DOMAIN_API, REFRESH_TOKEN } from '~/constants'
 import { getStore, setStore } from '~/utils' // Assuming this is a utility module for managing local storage
@@ -64,4 +65,47 @@ axiosInstance.interceptors.response.use(
   }
 )
 
-export default axiosInstance
+type AxiosBaseQueryResult = {
+  data: any
+  error?: {
+    status?: number
+    data: any
+  }
+}
+
+const axiosBaseQuery =
+  (
+    { baseUrl }: { baseUrl: string } = { baseUrl: '' }
+  ): BaseQueryFn<
+    {
+      url: string
+      method: AxiosRequestConfig['method']
+      data?: AxiosRequestConfig['data']
+      params?: AxiosRequestConfig['params']
+      headers?: AxiosRequestConfig['headers']
+    },
+    unknown,
+    AxiosBaseQueryResult
+  > =>
+  async ({ url, method, data, params, headers }) => {
+    try {
+      const result = await axiosInstance({
+        url: baseUrl + url,
+        method,
+        data,
+        params,
+        headers
+      })
+      return { data: result.data }
+    } catch (axiosError) {
+      const err = axiosError as AxiosError
+      return {
+        error: {
+          status: err.response?.status,
+          data: err.response?.data || err.message
+        }
+      }
+    }
+  }
+
+export { axiosInstance, axiosBaseQuery }

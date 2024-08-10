@@ -1,5 +1,5 @@
 import { FormItemProps } from 'antd'
-import { TaskPriority, TaskStatus } from './task.type'
+import { TaskPriority, TaskStatus } from '~/constants/enum'
 
 export type RegisterField = {
   fullName: string
@@ -36,16 +36,13 @@ export type CreateTaskField = {
 }
 
 export type EditTaskField = {
+  id: string
   name: string
   priority: TaskPriority
   startDate: Date
   dueDate: Date
   status: TaskStatus
   description: string
-}
-
-export type EditTaskParams = {
-  id: string
 }
 
 export type InputProps = FormItemProps & {

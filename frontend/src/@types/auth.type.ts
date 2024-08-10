@@ -1,4 +1,4 @@
-export type authStateType = {
+export type Auth = {
   isAuthenticated: boolean
   stepVerify: number
   email: string

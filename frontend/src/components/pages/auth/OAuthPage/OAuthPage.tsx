@@ -2,10 +2,11 @@ import Cookies from 'js-cookie'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import axiosInstance from '~/apis/axiosInstance'
+
+import { setStore } from '~/utils'
+import { axiosInstance } from '~/configs'
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '~/constants'
 import { authAction } from '~/redux/reducers/auth.reducers'
-import { setStore } from '~/utils'
 
 const OAuthPage = () => {
   let { token } = useParams()

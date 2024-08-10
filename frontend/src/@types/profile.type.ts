@@ -1,4 +1,4 @@
-export type ProfileType = {
+export type Profile = {
   userId: string
   fullName: string
   email: string

@@ -1,5 +1,5 @@
 import { CountdownProps } from 'antd'
-import { useResendOTPMutation, useVerifyOTPMutation } from '~/apis/api'
+import { useResendOTPMutation, useVerifyOTPMutation } from '~/apis/auth.api'
 import { Button } from '~/components'
 import { useToasts } from '~/hooks/useToasts'
 import { clearStore, getStore, setStore } from '~/utils'

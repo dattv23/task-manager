@@ -1,7 +1,7 @@
 import { Alert, Form, Input, Spin } from 'antd'
 import Button from '~/components/atoms/Button'
 import { Link, useNavigate } from 'react-router-dom'
-import { useLoginMutation, useResendOTPMutation } from '~/apis/api'
+import { useLoginMutation, useResendOTPMutation } from '~/apis/auth.api'
 import { getStore } from '~/utils'
 import { useState } from 'react'
 import { useAuth } from '~/hooks/useAuth'

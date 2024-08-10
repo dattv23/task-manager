@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
 import { Card } from 'antd'
-import { Task, TaskStatus } from '~/@types/task.type'
+import React, { useEffect, useState } from 'react'
+
 import { Badges } from '~/components'
 import { ICONS } from '~/assets/icons'
+import { Task } from '~/@types/task.type'
+import { TaskStatus } from '~/constants/enum'
 import { useNavigate } from 'react-router-dom'
 
 type TaskListProps = {
