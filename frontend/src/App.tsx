@@ -1,13 +1,15 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import { Suspense } from 'react'
-import { Root, ErrorBoundary } from '~/components'
-import Loader from './components/pages/Loader/Loader'
+import React, { Suspense } from 'react'
+import Root from '~/routes/Root'
 
-const router = createBrowserRouter([{ path: '*', Component: Root, errorElement: <ErrorBoundary /> }])
+const ErrorPage = React.lazy(() => import('~/components/pages/common/ErrorPage'))
+const LoadingPage = React.lazy(() => import('~/components/pages/common/LoadingPage'))
+
+const router = createBrowserRouter([{ path: '*', Component: Root, errorElement: <ErrorPage /> }])
 
 const App = () => {
   return (
-    <Suspense fallback={<Loader />}>
+    <Suspense fallback={<LoadingPage />}>
       <RouterProvider router={router} />
     </Suspense>
   )

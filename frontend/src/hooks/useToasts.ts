@@ -1,6 +1,6 @@
 import { useContext, useRef, useState } from 'react'
 import { ToastType } from '~/@types/hook.type'
-import { ToastsContext } from '~/contexts/toastsContext'
+import { ToastsContext } from '~/providers/ToastProvider'
 
 export const useToasts = () => {
   const [toastIds, setToastIds] = useState<string[]>([])
