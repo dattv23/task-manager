@@ -1,6 +1,6 @@
 import FormItem from 'antd/es/form/FormItem'
 import type { DragEndEvent } from '@dnd-kit/core'
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import { DatePicker, Form, Input, Modal, Select, Tabs } from 'antd'
 import { DndContext, PointerSensor, useSensor } from '@dnd-kit/core'
 import { arrayMove, horizontalListSortingStrategy, SortableContext } from '@dnd-kit/sortable'
@@ -62,7 +62,11 @@ const TaskPage: React.FC = () => {
               </span>
             </p>
           ),
-          children: <TaskList tasks={tasks} />
+          children: (
+            <Suspense fallback={'Loading'}>
+              <TaskList tasks={tasks} />
+            </Suspense>
+          )
         },
         {
           key: '2',
@@ -74,7 +78,11 @@ const TaskPage: React.FC = () => {
               </span>
             </p>
           ),
-          children: <TaskList tasks={tasks.filter((item) => item.status === TaskStatus.PENDING)} />
+          children: (
+            <Suspense fallback={'Loading'}>
+              <TaskList tasks={tasks.filter((item) => item.status === TaskStatus.PENDING)} />
+            </Suspense>
+          )
         },
         {
           key: '3',
@@ -86,7 +94,11 @@ const TaskPage: React.FC = () => {
               </span>
             </p>
           ),
-          children: <TaskList tasks={tasks.filter((item) => item.status === TaskStatus.IN_PROGRESS)} />
+          children: (
+            <Suspense fallback={'Loading'}>
+              <TaskList tasks={tasks.filter((item) => item.status === TaskStatus.IN_PROGRESS)} />
+            </Suspense>
+          )
         },
         {
           key: '4',
@@ -98,7 +110,11 @@ const TaskPage: React.FC = () => {
               </span>
             </p>
           ),
-          children: <TaskList tasks={tasks.filter((item) => item.status === TaskStatus.COMPLETED)} />
+          children: (
+            <Suspense fallback={'Loading'}>
+              <TaskList tasks={tasks.filter((item) => item.status === TaskStatus.COMPLETED)} />
+            </Suspense>
+          )
         }
       ])
     }
@@ -142,7 +158,7 @@ const TaskPage: React.FC = () => {
           <h2 className='text-[32px] font-semibold text-blue-950 '>Task</h2>
           <p className='text-xl font-normal text-zinc-600'>Your tasks in your space</p>
         </div>
-        {tasks.length == 0 ? null : <Button onClick={() => setOpenModalAddTask(true)}>Create a Task</Button>}
+        {tasks.length == 0 && <Button onClick={() => setOpenModalAddTask(true)}>Create a Task</Button>}
       </div>
       <div className='my-10'>
         {isLoading ? (
