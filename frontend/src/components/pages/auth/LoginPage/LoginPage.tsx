@@ -10,7 +10,7 @@ import { emailRegex, passwordRegex } from '~/utils/regex'
 import { useToasts } from '~/hooks/useToasts'
 import { LoginField } from '~/@types/form.type'
 import { handleAPIError } from '~/utils/handleAPIError'
-import { FormItem } from '~/components'
+import { FormItem } from '~/components/molecules'
 import { DOMAIN_API, EMAIL, FULL_NAME } from '~/constants'
 import { GoogleOutlined } from '@ant-design/icons'
 

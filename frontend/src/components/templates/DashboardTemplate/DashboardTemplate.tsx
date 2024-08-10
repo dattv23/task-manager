@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 import { Outlet } from 'react-router-dom'
-import { Header, SidebarLeft, SidebarRight } from '~/components/organisms'
+
 import { cn } from '~/utils'
+
+const Header = React.lazy(() => import('~/components/organisms/Header'))
+const SidebarLeft = React.lazy(() => import('~/components/organisms/Sidebar/SidebarLeft'))
+const SidebarRight = React.lazy(() => import('~/components/organisms/Sidebar/SidebarRight'))
 
 const DashboardTemplate: React.FC = () => {
   const [collapse, setCollapse] = useState<boolean>(false)

@@ -1,8 +1,14 @@
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, NewPassword, SendOTP, Verification } from '~/components'
 import { useDispatch, useSelector } from 'react-redux'
+
+import { Button } from '~/components/atoms'
 import { DispatchType, RootState } from '~/redux/config'
 import { updateEmailAction, verifyAction } from '~/redux/reducers/auth.reducers'
+
+const SendOTP = React.lazy(() => import('~/components/organisms/SendOTP'))
+const Verification = React.lazy(() => import('~/components/organisms/Verification'))
+const NewPassword = React.lazy(() => import('~/components/organisms/NewPassword'))
 
 /**
  * ForgotPassword Component

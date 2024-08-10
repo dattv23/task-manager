@@ -1,5 +1,9 @@
-import { Button } from "~/components/atoms"
-import { Calendar, Profile } from "~/components/molecules"
+import React from 'react'
+
+import { Button } from '~/components/atoms'
+import { Calendar } from '~/components/molecules'
+
+const Profile = React.lazy(() => import('~/components/organisms/Profile'))
 
 const SidebarRight: React.FC = () => {
   return (

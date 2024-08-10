@@ -1,8 +1,9 @@
 import { Form } from 'antd'
 import { ResendOTPField } from '~/@types/form.type'
-import { useResendOTPMutation } from '~/apis/auth.api'
-import { Button, FormItem } from '~/components'
-import { useToasts } from '~/hooks/useToasts'
+import { useResendOTPMutation } from '~/apis'
+import { Button } from '~/components/atoms'
+import { FormItem } from '~/components/molecules'
+import { useToasts } from '~/hooks'
 import { handleAPIError } from '~/utils/handleAPIError'
 import { emailRegex } from '~/utils/regex'
 

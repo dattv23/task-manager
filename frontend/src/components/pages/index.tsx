@@ -1,8 +1,0 @@
-export { default as DashboardPage } from './main/DashboardPage'
-export { default as ErrorPage } from './common/ErrorPage'
-export { default as HomePage } from './common/HomePage'
-export { default as LoadingPage } from './common/LoadingPage'
-export { default as NotFoundPage } from './common/NotFoundPage'
-export { default as SettingPage } from './main/SettingPage'
-export { default as TaskDetailPage } from './main/TaskDetailPage'
-export { default as TaskPage } from './main/TaskPage'
