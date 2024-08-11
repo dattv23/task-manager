@@ -1,12 +1,23 @@
 import { Suspense } from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
-import Root from '~/routes/Root'
+import { publicRoutes, privateRoutes } from '~/routes'
+import { ErrorPage, LoadingPage } from '~/components/pages/common'
+import DashboardTemplate from '~/components/templates/DashboardTemplate'
 
-import ErrorPage from './components/pages/common/ErrorPage'
-import LoadingPage from './components/pages/common/LoadingPage'
+const router = createBrowserRouter([
+  // Public Routes
+  ...publicRoutes,
 
-const router = createBrowserRouter([{ path: '*', Component: Root, errorElement: <ErrorPage /> }])
+  // Private Routes
+  {
+    element: <DashboardTemplate />,
+    children: [...privateRoutes]
+  },
+
+  // Fallback for undefined routes
+  { path: '*', element: <ErrorPage /> }
+])
 
 const App = () => {
   return (
