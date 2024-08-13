@@ -9,6 +9,7 @@ export const env = {
     host: process.env.APP_HOST,
     port: process.env.APP_PORT || 5000,
     secret: process.env.APP_SECRET,
+    domain: process.env.DOMAIN,
     domainFE: process.env.DOMAIN_FE
   },
   database: {
