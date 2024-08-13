@@ -51,8 +51,8 @@ export const authController = {
         code_challenge,
         code_challenge_method: 'S256'
       })
-
-      res.redirect(`${authUrl}&code_verifier=${encodeURIComponent(code_verifier)}`)
+      res.cookie('code_verifier', code_verifier, { httpOnly: true, secure: true, sameSite: 'strict' })
+      res.redirect(`${authUrl}`)
     } catch (error) {
       console.error('Error during auth initiation:', error)
       res.status(500).json({ error: 'Internal server error during auth initiation.' })
@@ -62,14 +62,15 @@ export const authController = {
   callback: async (req: Request, res: Response) => {
     const client = await OpenIDClientService.getClient()
     const params = client.callbackParams(req)
-    const code_verifier = req.query.code_verifier as string
+
+    const code_verifier = req.cookies.code_verifier
 
     if (!code_verifier) {
       return res.status(400).json({ error: 'Code verifier missing in request.' })
     }
 
     try {
-      const tokenSet = await client.callback(`${env.server.host}/api/auth/callback`, params, {
+      const tokenSet = await client.callback(`${env.server.domain}/api/auth/callback`, params, {
         code_verifier: code_verifier
       })
       const userinfo = await client.userinfo(tokenSet)
