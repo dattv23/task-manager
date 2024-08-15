@@ -33,7 +33,7 @@ export const apiTask = createApi({
     }),
     deleteTask: builder.mutation({
       query: ({ params }: { params: { id: string } }) => ({ url: `/tasks/${params.id}`, method: 'delete' }),
-      invalidatesTags: (_result, _error, arg) => [{ type: 'Task', id: arg.params.id }]
+      invalidatesTags: () => [{ type: 'Task' }]
     })
   })
 })
