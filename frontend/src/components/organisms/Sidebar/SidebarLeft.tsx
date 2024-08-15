@@ -1,5 +1,6 @@
 import { LogoutOutlined, MenuOutlined, PlusOutlined } from '@ant-design/icons'
 import { Avatar } from 'antd'
+import { useNavigate } from 'react-router-dom'
 import { IMAGES } from '~/assets/images'
 import Button from '~/components/atoms/Button'
 import Navbar from '~/components/atoms/Navbar'
@@ -14,7 +15,12 @@ type SidebarLeftProps = {
 const SidebarLeft: React.FC<SidebarLeftProps> = ({ collapse, setCollapse }) => {
   const { logoutUser } = useAuth()
   const { profile } = useProfile()
+  const navigate = useNavigate()
 
+  const handleClickLogout = () => {
+    logoutUser()
+    navigate('/login')
+  }
   return (
     <aside className='fixed left-0 top-0 z-50 flex min-h-screen'>
       <div className='after:1translate-x-1/2 z-50 w-20 bg-primary px-4 py-24'>
@@ -36,7 +42,7 @@ const SidebarLeft: React.FC<SidebarLeftProps> = ({ collapse, setCollapse }) => {
             <MenuOutlined />
           </Button>
         </div>
-        <Button variant={'secondary'} onClick={logoutUser} className='fixed bottom-10 w-[38px]'>
+        <Button variant={'secondary'} onClick={handleClickLogout} className='fixed bottom-10 w-[38px]'>
           <LogoutOutlined />
         </Button>
       </div>
