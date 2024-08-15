@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { ProfileType } from '~/@types/response.type'
-import { useGetProfileQuery } from '~/apis/api'
+
+import { Profile } from '~/@types'
+import { useGetProfileQuery } from '~/apis'
 
 export const useProfile = () => {
-  const [profile, setProfile] = useState<ProfileType>({
+  const [profile, setProfile] = useState<Profile>({
     avatar: '',
     userId: '',
     dateOfBirth: null,
@@ -13,7 +14,7 @@ export const useProfile = () => {
   })
   const { data, isFetching } = useGetProfileQuery()
 
-  const updateProfile = (profile: ProfileType) => {
+  const updateProfile = (profile: Profile) => {
     setProfile(profile)
   }
 

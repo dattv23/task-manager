@@ -1,0 +1,8 @@
+export { default as Header } from './Header'
+export { default as NewPassword } from './NewPassword'
+export { default as Profile } from './Profile'
+export { default as SendOTP } from './SendOTP'
+export { default as SidebarLeft } from './Sidebar/SidebarLeft'
+export { default as SidebarRight } from './Sidebar/SidebarRight'
+export { default as TaskList } from './TaskList'
+export { default as Verification } from './Verification'

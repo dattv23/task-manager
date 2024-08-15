@@ -1,19 +1,19 @@
-import express, { NextFunction, Request, Response } from 'express'
-import { sendResponse } from '~/config/response.config'
-import { createServer } from 'http'
 import cors from 'cors'
 import morgan from 'morgan'
+import 'express-async-errors'
+import { createServer } from 'http'
+import session from 'express-session'
 import compression from 'compression'
+import exitHook from 'async-exit-hook'
 import cookieParser from 'cookie-parser'
+import express, { NextFunction, Request, Response } from 'express'
+
 import rootRouter from './routes'
 import { env } from './config/env.config'
+import { sendResponse } from './config/response.config'
+import { DATABASE_MESSAGE } from './constants/messages'
 import { databaseService } from './services/database.services'
 import { errorHandler } from './middlewares/error.middlewares'
-import exitHook from 'async-exit-hook'
-import { DATABASE_MESSAGE } from './constants/messages'
-import 'express-async-errors'
-import session from 'express-session'
-import { Client, generators, Issuer } from 'openid-client'
 
 const app = express()
 const httpServer = createServer(app)
@@ -78,7 +78,6 @@ databaseService.connect()
 app.use(errorHandler)
 
 httpServer.listen({ port: env.server.port, hostname: env.server.host }, async () => {
-  // await initOpenIDClient()
   console.log(`🚀 Server Is Running At http://${env.server.host}:${env.server.port}`)
 })
 

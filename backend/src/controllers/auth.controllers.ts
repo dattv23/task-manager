@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { generators } from 'openid-client'
+import { env } from '~/config/env.config'
 import { sendResponse } from '~/config/response.config'
 import { RESULT_RESPONSE_MESSAGES } from '~/constants/messages'
 import { LoginBody, NewTokenBody, RegisterBody, ResendOTPBody, ResetPasswordBody, VerifyOTPBody } from '~/models/requests/auth.requests'
@@ -44,7 +45,6 @@ export const authController = {
       const client = await OpenIDClientService.getClient()
       const code_verifier = generators.codeVerifier()
       req.session.code_verifier = code_verifier
-      req.session.save
       const code_challenge = generators.codeChallenge(code_verifier)
 
       const authUrl = client.authorizationUrl({
@@ -52,8 +52,8 @@ export const authController = {
         code_challenge,
         code_challenge_method: 'S256'
       })
-
-      res.redirect(authUrl)
+      res.cookie('code_verifier', code_verifier, { httpOnly: true, secure: true, sameSite: 'strict' })
+      res.redirect(`${authUrl}`)
     } catch (error) {
       console.error('Error during auth initiation:', error)
       res.status(500).json({ error: 'Internal server error during auth initiation.' })
@@ -63,20 +63,21 @@ export const authController = {
   callback: async (req: Request, res: Response) => {
     const client = await OpenIDClientService.getClient()
     const params = client.callbackParams(req)
-    const { code_verifier } = req.session
+
+    const code_verifier = req.cookies.code_verifier
 
     if (!code_verifier) {
       return res.status(400).json({ error: 'Code verifier missing in request.' })
     }
 
     try {
-      const tokenSet = await client.callback('http://localhost:8080/api/auth/callback', params, {
+      const tokenSet = await client.callback(`${env.server.domain}/api/auth/callback`, params, {
         code_verifier: code_verifier
       })
       const userinfo = await client.userinfo(tokenSet)
       const { email, birthdate, name, picture } = userinfo
       const { refreshToken } = await usersServices.createUser({ email: email!, password: email!, dateOfBirth: new Date(birthdate!), fullName: name!, avatar: picture! })
-      res.redirect(`http://localhost:3000/oauth/${refreshToken}`)
+      res.redirect(`${env.server.domainFE}/oauth/${refreshToken}`)
     } catch (error) {
       res.status(500).json({ error: (error as Error).message })
     }

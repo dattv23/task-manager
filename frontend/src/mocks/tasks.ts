@@ -1,5 +1,5 @@
-import { formatDate } from 'date-fns'
-import { Task, TaskPriority, TaskStatus } from '~/@types/task.type'
+import { Task } from '~/@types/task.type'
+import { TaskPriority, TaskStatus } from '~/constants/enum'
 
 export const mockTasks: Task[] = [
   {
@@ -8,8 +8,8 @@ export const mockTasks: Task[] = [
     description:
       'I am to create a simpe design system to use to teach aspiring UI / UX Designers in my forth-coming cass on the 2nd of october 20201',
     priority: TaskPriority.IMPORTANT,
-    dueDate: formatDate(new Date(), 'dd/MM/yyyy'),
-    createdAt: formatDate(new Date(), 'dd/MM/yyyy'),
+    dueDate: new Date(),
+    startDate: new Date(),
     status: TaskStatus.PENDING
   },
   {
@@ -18,8 +18,8 @@ export const mockTasks: Task[] = [
     description:
       'I am to create a simpe design system to use to teach aspiring UI / UX Designers in my forth-coming cass on the 2nd of october 20201',
     priority: TaskPriority.IMPORTANT,
-    dueDate: formatDate(new Date(), 'dd/MM/yyyy'),
-    createdAt: formatDate(new Date(), 'dd/MM/yyyy'),
+    dueDate: new Date(),
+    startDate: new Date(),
     status: TaskStatus.COMPLETED
   },
   {
@@ -28,8 +28,8 @@ export const mockTasks: Task[] = [
     description:
       'I am to create a simpe design system to use to teach aspiring UI / UX Designers in my forth-coming cass on the 2nd of october 20201',
     priority: TaskPriority.IMPORTANT,
-    dueDate: formatDate(new Date(), 'dd/MM/yyyy'),
-    createdAt: formatDate(new Date(), 'dd/MM/yyyy'),
+    dueDate: new Date(),
+    startDate: new Date(),
     status: TaskStatus.PENDING
   },
   {
@@ -38,8 +38,8 @@ export const mockTasks: Task[] = [
     description:
       'I am to create a simpe design system to use to teach aspiring UI / UX Designers in my forth-coming cass on the 2nd of october 20201',
     priority: TaskPriority.IMPORTANT,
-    dueDate: formatDate(new Date(), 'dd/MM/yyyy'),
-    createdAt: formatDate(new Date(), 'dd/MM/yyyy'),
+    dueDate: new Date(),
+    startDate: new Date(),
     status: TaskStatus.IN_PROGRESS
   },
   {
@@ -48,8 +48,8 @@ export const mockTasks: Task[] = [
     description:
       'I am to create a simpe design system to use to teach aspiring UI / UX Designers in my forth-coming cass on the 2nd of october 20201',
     priority: TaskPriority.IMPORTANT,
-    dueDate: formatDate(new Date(), 'dd/MM/yyyy'),
-    createdAt: formatDate(new Date(), 'dd/MM/yyyy'),
+    dueDate: new Date(),
+    startDate: new Date(),
     status: TaskStatus.PENDING
   },
   {
@@ -58,8 +58,8 @@ export const mockTasks: Task[] = [
     description:
       'I am to create a simpe design system to use to teach aspiring UI / UX Designers in my forth-coming cass on the 2nd of october 20201',
     priority: TaskPriority.IMPORTANT,
-    dueDate: formatDate(new Date(), 'dd/MM/yyyy'),
-    createdAt: formatDate(new Date(), 'dd/MM/yyyy'),
+    dueDate: new Date(),
+    startDate: new Date(),
     status: TaskStatus.IN_PROGRESS
   },
   {
@@ -68,8 +68,8 @@ export const mockTasks: Task[] = [
     description:
       'I am to create a simpe design system to use to teach aspiring UI / UX Designers in my forth-coming cass on the 2nd of october 20201',
     priority: TaskPriority.IMPORTANT,
-    dueDate: formatDate(new Date(), 'dd/MM/yyyy'),
-    createdAt: formatDate(new Date(), 'dd/MM/yyyy'),
+    dueDate: new Date(),
+    startDate: new Date(),
     status: TaskStatus.IN_PROGRESS
   },
   {
@@ -78,8 +78,8 @@ export const mockTasks: Task[] = [
     description:
       'I am to create a simpe design system to use to teach aspiring UI / UX Designers in my forth-coming cass on the 2nd of october 20201',
     priority: TaskPriority.IMPORTANT,
-    dueDate: formatDate(new Date(), 'dd/MM/yyyy'),
-    createdAt: formatDate(new Date(), 'dd/MM/yyyy'),
+    dueDate: new Date(),
+    startDate: new Date(),
     status: TaskStatus.COMPLETED
   },
   {
@@ -88,8 +88,8 @@ export const mockTasks: Task[] = [
     description:
       'I am to create a simpe design system to use to teach aspiring UI / UX Designers in my forth-coming cass on the 2nd of october 20201',
     priority: TaskPriority.IMPORTANT,
-    dueDate: formatDate(new Date(), 'dd/MM/yyyy'),
-    createdAt: formatDate(new Date(), 'dd/MM/yyyy'),
+    dueDate: new Date(),
+    startDate: new Date(),
     status: TaskStatus.COMPLETED
   }
 ]

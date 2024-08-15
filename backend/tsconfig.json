@@ -12,10 +12,9 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
+    "outDir": "./dist",
     "paths": {
       "~/*": ["src/*"],
-      "@/utils/*": ["utils/*"],
-      "@/middlewares/*": ["middlewares/*"]
     },
     "esModuleInterop": true,
     "strict": true
