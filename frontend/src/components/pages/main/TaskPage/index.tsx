@@ -23,10 +23,9 @@ type TabItemType = {
 }
 
 const TaskPage: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>([])
   const [openModalAddTask, setOpenModalAddTask] = useState<boolean>(false)
   const { addToast } = useToasts()
-  const { data, isFetching, isLoading } = useGetTasksQuery()
+  const { data, isLoading, isSuccess } = useGetTasksQuery()
   const [addTask] = useAddTaskMutation()
 
   const countTaskWithStatus = (tasks: Task[], status: string) => {
@@ -43,14 +42,9 @@ const TaskPage: React.FC = () => {
 
   const [items, setItems] = useState<TabItemType[]>([])
 
-  useEffect(() => {
-    if (data) {
-      setTasks(data)
-    }
-  }, [isFetching])
 
   useEffect(() => {
-    if (tasks) {
+    if (isSuccess) {
       setItems([
         {
           key: '1',
@@ -58,13 +52,13 @@ const TaskPage: React.FC = () => {
             <p>
               All Task
               <span className='ml-3 inline-block h-6 w-6 rounded-full bg-slate-100 text-center'>
-                {countTaskWithStatus(tasks, 'All')}
+                {countTaskWithStatus(data, 'All')}
               </span>
             </p>
           ),
           children: (
             <Suspense fallback={'Loading'}>
-              <TaskList tasks={tasks} />
+              <TaskList tasks={data} />
             </Suspense>
           )
         },
@@ -74,13 +68,13 @@ const TaskPage: React.FC = () => {
             <p>
               Pending
               <span className='ml-3 inline-block h-6 w-6 rounded-full bg-slate-100 text-center'>
-                {countTaskWithStatus(tasks, TaskStatus.PENDING)}
+                {countTaskWithStatus(data, TaskStatus.PENDING)}
               </span>
             </p>
           ),
           children: (
             <Suspense fallback={'Loading'}>
-              <TaskList tasks={tasks.filter((item) => item.status === TaskStatus.PENDING)} />
+              <TaskList tasks={data.filter((item) => item.status === TaskStatus.PENDING)} />
             </Suspense>
           )
         },
@@ -90,13 +84,13 @@ const TaskPage: React.FC = () => {
             <p>
               In Progress
               <span className='ml-3 inline-block h-6 w-6 rounded-full bg-slate-100 text-center'>
-                {countTaskWithStatus(tasks, TaskStatus.IN_PROGRESS)}
+                {countTaskWithStatus(data, TaskStatus.IN_PROGRESS)}
               </span>
             </p>
           ),
           children: (
             <Suspense fallback={'Loading'}>
-              <TaskList tasks={tasks.filter((item) => item.status === TaskStatus.IN_PROGRESS)} />
+              <TaskList tasks={data.filter((item) => item.status === TaskStatus.IN_PROGRESS)} />
             </Suspense>
           )
         },
@@ -106,19 +100,19 @@ const TaskPage: React.FC = () => {
             <p>
               Completed
               <span className='ml-3 inline-block h-6 w-6 rounded-full bg-slate-100 text-center'>
-                {countTaskWithStatus(tasks, TaskStatus.COMPLETED)}
+                {countTaskWithStatus(data, TaskStatus.COMPLETED)}
               </span>
             </p>
           ),
           children: (
             <Suspense fallback={'Loading'}>
-              <TaskList tasks={tasks.filter((item) => item.status === TaskStatus.COMPLETED)} />
+              <TaskList tasks={data.filter((item) => item.status === TaskStatus.COMPLETED)} />
             </Suspense>
           )
         }
       ])
     }
-  }, [tasks])
+  }, [data])
 
   const sensor = useSensor(PointerSensor, {
     activationConstraint: { distance: 10 }
@@ -130,9 +124,7 @@ const TaskPage: React.FC = () => {
     const status = TaskStatus.PENDING
     const res = await addTask({ name, description, priority, status, startDate, dueDate })
     if ('data' in res) {
-      const { _id } = res.data as Task
       addToast({ title: 'Success', message: 'Add task successfully!', progress: true, timeOut: 3, type: 'success' })
-      setTasks([...tasks, { _id, startDate, status, name, description, priority, dueDate }])
     }
     if ('error' in res) {
       const { message } = handleAPIError(res.error)
@@ -158,14 +150,14 @@ const TaskPage: React.FC = () => {
           <h2 className='text-[32px] font-semibold text-blue-950 '>Task</h2>
           <p className='text-xl font-normal text-zinc-600'>Your tasks in your space</p>
         </div>
-        {tasks.length == 0 && <Button onClick={() => setOpenModalAddTask(true)}>Create a Task</Button>}
+        <Button onClick={() => setOpenModalAddTask(true)}>Create a new task</Button>
       </div>
       <div className='my-10'>
         {isLoading ? (
           <p>Loading...</p>
         ) : (
           <div>
-            {tasks.length == 0 ? (
+            {data?.length == 0 ? (
               <div className='flex flex-col items-center justify-center py-16 text-center'>
                 <img src={ICONS.tasks} />
                 <h4 className='mt-4 text-[28px] font-semibold text-black opacity-80'>No Tasks Yet</h4>
