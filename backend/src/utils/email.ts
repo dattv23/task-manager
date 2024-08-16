@@ -9,8 +9,10 @@ const sendOTP = async (emailTo: string) => {
   const otp = generateOTP()
 
   const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
+    // host: 'smtp.gmail.com',
+    // port: 587,
+    host: 'sandbox.smtp.mailtrap.io',
+    port: 2525,
     secure: false,
     auth: {
       user: env.email.address,
