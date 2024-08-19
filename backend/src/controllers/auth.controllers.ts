@@ -49,9 +49,9 @@ export const authController = {
       const authUrl = client.authorizationUrl({
         scope: 'openid email profile',
         code_challenge,
-        code_challenge_method: 'S256'
+        code_challenge_method: 'S256',
+        state: JSON.stringify({ code_verifier })
       })
-      res.cookie('code_verifier', code_verifier, { httpOnly: true, secure: true, sameSite: 'strict' })
       res.redirect(`${authUrl}`)
     } catch (error) {
       console.error('Error during auth initiation:', error)
@@ -63,7 +63,8 @@ export const authController = {
     const client = await OpenIDClientService.getClient()
     const params = client.callbackParams(req)
 
-    const code_verifier = req.cookies.code_verifier
+    // Retrieve code_verifier from the state or query parameters
+    const { code_verifier } = JSON.parse(params.state || '{}')
 
     if (!code_verifier) {
       return res.status(400).json({ error: 'Code verifier missing in request.' })
