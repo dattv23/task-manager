@@ -6,10 +6,13 @@ import { cn } from '~/utils'
 import { IMAGES } from '~/assets/images'
 import { Button, DarkMode } from '~/components/atoms'
 import { MultiLanguage } from '~/components/molecules'
+import { useSelector } from 'react-redux'
+import { RootState } from '~/redux/config'
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate()
   const [collapse, setCollapse] = useState(false)
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated)
 
   return (
     <div className='p-4 lg:px-10'>
@@ -44,7 +47,7 @@ const HomePage: React.FC = () => {
             <p className='text-lg text-zinc-500'>
               This productive tool is designed to help you better manage your task project-wise conveniently!
             </p>
-            <Button className='mt-20 w-full' onClick={() => navigate('/dashboard')}>
+            <Button className='mt-20 w-full' onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}>
               Let’s Start{' '}
               <span>
                 <i className='icon ion-md-arrow-round-forward ml-1'></i>
