@@ -46,14 +46,14 @@ class MailServices {
     }
 
     // Read the HTML file content
-    // const htmlFilePath = path.join(__dirname, '..', 'templates', 'mail-test.html')
-    // const htmlContent = fs.readFileSync(htmlFilePath, 'utf-8')
+    const htmlFilePath = path.join(__dirname, '..', 'templates', 'mail-test.html')
+    const htmlContent = fs.readFileSync(htmlFilePath, 'utf-8')
 
     const mailOptions = {
       from: env.email.address, // sender address
       to, // recipient address
       subject, // subject line
-      html: content // send HTML content from the file
+      html: htmlContent // send HTML content from the file
     }
 
     try {
