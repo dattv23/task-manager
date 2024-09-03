@@ -1,14 +1,15 @@
 import Cookies from 'js-cookie'
-import React, { createContext, useContext, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import React, { createContext, useContext, useEffect } from 'react'
+
 import { LoginResult } from '~/@types/api.type'
 import { AuthContextType } from '~/@types/hook.type'
 import { ACCESS_TOKEN, EMAIL, FULL_NAME, REFRESH_TOKEN } from '~/constants'
-import { useToasts } from '~/hooks/useToasts'
+
 import { RootState } from '~/redux/config'
-import { authAction } from '~/redux/reducers/auth.reducers'
+import { useToasts } from '~/hooks/useToasts'
 import { clearStore, setStore } from '~/utils'
+import { authAction } from '~/redux/reducers/auth.reducers'
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
