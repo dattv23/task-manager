@@ -1,26 +1,28 @@
-import { LogoutOutlined, MenuOutlined, PlusOutlined } from '@ant-design/icons'
 import { Avatar } from 'antd'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { LogoutOutlined, MenuOutlined, PlusOutlined } from '@ant-design/icons'
+
+import { useProfile } from '~/hooks/useProfile'
+import { useAuth } from '~/providers/AuthProvider'
+import { cn } from '~/utils'
+
 import { IMAGES } from '~/assets/images'
 import Button from '~/components/atoms/Button'
 import Navbar from '~/components/atoms/Navbar'
-import { useAuth } from '~/hooks/useAuth'
-import { useProfile } from '~/hooks/useProfile'
-import { cn } from '~/utils'
 
-type SidebarLeftProps = {
-  collapse: boolean
-  setCollapse: (val: boolean) => void
-}
-const SidebarLeft: React.FC<SidebarLeftProps> = ({ collapse, setCollapse }) => {
+const SidebarLeft: React.FC = () => {
   const { logoutUser } = useAuth()
   const { profile } = useProfile()
   const navigate = useNavigate()
+
+  const [collapse, setCollapse] = useState<boolean>(false)
 
   const handleClickLogout = () => {
     logoutUser()
     navigate('/login')
   }
+
   return (
     <aside className='fixed left-0 top-0 z-50 flex min-h-screen'>
       <div className='after:1translate-x-1/2 z-50 w-20 bg-primary px-4 py-24'>

@@ -1,11 +1,11 @@
 import { Card } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import React, { useEffect, useState } from 'react'
 
 import { Task } from '~/@types'
 import { ICONS } from '~/assets/icons'
-import { Badges } from '~/components/atoms'
 import { TaskStatus } from '~/constants/enum'
+
+import { Badges } from '~/components/atoms'
 
 type TaskListProps = {
   tasks: Task[]
@@ -23,24 +23,13 @@ const renderStatus = (status: string) => {
 }
 
 const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
-  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
-
-  useEffect(() => {
-    setLoading(true)
-    const timer = setTimeout(() => {
-      setLoading(false)
-    }, 1000)
-    return () => {
-      clearTimeout(timer)
-    }
-  }, [])
 
   return (
     <>
       <div className='flex flex-wrap gap-2'>
         {tasks.map((task, index) => (
-          <Card key={index} loading={loading} className='w-full lg:w-[248px]'>
+          <Card key={index} className='w-full lg:w-[248px]'>
             <div className='flex justify-between'>
               <span className='text-sm font-semibold text-zinc-400'>{`T - ${String(index + 1).padStart(2, '0')}`}</span>
               {renderStatus(task.status)}
