@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie'
-import React, { createContext, useEffect } from 'react'
+import React, { createContext, useContext, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { LoginResult } from '~/@types/api.type'
 import { AuthContextType } from '~/@types/hook.type'
 import { ACCESS_TOKEN, EMAIL, FULL_NAME, REFRESH_TOKEN } from '~/constants'
@@ -45,6 +46,14 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   }, [])
 
   return <AuthContext.Provider value={{ isAuthenticated, loginUser, logoutUser }}>{children}</AuthContext.Provider>
+}
+
+export const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext)
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider')
+  }
+  return context
 }
 
 export default AuthProvider

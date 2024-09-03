@@ -1,5 +1,6 @@
 import { Outlet, Navigate, NonIndexRouteObject } from 'react-router-dom'
-import { useAuth } from '~/hooks/useAuth'
+
+import { useAuth } from '~/providers/AuthProvider'
 
 interface PrivateRoute extends NonIndexRouteObject {
   Layout?: React.FC

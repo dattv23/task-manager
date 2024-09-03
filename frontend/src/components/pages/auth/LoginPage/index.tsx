@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useLoginMutation, useResendOTPMutation } from '~/apis/auth.api'
 import { getStore } from '~/utils'
 import { useState } from 'react'
-import { useAuth } from '~/hooks/useAuth'
 import { LoginResult } from '~/@types/api.type'
 import { emailRegex, passwordRegex } from '~/utils/regex'
 import { useToasts } from '~/hooks/useToasts'
@@ -13,6 +12,7 @@ import { handleAPIError } from '~/utils/handleAPIError'
 import { FormItem } from '~/components/molecules'
 import { DOMAIN_API, EMAIL, FULL_NAME } from '~/constants'
 import { GoogleOutlined } from '@ant-design/icons'
+import { useAuth } from '~/providers/AuthProvider'
 
 const LoginPage: React.FC = () => {
   const [login, { isLoading }] = useLoginMutation()
